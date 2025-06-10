@@ -1,0 +1,37 @@
+from fastapi import FastAPI
+
+from back.src.domain.menu_request import MenuRequest
+from config import MODEL_NAME
+from back.src.application.use_cases import generate_shopping_list_use_case, generate_menu_use_case, \
+    generate_menu_use_case_many_calls
+from back.src.domain.dish_request import DishRequest
+from back.src.repository.gpt_text_model_client import GptTextModelClient
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
+
+
+origins = ["http://localhost:3000", "https://endrokosai.com"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.post("/generate-shopping-list")
+def generate_shopping_list(dishes: DishRequest):
+    gpt_text_model_client = GptTextModelClient(model_name=MODEL_NAME)
+    return generate_shopping_list_use_case(dish_request=dishes, text_model_client=gpt_text_model_client)
+
+@app.post("/generate-menu")
+def generate_menu(menu: MenuRequest):
+    gpt_text_model_client = GptTextModelClient(model_name=MODEL_NAME)
+    return generate_menu_use_case(menu_request=menu, text_model_client=gpt_text_model_client)
+
+@app.post("/generate-menu-many-calls")
+def generate_menu_many_calls(menu: MenuRequest):
+    gpt_text_model_client = GptTextModelClient(model_name=MODEL_NAME)
+    return generate_menu_use_case_many_calls(menu_request=menu, text_model_client=gpt_text_model_client)
