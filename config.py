@@ -1,4 +1,5 @@
 MODEL_NAME = "gpt-4.1-mini"
+MODEL_NAME_NANO = "gpt-4.1-nano"
 DAY_LIST = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
 PROMPT_SHOPPING_LIST = """
 Dado el siguiente listado de platos: content,
@@ -521,4 +522,17 @@ Ejemplo:
 trata de crear menus variados
 
 IMPORTANTE: El menu que se ha realizado para los días anteriores es el siguiente: {menu_para_dias_anteriores}
+"""
+
+
+PROMPT_CREATE_RECIPES="""
+Genera una receta en formato JSON para el plato "{plato}", que contenga:
+- Lista de ingredientes con cantidades exactas.
+- Pasos claros y numerados para prepararlo.
+La receta debe estar alineada con los siguientes valores nutricionales aproximados: calorías {calories}, proteínas {protein}, carbohidratos {carbohydrate} y grasas {fat}.
+No incluyas texto adicional fuera del JSON.
+
+Ejemplo:
+
+{"ingredients": "", "recipe": ""}
 """

@@ -1,10 +1,10 @@
 from typing import Dict
 
-from src.menu_generator.domain.dish_request import DishRequest
-from src.menu_generator.domain.menu_request import MenuRequest
-from src.menu_generator.repository.extract_json import extract_json, compact_jsons
-from src.menu_generator.repository.gpt_text_model_client import GptTextModelClient
-from src.menu_generator.repository.prompt_injecting import (
+from back.src.menu_generator.domain.dish_request import DishRequest
+from back.src.menu_generator.domain.menu_request import MenuRequest
+from back.src.shared.repository.extract_json import extract_json, compact_jsons
+from back.src.shared.repository.gpt_text_model_client import GptTextModelClient
+from back.src.menu_generator.repository.prompt_injecting import (
     prompt_injecting,
     prompt_injecting_menu,
     prompt_injecting_menu_and_day,

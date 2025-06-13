@@ -1,4 +1,4 @@
-from src.menu_generator.domain.menu_request import MenuRequest
+from back.src.menu_generator.domain.menu_request import MenuRequest
 
 
 def prompt_injecting(content: str, prompt: str):

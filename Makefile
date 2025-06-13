@@ -1,9 +1,13 @@
 PORT=8000
-APP=endpoints.handlers:app
+APP_MENU=menu_generator.endpoints.handlers:app
+APP_RECIPES=recipes.endpoints.handlers:app
 PYTHONPATH=back/src
 
-run:
-	PYTHONPATH=$(PYTHONPATH) uvicorn $(APP) --reload --port $(PORT)
+run-menu:
+	PYTHONPATH=$(PYTHONPATH) uvicorn $(APP_MENU) --reload --port $(PORT)
+
+run-recipes:
+	PYTHONPATH=$(PYTHONPATH) uvicorn $(APP_RECIPES) --reload --port $(PORT)
 
 # Ejecutar el servidor sin recarga (producción local)
 run-prod:

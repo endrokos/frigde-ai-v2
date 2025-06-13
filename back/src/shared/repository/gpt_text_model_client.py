@@ -11,7 +11,7 @@ load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
-from src.menu_generator.domain.text_model_client import TextModelClient
+from back.src.shared.domain.text_model_client import TextModelClient
 
 
 class GptTextModelClient(TextModelClient):
