@@ -536,3 +536,29 @@ Ejemplo:
 
 {"ingredients": "", "recipe": ""}
 """
+
+PROMPT_OBTAIN_MORE_RECIPES="""
+A partir del siguiente plato: "{plato}", genera 5 platos distintos pero similares en estilo y perfil nutricional.
+
+Cada plato debe tener valores aproximados a:
+- Calorías: {calories}
+- Proteínas: {protein}
+- Carbohidratos: {carbohydrate}
+- Grasas: {fat}
+
+Devuelve únicamente un bloque JSON con una lista de 5 objetos, cada uno con el siguiente formato:
+
+[
+  {
+    "plato": "nombre del plato",
+    "ingredientes": ["lista", "de", "ingredientes"],
+    "calorias": número,
+    "proteinas": número,
+    "hidratos": número,
+    "grasas": número
+  },
+  ...
+]
+
+No escribas ninguna explicación ni texto adicional. Solo devuelve el JSON.
+"""

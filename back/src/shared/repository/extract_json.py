@@ -2,7 +2,7 @@ import json
 import re
 
 
-def extract_json(texto) -> dict:
+def extract_json_menu(texto) -> dict:
     block = re.search(r'(\{.*\})', texto, re.DOTALL)
     if not block:
         raise ValueError("No se encontró un JSON válido.")
@@ -14,6 +14,25 @@ def extract_json(texto) -> dict:
     return json.loads(raw)
 
 
+def extract_json_recipes(texto: str):
+    if isinstance(texto, (dict, list)):
+        return texto
+
+    try:
+        return json.loads(texto)
+    except json.JSONDecodeError:
+        pass
+
+    json_match = re.search(r'(\{.*\}|\[.*\])', texto, re.DOTALL)
+    if json_match:
+        try:
+            return json.loads(json_match.group(0))
+        except json.JSONDecodeError as e:
+            raise ValueError(f"JSON extraído pero inválido: {e}")
+
+    raise ValueError("No se encontró un JSON válido.")
+
+
 def compact_jsons(jsons: list) -> dict:
     json_concat = {
         "dias": [],
@@ -23,7 +42,7 @@ def compact_jsons(jsons: list) -> dict:
         "objetivo_grasas": "",
     }
     for json_text in jsons:
-        json_dia = extract_json(json_text)
+        json_dia = extract_json_menu(json_text)
         json_concat['dias'].append(json_dia['dias'])
 
     json_concat['objetivo_calorias'] = json_dia['objetivo_calorias']

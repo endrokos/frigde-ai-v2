@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from back.src.recipes.application.use_case import generate_recipes_use_case
+from back.src.recipes.application.use_case import generate_recipes_use_case, obtain_more_recipes_use_case
 from back.src.recipes.domain.recipes_request import RecipesRequest
 from back.src.shared.repository.gpt_text_model_client import GptTextModelClient
 from config import MODEL_NAME_NANO
@@ -23,4 +23,9 @@ app.add_middleware(
 def generate_recipe(recipes_request: RecipesRequest):
     gpt_text_model_client = GptTextModelClient(model_name=MODEL_NAME_NANO)
     return generate_recipes_use_case(recipes_request=recipes_request, text_model_client=gpt_text_model_client)
+
+@app.post("/obtain_more_recipes")
+def obtain_more_recipes(recipes_request: RecipesRequest):
+    gpt_text_model_client = GptTextModelClient(model_name=MODEL_NAME_NANO)
+    return obtain_more_recipes_use_case(recipes_request=recipes_request, text_model_client=gpt_text_model_client)
 

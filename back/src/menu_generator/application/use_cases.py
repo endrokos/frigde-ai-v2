@@ -2,7 +2,7 @@ from typing import Dict
 
 from back.src.menu_generator.domain.dish_request import DishRequest
 from back.src.menu_generator.domain.menu_request import MenuRequest
-from back.src.shared.repository.extract_json import extract_json, compact_jsons
+from back.src.shared.repository.extract_json import extract_json_menu, compact_jsons
 from back.src.shared.repository.gpt_text_model_client import GptTextModelClient
 from back.src.menu_generator.repository.prompt_injecting import (
     prompt_injecting,
@@ -28,7 +28,7 @@ def generate_menu_use_case(menu_request: MenuRequest, text_model_client: GptText
     prompt = prompt_injecting_menu(menu=menu_request, prompt=PROMPT_MAKE_MENU)
     try:
         response = text_model_client.generate(prompt)
-        return {"menu": extract_json(response)}
+        return {"menu": extract_json_menu(response)}
     except Exception as e:
         print(f"ERROR: {str(e)}")
         return {"menu": "Algo salió mal :("}
