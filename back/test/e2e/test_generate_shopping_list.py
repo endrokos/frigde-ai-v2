@@ -1,5 +1,5 @@
-from src.domain.dish_request import DishRequest
-from src.endpoints.handlers import generate_shopping_list
+from src.menu_generator.domain.dish_request import DishRequest
+from src.menu_generator.endpoints.handlers import generate_shopping_list
 
 
 def test_generate_shopping_list():

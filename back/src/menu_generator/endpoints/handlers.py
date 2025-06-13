@@ -1,11 +1,15 @@
 from fastapi import FastAPI
 
-from back.src.domain.menu_request import MenuRequest
+from src.menu_generator.domain.menu_request import MenuRequest
 from config import MODEL_NAME
-from back.src.application.use_cases import generate_shopping_list_use_case, generate_menu_use_case, \
-    generate_menu_use_case_many_calls, generate_menu_use_case_iterating
-from back.src.domain.dish_request import DishRequest
-from back.src.repository.gpt_text_model_client import GptTextModelClient
+from src.menu_generator.application.use_cases import (
+    generate_shopping_list_use_case,
+    generate_menu_use_case,
+    generate_menu_use_case_many_calls,
+    generate_menu_use_case_iterating,
+)
+from src.menu_generator.domain.dish_request import DishRequest
+from src.menu_generator.repository.gpt_text_model_client import GptTextModelClient
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
