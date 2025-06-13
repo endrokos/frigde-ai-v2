@@ -1,11 +1,15 @@
 from typing import Dict
 
-from back.src.domain.dish_request import DishRequest
-from back.src.domain.menu_request import MenuRequest
-from back.src.repository.extract_json import extract_json, compact_jsons
-from back.src.repository.gpt_text_model_client import GptTextModelClient
-from back.src.repository.prompt_injecting import prompt_injecting, prompt_injecting_menu, prompt_injecting_menu_and_day, \
-    prompt_injecting_menu_and_day_iterating
+from src.menu_generator.domain.dish_request import DishRequest
+from src.menu_generator.domain.menu_request import MenuRequest
+from src.menu_generator.repository.extract_json import extract_json, compact_jsons
+from src.menu_generator.repository.gpt_text_model_client import GptTextModelClient
+from src.menu_generator.repository.prompt_injecting import (
+    prompt_injecting,
+    prompt_injecting_menu,
+    prompt_injecting_menu_and_day,
+    prompt_injecting_menu_and_day_iterating,
+)
 from config import PROMPT_SHOPPING_LIST, PROMPT_MAKE_MENU, DAY_LIST, PROMPT_MAKE_MENU_FOR_DAY, \
     PROMPT_MAKE_MENU_FOR_DAY_ITERATING
 

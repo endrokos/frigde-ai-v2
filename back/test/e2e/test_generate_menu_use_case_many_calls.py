@@ -1,5 +1,5 @@
-from back.src.domain.menu_request import MenuRequest
-from back.src.endpoints.handlers import generate_menu_many_calls
+from src.menu_generator.domain.menu_request import MenuRequest
+from src.menu_generator.endpoints.handlers import generate_menu_many_calls
 
 
 def test_generate_menu_many_calls():

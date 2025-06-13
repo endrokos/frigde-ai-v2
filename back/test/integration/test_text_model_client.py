@@ -1,6 +1,6 @@
 from http.client import responses
 
-from src.repository.gpt_text_model_client import GptTextModelClient
+from src.menu_generator.repository.gpt_text_model_client import GptTextModelClient
 
 
 def test_gpt_text_model_client():
