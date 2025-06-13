@@ -57,7 +57,7 @@ Importante: Ten en cuenta que estos platos van para una App que la va a utilizar
 """
 
 PROMPT_MAKE_MENU = """
-Quiero que me generes un json donde añadas en la estructura que te voy a pasar, 3 platos por comida por semana
+Quiero que me generes un json donde añadas en la estructura que te voy a pasar, 1 platos por comida por semana
 
 quiero que este menu se base en la dieta para bajar peso si mido 170 y peso 80 kg y hago deporte cada 3 días
 
@@ -83,132 +83,47 @@ Ejemplo:
         "Comida 1": [
           {
             "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
             "calorias": ,
             "proteinas": ,
             "hidratos": ,
             "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
+          }
         ],
         "Comida 2": [
           {
             "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
             "calorias": ,
             "proteinas": ,
             "hidratos": ,
             "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
+          }
         ],
         "Comida 3": [
           {
             "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
             "calorias": ,
             "proteinas": ,
             "hidratos": ,
             "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
+          }
         ],
         "Comida 4": [
           {
             "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
             "calorias": ,
             "proteinas": ,
             "hidratos": ,
             "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
+          }
         ],
         "Comida 5": [
           {
             "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
             "calorias": ,
             "proteinas": ,
             "hidratos": ,
             "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
+          }
         ]
       }
     },
