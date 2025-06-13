@@ -28,16 +28,14 @@ export default function MenuPage() {
     if (stored) {
       const dietaSemana = JSON.parse(stored);
 
+      console.log(dietaSemana)
+
       // --- Aquí es donde evitamos el error de array de arrays ---
       let diasArray = [];
       if (Array.isArray(dietaSemana.dias)) {
-        // Si el primer elemento de dias es un array, lo desanidamos:
-        if (Array.isArray(dietaSemana.dias[0])) {
-          diasArray = dietaSemana.dias[0];
-        } else {
-          diasArray = dietaSemana.dias;
-        }
+        diasArray = dietaSemana.dias.flat();
       }
+
 
       setDias(diasArray);
       setObjetivoProteina(dietaSemana.objetivo_proteinas || 0);

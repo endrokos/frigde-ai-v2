@@ -286,7 +286,7 @@ quiero que este menu se base en la dieta para bajar peso si mido 170 y peso 80 k
 
 Para rellenar el json ten en cuenta los siguientes datos
 
-Dia X es: {dia}
+Cambia en el json Dia por {dia}
 El objetivo del menu es el siguiente: {objetivo_del_menu}
 Comidas al día: {comidas}
 Tiene alegia a: {alergias}
@@ -302,7 +302,7 @@ Ejemplo:
   "objetivo_grasas": ,
   "dias": [
     {
-      "nombre": "Dia X",
+      "nombre": "Dia",
       "comidas": {
         "Comida 1": [
           {
@@ -440,4 +440,170 @@ Ejemplo:
 }
 
 trata de crear menus variados
+"""
+
+
+PROMPT_MAKE_MENU_FOR_DAY_ITERATING = """
+Quiero que me generes un json donde añadas en la estructura que te voy a pasar, 3 platos por comida por semana
+
+quiero que este menu se base en la dieta para bajar peso si mido 170 y peso 80 kg y hago deporte cada 3 días
+
+Para rellenar el json ten en cuenta los siguientes datos
+
+Cambia en el json Dia por {dia}
+El objetivo del menu es el siguiente: {objetivo_del_menu}
+Comidas al día: {comidas}
+Tiene alegia a: {alergias}
+Sigue la siguiente dieta: {dieta}, sino hay dieta sigue algo sano y variado 
+No le gusta estos alimentos: {alimentos_no_ricos}
+
+Ejemplo: 
+
+{
+  "objetivo_calorias": ,
+  "objetivo_proteinas": ,
+  "objetivo_hidratos": ,
+  "objetivo_grasas": ,
+  "dias": [
+    {
+      "nombre": "Dia",
+      "comidas": {
+        "Comida 1": [
+          {
+            "plato": ,
+            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
+            "calorias": ,
+            "proteinas": ,
+            "hidratos": ,
+            "grasas": ,
+          },
+          {
+            "plato": ,
+            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
+            "calorias": ,
+            "proteinas": ,
+            "hidratos": ,
+            "grasas": ,
+          },
+          {
+            "plato": ,
+            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
+            "calorias": ,
+            "proteinas": ,
+            "hidratos": ,
+            "grasas": ,
+          },
+        ],
+        "Comida 2": [
+          {
+            "plato": ,
+            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
+            "calorias": ,
+            "proteinas": ,
+            "hidratos": ,
+            "grasas": ,
+          },
+          {
+            "plato": ,
+            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
+            "calorias": ,
+            "proteinas": ,
+            "hidratos": ,
+            "grasas": ,
+          },
+          {
+            "plato": ,
+            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
+            "calorias": ,
+            "proteinas": ,
+            "hidratos": ,
+            "grasas": ,
+          },
+        ],
+        "Comida 3": [
+          {
+            "plato": ,
+            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
+            "calorias": ,
+            "proteinas": ,
+            "hidratos": ,
+            "grasas": ,
+          },
+          {
+            "plato": ,
+            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
+            "calorias": ,
+            "proteinas": ,
+            "hidratos": ,
+            "grasas": ,
+          },
+          {
+            "plato": ,
+            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
+            "calorias": ,
+            "proteinas": ,
+            "hidratos": ,
+            "grasas": ,
+          },
+        ],
+        "Comida 4": [
+          {
+            "plato": ,
+            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
+            "calorias": ,
+            "proteinas": ,
+            "hidratos": ,
+            "grasas": ,
+          },
+          {
+            "plato": ,
+            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
+            "calorias": ,
+            "proteinas": ,
+            "hidratos": ,
+            "grasas": ,
+          },
+          {
+            "plato": ,
+            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
+            "calorias": ,
+            "proteinas": ,
+            "hidratos": ,
+            "grasas": ,
+          },
+        ],
+        "Comida 5": [
+          {
+            "plato": ,
+            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
+            "calorias": ,
+            "proteinas": ,
+            "hidratos": ,
+            "grasas": ,
+          },
+          {
+            "plato": ,
+            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
+            "calorias": ,
+            "proteinas": ,
+            "hidratos": ,
+            "grasas": ,
+          },
+          {
+            "plato": ,
+            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
+            "calorias": ,
+            "proteinas": ,
+            "hidratos": ,
+            "grasas": ,
+          },
+        ]
+      }
+    },
+  ]
+}
+
+trata de crear menus variados
+
+IMPORTANTE: El menu que se ha realizado para los días anteriores es el siguiente: {menu_para_dias_anteriores}
 """

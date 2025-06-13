@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from back.src.domain.menu_request import MenuRequest
 from config import MODEL_NAME
 from back.src.application.use_cases import generate_shopping_list_use_case, generate_menu_use_case, \
-    generate_menu_use_case_many_calls
+    generate_menu_use_case_many_calls, generate_menu_use_case_iterating
 from back.src.domain.dish_request import DishRequest
 from back.src.repository.gpt_text_model_client import GptTextModelClient
 from fastapi.middleware.cors import CORSMiddleware
@@ -35,3 +35,8 @@ def generate_menu(menu: MenuRequest):
 def generate_menu_many_calls(menu: MenuRequest):
     gpt_text_model_client = GptTextModelClient(model_name=MODEL_NAME)
     return generate_menu_use_case_many_calls(menu_request=menu, text_model_client=gpt_text_model_client)
+
+@app.post("/generate-menu-iterating")
+def generate_menu_iterating(menu: MenuRequest):
+    gpt_text_model_client = GptTextModelClient(model_name=MODEL_NAME)
+    return generate_menu_use_case_iterating(menu_request=menu, text_model_client=gpt_text_model_client)

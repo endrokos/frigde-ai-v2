@@ -4,8 +4,10 @@ from back.src.domain.dish_request import DishRequest
 from back.src.domain.menu_request import MenuRequest
 from back.src.repository.extract_json import extract_json, compact_jsons
 from back.src.repository.gpt_text_model_client import GptTextModelClient
-from back.src.repository.prompt_injecting import prompt_injecting, prompt_injecting_menu, prompt_injecting_menu_and_day
-from config import PROMPT_SHOPPING_LIST, PROMPT_MAKE_MENU, DAY_LIST, PROMPT_MAKE_MENU_FOR_DAY
+from back.src.repository.prompt_injecting import prompt_injecting, prompt_injecting_menu, prompt_injecting_menu_and_day, \
+    prompt_injecting_menu_and_day_iterating
+from config import PROMPT_SHOPPING_LIST, PROMPT_MAKE_MENU, DAY_LIST, PROMPT_MAKE_MENU_FOR_DAY, \
+    PROMPT_MAKE_MENU_FOR_DAY_ITERATING
 
 
 def generate_shopping_list_use_case(dish_request: DishRequest, text_model_client: GptTextModelClient) -> Dict:
@@ -40,3 +42,16 @@ def generate_menu_use_case_many_calls(menu_request: MenuRequest, text_model_clie
     except Exception as e:
         print(f"ERROR: {str(e)}")
         return {"menu": "Algo salió mal :("}
+
+def generate_menu_use_case_iterating(menu_request: MenuRequest, text_model_client: GptTextModelClient) -> Dict:
+    responses = []
+    # try:
+    for day in DAY_LIST:
+        prompt = prompt_injecting_menu_and_day_iterating(menu=menu_request, prompt=PROMPT_MAKE_MENU_FOR_DAY_ITERATING, day=day, response_before=str(responses))
+        response = text_model_client.generate(prompt)
+        print(response)
+        responses.append(response)
+    return compact_jsons(responses)
+    # except Exception as e:
+    #     print(f"ERROR: {str(e)}")
+    #     return {"menu": "Algo salió mal :("}
