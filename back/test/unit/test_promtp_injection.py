@@ -1,5 +1,5 @@
-from src.domain.dish_request import DishRequest
-from src.repository.prompt_injecting import prompt_injecting
+from src.menu_generator.domain.dish_request import DishRequest
+from src.menu_generator.repository.prompt_injecting import prompt_injecting
 
 
 def test_prompt_injection():
