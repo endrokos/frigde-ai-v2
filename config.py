@@ -393,10 +393,32 @@ Devuelve únicamente un bloque JSON con una lista de 5 objetos, cada uno con el 
 No escribas ninguna explicación ni texto adicional. Solo devuelve el JSON.
 """
 
-PROMPT_CALCULATE_MACROS="""
+PROMPT_CALCULATE_MACROS_FROM_IMAGE= """
 Actúa como un experto nutricionista, quiero que dada la foto que acabas de recibir, me calcules de manera más exacta que puedas los diferentes parámetros.
 
 Nombre del Plato, Calorías, Proteinas, Hidratos de carbono y grasas
+
+Ejemplo:
+
+{
+"plato": "nombre del plato",
+"calorias": número,
+"proteinas": número,
+"hidratos": número,
+"grasas": número
+}
+"""
+
+PROMPT_CALCULATE_MACROS_FROM_TEXT = """
+Actúa como un experto nutricionista, quiero que dado el nombre de un plato, en algunos casos los ingredientes y en otros casos la receta, que me calcules de manera más exacta que puedas los diferentes parámetros.
+
+Nombre del Plato, Calorías, Proteinas, Hidratos de carbono y grasas
+
+Información:
+
+El plato es el siguiente: {plato}
+Los ingredientes: {ingredientes}
+La Receta: {receta}
 
 Ejemplo:
 
