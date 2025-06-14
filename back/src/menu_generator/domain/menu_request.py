@@ -1,9 +1,18 @@
-from dataclasses import dataclass
+from pydantic import BaseModel
+from typing import List
 
-@dataclass
-class MenuRequest:
+class MenuRequest(BaseModel):
     menu_goal: str
-    meals: list
-    allergies: list
+    meals: List[str]
+    allergies: List[str]
     diet: str
-    not_rich_foods: list
+    not_rich_foods: List[str]
+
+class OptionalsRequest(BaseModel):
+    numero_de_platos: int
+    postre: str
+
+class MenuWithOptionalsRequest(BaseModel):
+    menu: MenuRequest
+    optionals: OptionalsRequest
+

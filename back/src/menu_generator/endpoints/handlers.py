@@ -1,12 +1,12 @@
 from fastapi import FastAPI
 
-from back.src.menu_generator.domain.menu_request import MenuRequest
+from back.src.menu_generator.domain.menu_request import MenuRequest, OptionalsRequest, MenuWithOptionalsRequest
 from config.models import MENU_GENERATION_MODEL
 from back.src.menu_generator.application.use_cases import (
     generate_shopping_list_use_case,
     generate_menu_use_case,
     generate_menu_use_case_many_calls,
-    generate_menu_use_case_iterating,
+    generate_menu_use_case_iterating, generate_menu_with_optionals_use_case,
 )
 from back.src.menu_generator.domain.dish_request import DishRequest
 from back.src.shared.repository.gpt_text_model_client import GptTextModelClient
@@ -34,6 +34,13 @@ def generate_shopping_list(dishes: DishRequest):
 def generate_menu(menu: MenuRequest):
     gpt_text_model_client = GptTextModelClient(model_name=MENU_GENERATION_MODEL)
     return generate_menu_use_case(menu_request=menu, text_model_client=gpt_text_model_client)
+
+
+@app.post("/generate-menu-with-optionals")
+def generate_menu_with_optionals(request: MenuWithOptionalsRequest):
+    gpt_text_model_client = GptTextModelClient(model_name=MENU_GENERATION_MODEL)
+    return generate_menu_with_optionals_use_case(menu_request=request.menu, optionals=request.optionals, text_model_client=gpt_text_model_client)
+
 
 @app.post("/generate-menu-many-calls")
 def generate_menu_many_calls(menu: MenuRequest):

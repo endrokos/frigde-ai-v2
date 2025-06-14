@@ -43,3 +43,4 @@ app.include_router(router)
 def obtain_more_recipes(disk_request: DiskRequest):
     gpt_text_model_client = GptTextModelClient(model_name=RECIPE_GENERATION_MODEL)
     return calculate_macros_from_text_use_case(disk_request=disk_request, text_model_client=gpt_text_model_client)
+

@@ -1,4 +1,4 @@
-from back.src.menu_generator.domain.menu_request import MenuRequest
+from back.src.menu_generator.domain.menu_request import MenuRequest, OptionalsRequest
 
 
 def prompt_injecting(content: str, prompt: str):
@@ -35,4 +35,15 @@ def prompt_injecting_menu_and_day_iterating(menu: MenuRequest, prompt: str, day:
             .replace("{menu_para_dias_anteriores}", str(response_before))
 
 
+            )
+
+def prompt_injecting_menu_with_optionals(menu: MenuRequest, optionals: OptionalsRequest, prompt: str):
+    return (prompt
+            .replace("{objetivo_del_menu}", menu.menu_goal)
+            .replace("{comidas}", str(menu.meals))
+            .replace("{alergias}", str(menu.allergies))
+            .replace("{dieta}", menu.diet)
+            .replace("{alimentos_no_ricos}", str(menu.not_rich_foods))
+            .replace("{postre}", optionals.postre)
+            .replace("{numero_de_platos}", str(optionals.numero_de_platos))
             )
