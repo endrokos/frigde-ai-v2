@@ -32,6 +32,17 @@ def extract_json_recipes(texto: str):
 
     raise ValueError("No se encontró un JSON válido.")
 
+def extract_json_macros(texto) -> dict:
+    block = re.search(r'(\{.*\})', texto, re.DOTALL)
+    if not block:
+        raise ValueError("No se encontró un JSON válido.")
+    raw = block.group(1)
+    try:
+        raw = raw.encode('utf-8')
+    except Exception:
+        pass
+    return json.loads(raw)
+
 
 def compact_jsons(jsons: list) -> dict:
     json_concat = {

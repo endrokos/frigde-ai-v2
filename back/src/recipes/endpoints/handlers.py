@@ -1,13 +1,15 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File, APIRouter
 from starlette.middleware.cors import CORSMiddleware
 
-from back.src.recipes.application.use_case import generate_recipes_use_case, obtain_more_recipes_use_case
+from back.src.recipes.application.use_case import generate_recipes_use_case, obtain_more_recipes_use_case, \
+    calculate_macros_use_case
 from back.src.recipes.domain.recipes_request import RecipesRequest
 from back.src.shared.repository.gpt_text_model_client import GptTextModelClient
-from config import MODEL_NAME_NANO
+from back.src.shared.repository.gpt_vision_model_client import GptVisionModelClient
+from config import MODEL_NAME_NANO, MODEL_NAME_VISION
 
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
-
+router = APIRouter()
 
 origins = ["http://localhost:3000", "https://endrokosai.com"]
 
@@ -29,3 +31,9 @@ def obtain_more_recipes(recipes_request: RecipesRequest):
     gpt_text_model_client = GptTextModelClient(model_name=MODEL_NAME_NANO)
     return obtain_more_recipes_use_case(recipes_request=recipes_request, text_model_client=gpt_text_model_client)
 
+@router.post("/calculate_macros")
+async def calculate_macros(image: UploadFile = File(...)):
+    gpt_vision_model_client = GptVisionModelClient(model_name=MODEL_NAME_VISION)
+    return await calculate_macros_use_case(image_bytes=image, vision_model_client=gpt_vision_model_client)
+
+app.include_router(router)

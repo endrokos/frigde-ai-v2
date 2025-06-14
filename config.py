@@ -1,5 +1,6 @@
 MODEL_NAME = "gpt-4.1-mini"
 MODEL_NAME_NANO = "gpt-4.1-nano"
+MODEL_NAME_VISION = "gpt-4.1-nano"
 DAY_LIST = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
 PROMPT_SHOPPING_LIST = """
 Dado el siguiente listado de platos: content,
@@ -223,23 +224,6 @@ Ejemplo:
         "Comida 1": [
           {
             "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
             "calorias": ,
             "proteinas": ,
             "hidratos": ,
@@ -249,23 +233,6 @@ Ejemplo:
         "Comida 2": [
           {
             "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
             "calorias": ,
             "proteinas": ,
             "hidratos": ,
@@ -275,23 +242,6 @@ Ejemplo:
         "Comida 3": [
           {
             "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
             "calorias": ,
             "proteinas": ,
             "hidratos": ,
@@ -301,23 +251,6 @@ Ejemplo:
         "Comida 4": [
           {
             "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
             "calorias": ,
             "proteinas": ,
             "hidratos": ,
@@ -327,23 +260,6 @@ Ejemplo:
         "Comida 5": [
           {
             "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
             "calorias": ,
             "proteinas": ,
             "hidratos": ,
@@ -387,23 +303,6 @@ Ejemplo:
         "Comida 1": [
           {
             "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
             "calorias": ,
             "proteinas": ,
             "hidratos": ,
@@ -413,23 +312,6 @@ Ejemplo:
         "Comida 2": [
           {
             "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
             "calorias": ,
             "proteinas": ,
             "hidratos": ,
@@ -439,23 +321,6 @@ Ejemplo:
         "Comida 3": [
           {
             "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
             "calorias": ,
             "proteinas": ,
             "hidratos": ,
@@ -465,23 +330,6 @@ Ejemplo:
         "Comida 4": [
           {
             "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
             "calorias": ,
             "proteinas": ,
             "hidratos": ,
@@ -491,23 +339,6 @@ Ejemplo:
         "Comida 5": [
           {
             "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          },
-          {
-            "plato": ,
-            "ingredientes": [ingrediente 1, ingrediente 2, ingrediente 3],
             "calorias": ,
             "proteinas": ,
             "hidratos": ,
@@ -551,7 +382,6 @@ Devuelve únicamente un bloque JSON con una lista de 5 objetos, cada uno con el 
 [
   {
     "plato": "nombre del plato",
-    "ingredientes": ["lista", "de", "ingredientes"],
     "calorias": número,
     "proteinas": número,
     "hidratos": número,
@@ -561,4 +391,20 @@ Devuelve únicamente un bloque JSON con una lista de 5 objetos, cada uno con el 
 ]
 
 No escribas ninguna explicación ni texto adicional. Solo devuelve el JSON.
+"""
+
+PROMPT_CALCULATE_MACROS="""
+Actúa como un experto nutricionista, quiero que dada la foto que acabas de recibir, me calcules de manera más exacta que puedas los diferentes parámetros.
+
+Nombre del Plato, Calorías, Proteinas, Hidratos de carbono y grasas
+
+Ejemplo:
+
+{
+"plato": "nombre del plato",
+"calorias": número,
+"proteinas": número,
+"hidratos": número,
+"grasas": número
+}
 """

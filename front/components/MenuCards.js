@@ -1,20 +1,17 @@
+import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { List, ChevronDown, Check } from "lucide-react";
+import { ChevronDown, Check } from "lucide-react";
 import ChickenIcon from "./icons/ChickenIcon";
 import WheatIcon from "./icons/WheatIcon";
 import AvocadoIcon from "./icons/AvocadoIcon";
 
-
-// Colores para el texto
-const COLOR_PROTEINA = "#EF4444";   // Rojo fuerte
-const COLOR_HIDRATOS = "#F59E42";   // Naranja fuerte
-const COLOR_GRASAS = "#22C55E";     // Verde fuerte
-const COLOR_KCAL = "#111111";       // Negro
-
-// Colores pastel para los fondos de recuadro
-const BG_PROTEINA = "#FEE2E2";   // Rojo claro
-const BG_HIDRATOS = "#FEF6E7";   // Naranja claro
-const BG_GRASAS = "#DCFCE7";     // Verde claro
+const COLOR_PROTEINA = "#EF4444";
+const COLOR_HIDRATOS = "#F59E42";
+const COLOR_GRASAS = "#22C55E";
+const COLOR_KCAL = "#111111";
+const BG_PROTEINA = "#FEE2E2";
+const BG_HIDRATOS = "#FEF6E7";
+const BG_GRASAS = "#DCFCE7";
 
 const colorPorMomento = {
   "Desayuno": "bg-yellow-200 text-yellow-800",
@@ -26,23 +23,51 @@ const colorPorMomento = {
 
 const MOMENTOS = ["Desayuno", "Media mañana", "Comida", "Merienda", "Cena"];
 
+async function enviarPeticion(endpoint, datos, key, setRecetasGeneradas) {
+  try {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(datos),
+    });
+    const result = await response.json();
+    if (result?.recipes) {
+      setRecetasGeneradas(prev => ({
+        ...prev,
+        [key]: result.recipes,
+      }));
+    }
+  } catch (error) {
+    console.error("Error al enviar petición:", error);
+  }
+}
+
 export default function MenuCards({
   diaActivo,
   dias,
   platoSeleccionado,
-  handleSelector,
+  handleSelector: externalHandleSelector,
   seleccionarPlato,
-  openSelector,
-  openIngredientes,
-  toggleIngredientes,
   realizadas,
   toggleRealizada,
 }) {
+  const [recetasGeneradas, setRecetasGeneradas] = useState({});
+  const [alternativasPlato, setAlternativasPlato] = useState({});
+  const [openSelector, setOpenSelector] = useState({});
+  const [openAlternativas, setOpenAlternativas] = useState({});
+
+
+  const handleSelector = (key) => {
+    setOpenSelector(prev => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
   if (!dias || !dias.length || !dias[diaActivo]) {
-    return (
-      <div className="text-center text-lg py-10">Cargando tu menú...</div>
-    );
+    return <div className="text-center text-lg py-10">Cargando tu menú...</div>;
   }
+
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -60,18 +85,8 @@ export default function MenuCards({
           const seleccionado = platoSeleccionado[key] ?? 0;
           const plato = opciones[seleccionado];
           const openSel = !!openSelector[key];
-          const openIng = !!openIngredientes[key];
           const colorBadge = colorPorMomento[momento] || "bg-gray-200 text-gray-700";
           const realizada = !!realizadas[key];
-
-          if (!dias.length || !dias[diaActivo]) {
-          return (
-            <main>
-              <div className="text-center text-lg py-10">Cargando tu menú...</div>
-            </main>
-          );
-        }
-
 
           return (
             <div key={momento} className="relative">
@@ -84,16 +99,15 @@ export default function MenuCards({
                 `}
                 style={{ minHeight: 64, zIndex: openSel ? 30 : 10 }}
               >
-                {/* TOP: info y botón selector */}
+                {/* Header */}
                 <div
                   className="w-full flex items-center justify-between gap-3 p-4 rounded-2xl cursor-pointer select-none"
                   role="button"
                   tabIndex={0}
-                  onClick={() => handleSelector(key)}
-                  onKeyDown={e => { if (e.key === "Enter" || e.key === " ") handleSelector(key); }}
+                  onClick={() => externalHandleSelector?.(key)}
+                  onKeyDown={e => { if (e.key === "Enter" || e.key === " ") externalHandleSelector?.(key); }}
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    {/* Círculo check */}
                     <button
                       type="button"
                       onClick={e => { e.stopPropagation(); toggleRealizada(key); }}
@@ -103,14 +117,12 @@ export default function MenuCards({
                         hover:bg-emerald-50 transition
                       `}
                       tabIndex={-1}
-                      aria-label={realizada ? "Comida realizada" : "Marcar como realizada"}
                     >
                       {realizada && (
                         <Check className="w-4 h-4 text-emerald-500" strokeWidth={3} />
                       )}
                     </button>
-                    {/* Badge de momento */}
-                    <span className={`font-semibold text-sm px-3 py-1 rounded-full ${colorBadge} whitespace-nowrap`}>
+                    <span className={`font-semibold text-sm px-3 py-1 rounded-full ${colorBadge}`}>
                       {momento}
                     </span>
                     <span className="font-bold text-base md:text-lg text-gray-900 truncate">
@@ -121,125 +133,156 @@ export default function MenuCards({
                     <span className="font-bold text-base mr-1" style={{ color: COLOR_KCAL }}>
                       {plato.calorias} <span className="text-xs font-medium">kcal</span>
                     </span>
-                    <ChevronDown className={`w-5 h-5 transition-transform duration-200 ${openSel ? "rotate-180" : ""} text-gray-400`} />
+                    {alternativasPlato[key] && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setOpenAlternativas(prev => ({
+                            ...prev,
+                            [key]: !prev[key],
+                          }));
+                        }}
+                        className="p-1 rounded-full hover:bg-gray-100 transition"
+                      >
+                        <ChevronDown
+                          className={`w-5 h-5 transition-transform ${openAlternativas[key] ? "rotate-180" : ""} text-gray-400`}
+                        />
+                      </button>
+                    )}
                   </div>
                 </div>
 
-                {/* MACROS + BOTÓN INGREDIENTES */}
+                {/* Macros + Botones */}
                 <div className="flex items-center justify-between gap-3 px-6 pt-1 pb-2">
-                  {/* Macros */}
                   <div className="flex gap-2">
-                    <div
-                      className="rounded-xl px-2 py-1 flex items-center gap-1 text-xs"
-                      style={{ background: BG_PROTEINA }}
-                    >
+                    <div className="rounded-xl px-2 py-1 flex items-center gap-1 text-xs" style={{ background: BG_PROTEINA }}>
                       <span className="font-bold" style={{ color: COLOR_PROTEINA }}>{plato.proteinas}g</span>
                       <ChickenIcon width={16} height={16} color={COLOR_PROTEINA} />
                     </div>
-                    <div
-                      className="rounded-xl px-2 py-1 flex items-center gap-1 text-xs"
-                      style={{ background: BG_HIDRATOS }}
-                    >
+                    <div className="rounded-xl px-2 py-1 flex items-center gap-1 text-xs" style={{ background: BG_HIDRATOS }}>
                       <span className="font-bold" style={{ color: COLOR_HIDRATOS }}>{plato.hidratos}g</span>
                       <WheatIcon width={16} height={16} color={COLOR_HIDRATOS} />
                     </div>
-                    <div
-                      className="rounded-xl px-2 py-1 flex items-center gap-1 text-xs"
-                      style={{ background: BG_GRASAS }}
-                    >
+                    <div className="rounded-xl px-2 py-1 flex items-center gap-1 text-xs" style={{ background: BG_GRASAS }}>
                       <span className="font-bold" style={{ color: COLOR_GRASAS }}>{plato.grasas}g</span>
                       <AvocadoIcon width={16} height={16} color={COLOR_GRASAS} />
                     </div>
                   </div>
-                  {/* Botón ingredientes */}
-                  <button
-                    type="button"
-                    onClick={() => toggleIngredientes(key)}
-                    className={`
-                      bg-gray-100 px-2 py-1 rounded-full flex items-center gap-1
-                      text-gray-400 font-semibold text-xs shadow hover:text-emerald-600 hover:bg-emerald-50
-                      transition-all duration-150 z-30
-                    `}
-                    tabIndex={-1}
-                  >
-                    <List className="w-4 h-4" />
-                    <span className="font-medium">{openIng ? "Ocultar" : "Ver"} ingredientes</span>
-                  </button>
+
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        enviarPeticion(
+                          "http://127.0.0.1:8001/generate_recipe",
+                          {
+                            plato: plato.plato,
+                            calories: plato.calorias,
+                            protein: plato.proteinas,
+                            carbohydrate: plato.hidratos,
+                            fat: plato.grasas,
+                          },
+                          key,
+                          setRecetasGeneradas
+                        )
+                      }
+                      className="bg-emerald-100 px-3 py-1 rounded-full text-emerald-800 font-semibold text-xs hover:bg-emerald-200"
+                    >
+                      Generar receta
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        fetch("http://127.0.0.1:8001/obtain_more_recipes", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({
+                            plato: plato.plato,
+                            calories: plato.calorias,
+                            protein: plato.proteinas,
+                            carbohydrate: plato.hidratos,
+                            fat: plato.grasas,
+                          }),
+                        })
+                          .then(res => res.json())
+                          .then(data => {
+                            if (data?.recipes) {
+                              setAlternativasPlato(prev => ({
+                                ...prev,
+                                [key]: data.recipes,
+                              }));
+                              setOpenAlternativas(prev => ({
+                                ...prev,
+                                [key]: true,
+                              }));
+                            }
+                          })
+                          .catch(err => console.error("Error:", err))
+                      }
+                      className="bg-blue-100 px-3 py-1 rounded-full text-blue-800 font-semibold text-xs hover:bg-blue-200"
+                    >
+                      Cambiar plato
+                    </button>
+                  </div>
                 </div>
 
-                {/* Ingredientes desplegable */}
-                <AnimatePresence>
-                  {openIng && (
-                    <motion.ul
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.17 }}
-                      className="px-8 pb-4 list-disc text-gray-700 text-base font-light overflow-hidden bg-white rounded-xl"
-                    >
-                      {plato.ingredientes.map((ing, idx) => (
-                        <li key={ing + idx}>{ing}</li>
-                      ))}
-                    </motion.ul>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* Dropdown en posición absoluta sobre el resto */}
-              <AnimatePresence>
-                {openSel && (
-                  <motion.ul
-                    initial={{ opacity: 0, y: 5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 5 }}
-                    transition={{ duration: 0.16 }}
-                    className="absolute left-0 right-0 z-50 mt-2 bg-white rounded-2xl shadow-2xl border border-emerald-100 overflow-hidden"
-                    style={{
-                      top: "100%",
-                      minWidth: "100%",
-                    }}
-                  >
-                    {opciones.map((op, idx) =>
-                      idx === seleccionado ? null : (
-                        <li
+                {/* Desplegable de alternativas */}
+                {openAlternativas[key] && alternativasPlato[key] && (
+                  <div className="px-6 pb-4">
+                    <div className="border border-blue-100 rounded-xl shadow-sm mt-2 overflow-hidden">
+                      {alternativasPlato[key].map((op, idx) => (
+                        <div
                           key={op.plato + idx}
-                          className="w-full hover:bg-emerald-50 px-6 py-3 cursor-pointer flex items-center justify-between gap-2"
-                          onClick={() => seleccionarPlato(key, idx)}
+                          className="px-4 py-3 hover:bg-blue-50 cursor-pointer flex justify-between items-center"
+                          onClick={() => {
+                            dias[diaActivo].comidas[momento][seleccionado] = op;
+                            seleccionarPlato(key, seleccionado);
+                            setAlternativasPlato(prev => ({
+                              ...prev,
+                              [key]: undefined
+                            }));
+                          }}
                         >
-                          <span className="font-semibold text-emerald-700">{op.plato}</span>
-                          <div className="flex gap-2">
-                            <div
-                              className="rounded-xl px-2 py-1 flex items-center gap-1 text-xs"
-                              style={{ background: BG_PROTEINA }}
-                            >
-                              <ChickenIcon width={16} height={16} color={COLOR_PROTEINA} />
-                              <span className="font-bold" style={{ color: COLOR_PROTEINA }}>{plato.proteinas}g</span>
-                            </div>
-                            <div
-                              className="rounded-xl px-2 py-1 flex items-center gap-1 text-xs"
-                              style={{ background: BG_HIDRATOS }}
-                            >
-                              <WheatIcon width={16} height={16} color={COLOR_HIDRATOS} />
-                              <span className="font-bold" style={{ color: COLOR_HIDRATOS }}>{plato.hidratos}g</span>
-                            </div>
-                            <div
-                              className="rounded-xl px-2 py-1 flex items-center gap-1 text-xs"
-                              style={{ background: BG_GRASAS }}
-                            >
-                              <AvocadoIcon width={16} height={16} color={COLOR_GRASAS} />
-                              <span className="font-bold" style={{ color: COLOR_GRASAS }}>{plato.grasas}g</span>
-                          </div>
-                            {/* Calorías */}
-                            <span className="font-bold text-sm ml-1" style={{ color: COLOR_KCAL }}>
-                              {op.calorias} kcal
-                            </span>
-                          </div>
-                        </li>
-                      )
-                    )}
-                  </motion.ul>
+                          <span className="font-semibold text-blue-800">{op.plato}</span>
+                          <span className="text-xs text-gray-600">{op.calorias} kcal</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 )}
-              </AnimatePresence>
+
+                {/* Receta e ingredientes */}
+                {recetasGeneradas[key] && (
+                  <div className="px-6 pb-4 pt-2 text-sm text-gray-700 space-y-2">
+                    {Array.isArray(recetasGeneradas[key].recipe) && (
+                      <div>
+                        <span className="font-semibold text-emerald-700">Receta:</span>
+                        <ol className="list-decimal list-inside space-y-2 mt-1">
+                          {recetasGeneradas[key].recipe.map((paso, i) => (
+                            <li key={i} className="text-gray-800">{paso}</li>
+                          ))}
+                        </ol>
+                      </div>
+                    )}
+                    {Array.isArray(recetasGeneradas[key].ingredients) && (
+                      <div>
+                        <span className="font-semibold text-emerald-700">Ingredientes:</span>
+                        <ul className="list-disc list-inside mt-1">
+                          {recetasGeneradas[key].ingredients.map((ing, idx) => (
+                            <li key={idx}>
+                              {typeof ing === "string"
+                                ? ing
+                                : `${ing.name ?? "Ingrediente"}${ing.quantity ? ` – ${ing.quantity}` : ""}`}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           );
         })}
