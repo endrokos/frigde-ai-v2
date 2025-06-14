@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from back.src.menu_generator.domain.menu_request import MenuRequest, OptionalsRequest, MenuWithOptionalsRequest
+from back.src.menu_generator.domain.menu_request import MenuRequest, MenuWithOptionalsRequest
 from config.models import MENU_GENERATION_MODEL
 from back.src.menu_generator.application.use_cases import (
     generate_shopping_list_use_case,
