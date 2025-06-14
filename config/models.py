@@ -1,0 +1,3 @@
+MENU_GENERATION_MODEL = "gpt-4.1-mini"
+RECIPE_GENERATION_MODEL = "gpt-4.1-nano"
+VISION_MODEL = "gpt-4.1-nano"

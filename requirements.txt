@@ -1,2 +1,5 @@
-openai
-fastapi
+openai~=1.86.0
+fastapi~=0.115.12
+dotenv~=0.9.9
+python-dotenv~=1.1.0
+starlette~=0.46.2

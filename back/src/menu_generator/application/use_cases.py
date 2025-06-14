@@ -10,7 +10,7 @@ from back.src.menu_generator.repository.prompt_injecting import (
     prompt_injecting_menu_and_day,
     prompt_injecting_menu_and_day_iterating,
 )
-from config import PROMPT_SHOPPING_LIST, PROMPT_MAKE_MENU, DAY_LIST, PROMPT_MAKE_MENU_FOR_DAY, \
+from config.prompts import PROMPT_SHOPPING_LIST, PROMPT_MAKE_MENU, DAY_LIST, PROMPT_MAKE_MENU_FOR_DAY, \
     PROMPT_MAKE_MENU_FOR_DAY_ITERATING
 
 

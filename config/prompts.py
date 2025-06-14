@@ -1,6 +1,3 @@
-MODEL_NAME = "gpt-4.1-mini"
-MODEL_NAME_NANO = "gpt-4.1-nano"
-MODEL_NAME_VISION = "gpt-4.1-nano"
 DAY_LIST = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
 PROMPT_SHOPPING_LIST = """
 Dado el siguiente listado de platos: content,

@@ -10,7 +10,7 @@ from back.src.shared.repository.code_base64 import process_image_content
 from back.src.shared.repository.extract_json import extract_json_macros
 from back.src.shared.repository.gpt_text_model_client import GptTextModelClient
 from back.src.shared.repository.gpt_vision_model_client import GptVisionModelClient
-from config import PROMPT_CREATE_RECIPES, PROMPT_OBTAIN_MORE_RECIPES, PROMPT_CALCULATE_MACROS_FROM_IMAGE, \
+from config.prompts import PROMPT_CREATE_RECIPES, PROMPT_OBTAIN_MORE_RECIPES, PROMPT_CALCULATE_MACROS_FROM_IMAGE, \
     PROMPT_CALCULATE_MACROS_FROM_TEXT
 
 
