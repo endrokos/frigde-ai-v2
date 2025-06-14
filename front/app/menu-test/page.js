@@ -5,6 +5,7 @@ import DiaSelector from "@/components/DiaSelector";
 import ProgresoResumen from "@/components/ProgresoResumen";
 import MacroCard from "@/components/MacroCard";
 import MenuCards from "@/components/MenuCards";
+import SubirPlatoDesdeImagen from "@/components/SubirPlatoDesdeImagen";
 
 const MOMENTOS = ["Desayuno", "Media mañana", "Comida", "Merienda", "Cena"];
 
@@ -14,28 +15,18 @@ export default function MenuPage() {
   const [openIngredientes, setOpenIngredientes] = useState({});
   const [platoSeleccionado, setPlatoSeleccionado] = useState({});
   const [realizadas, setRealizadas] = useState({});
-
-  // Estados para dietaSemana y macros
   const [dias, setDias] = useState([]);
+
   const [objetivoProteina, setObjetivoProteina] = useState(0);
   const [objetivoHidratos, setObjetivoHidratos] = useState(0);
   const [objetivoGrasas, setObjetivoGrasas] = useState(0);
   const [objetivoCalorias, setObjetivoCalorias] = useState(0);
 
   useEffect(() => {
-    // Lee y desestructura el JSON de localStorage
     const stored = localStorage.getItem("dietaSemana");
     if (stored) {
       const dietaSemana = JSON.parse(stored);
-
-      console.log(dietaSemana)
-
-      // --- Aquí es donde evitamos el error de array de arrays ---
-      let diasArray = [];
-      if (Array.isArray(dietaSemana.dias)) {
-        diasArray = dietaSemana.dias.flat();
-      }
-
+      let diasArray = Array.isArray(dietaSemana.dias) ? dietaSemana.dias.flat() : [];
 
       setDias(diasArray);
       setObjetivoProteina(dietaSemana.objetivo_proteinas || 0);
@@ -45,7 +36,16 @@ export default function MenuPage() {
     }
   }, []);
 
-  // Handlers principales:
+  // ✅ Nueva función: guarda el array actualizado en localStorage
+  const guardarDiasEnLocalStorage = (nuevosDias) => {
+    const stored = localStorage.getItem("dietaSemana");
+    if (stored) {
+      const data = JSON.parse(stored);
+      data.dias = nuevosDias;
+      localStorage.setItem("dietaSemana", JSON.stringify(data));
+    }
+  };
+
   const handleSelector = (key) => {
     setOpenSelector((prev) => ({
       ...Object.fromEntries(Object.keys(prev).map(k => [k, false])),
@@ -84,7 +84,6 @@ export default function MenuPage() {
     }));
   };
 
-  // ----------- RESUMEN DÍA/MACROS -----------
   const resumenDia = (() => {
     const comidas = dias[diaActivo]?.comidas || {};
     let totalCalorias = 0, totalProteinas = 0, totalHidratos = 0, totalGrasas = 0;
@@ -99,20 +98,13 @@ export default function MenuPage() {
         totalGrasas += plato.grasas || 0;
       }
     });
-    return {
-      calorias: totalCalorias,
-      proteinas: totalProteinas,
-      hidratos: totalHidratos,
-      grasas: totalGrasas
-    };
+    return { calorias: totalCalorias, proteinas: totalProteinas, hidratos: totalHidratos, grasas: totalGrasas };
   })();
 
-  // ---- Progreso del día ----
   const totalComidasDia = MOMENTOS.filter(m => (dias[diaActivo]?.comidas?.[m] || []).length > 0).length;
   const realizadasDia = MOMENTOS.filter(m => realizadas[`${diaActivo}-${m}`]).length;
   const progresoDia = totalComidasDia ? realizadasDia / totalComidasDia : 0;
 
-  // ---- Progreso de la semana ----
   let totalComidasSemana = 0, realizadasSemana = 0;
   dias.forEach((dia, i) => {
     MOMENTOS.forEach(m => {
@@ -127,7 +119,6 @@ export default function MenuPage() {
   const macrosRealizadas = (() => {
     const comidas = dias[diaActivo]?.comidas || {};
     let cal = 0, prot = 0, hidr = 0, grasa = 0;
-
     Object.entries(comidas).forEach(([momento, opciones]) => {
       if (opciones && opciones.length > 0) {
         const key = `${diaActivo}-${momento}`;
@@ -149,7 +140,6 @@ export default function MenuPage() {
   const hidrRestantes = Math.max(objetivoHidratos - macrosRealizadas.hidratos, 0);
   const grasaRestantes = Math.max(objetivoGrasas - macrosRealizadas.grasas, 0);
 
-  // --- Protección para evitar errores si aún no hay días cargados
   if (!dias || !dias.length) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-tr from-white via-emerald-50 to-lime-100 relative py-8">
@@ -164,7 +154,7 @@ export default function MenuPage() {
     <main className="flex min-h-screen flex-col items-center bg-gradient-to-tr from-white via-emerald-50 to-lime-100 relative py-8">
       <div className="bg-white/80 rounded-3xl shadow-xl shadow-emerald-100 p-8 w-full max-w-3xl flex flex-col gap-6 border border-emerald-100">
         <h2 className="text-3xl font-extrabold text-emerald-600 text-center mb-2">Tu menú semanal</h2>
-        
+
         <DiaSelector dias={dias} diaActivo={diaActivo} setDiaActivo={setDiaActivo} />
 
         <ProgresoResumen
@@ -177,38 +167,10 @@ export default function MenuPage() {
         />
 
         <div className="w-full grid grid-cols-1 sm:grid-cols-4 gap-4 mb-2">
-          <MacroCard
-            cantidad={kcalRestantes}
-            macro="Calorías"
-            icon="fire"
-            color="#111"
-            objetivo={objetivoCalorias}
-            realizado={macrosRealizadas.calorias}
-          />
-          <MacroCard
-            cantidad={protRestantes}
-            macro="Proteína"
-            icon="chicken"
-            color="#EF4444"
-            objetivo={objetivoProteina}
-            realizado={macrosRealizadas.proteinas}
-          />
-          <MacroCard
-            cantidad={hidrRestantes}
-            macro="Hidratos"
-            icon="wheat"
-            color="#F59E42"
-            objetivo={objetivoHidratos}
-            realizado={macrosRealizadas.hidratos}
-          />
-          <MacroCard
-            cantidad={grasaRestantes}
-            macro="Grasas"
-            icon="droplet"
-            color="#22C55E"
-            objetivo={objetivoGrasas}
-            realizado={macrosRealizadas.grasas}
-          />
+          <MacroCard cantidad={kcalRestantes} macro="Calorías" icon="fire" color="#111" objetivo={objetivoCalorias} realizado={macrosRealizadas.calorias} />
+          <MacroCard cantidad={protRestantes} macro="Proteína" icon="chicken" color="#EF4444" objetivo={objetivoProteina} realizado={macrosRealizadas.proteinas} />
+          <MacroCard cantidad={hidrRestantes} macro="Hidratos" icon="wheat" color="#F59E42" objetivo={objetivoHidratos} realizado={macrosRealizadas.hidratos} />
+          <MacroCard cantidad={grasaRestantes} macro="Grasas" icon="droplet" color="#22C55E" objetivo={objetivoGrasas} realizado={macrosRealizadas.grasas} />
         </div>
 
         <MenuCards
@@ -222,6 +184,13 @@ export default function MenuPage() {
           toggleIngredientes={toggleIngredientes}
           realizadas={realizadas}
           toggleRealizada={toggleRealizada}
+        />
+
+        <SubirPlatoDesdeImagen
+          diaActivo={diaActivo}
+          setDias={setDias}
+          setPlatoSeleccionado={setPlatoSeleccionado}
+          guardarDiasEnLocalStorage={guardarDiasEnLocalStorage} // ✅ nuevo prop
         />
       </div>
     </main>
