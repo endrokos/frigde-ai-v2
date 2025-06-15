@@ -16,6 +16,12 @@ export default function MenuPage() {
   const [openIngredientes, setOpenIngredientes] = useState({});
   const [platoSeleccionado, setPlatoSeleccionado] = useState({});
   const [realizadas, setRealizadas] = useState({});
+  const [resumen, setResumen] = useState({
+    calorias: 0,
+    proteinas: 0,
+    hidratos: 0,
+    grasas: 0,
+  }); 
   const [dias, setDias] = useState([]);
 
   const [objetivoProteina, setObjetivoProteina] = useState(0);
@@ -24,35 +30,18 @@ export default function MenuPage() {
   const [objetivoCalorias, setObjetivoCalorias] = useState(0);
 
   useEffect(() => {
-    const fetchMenu = async () => {
-      try {
-        const payload = {}; // opcional: aquí puedes definir valores predeterminados
-        const response = await generarDietasSemana(payload);
-        const menu = response.menu;
-
-        localStorage.setItem("dietaSemana", JSON.stringify(menu));
-
-        setDias(menu.dias || []);
-        setObjetivoProteina(menu.objetivo_proteinas || 0);
-        setObjetivoHidratos(menu.objetivo_hidratos || 0);
-        setObjetivoGrasas(menu.objetivo_grasas || 0);
-        setObjetivoCalorias(menu.objetivo_calorias || 0);
-      } catch (error) {
-        console.error("Error generando el menú semanal:", error);
-      }
-    };
-
     const stored = localStorage.getItem("dietaSemana");
     if (stored) {
       const dietaSemana = JSON.parse(stored);
+      console.log("📥 Recuperado de localStorage:", dietaSemana);
+      console.log("📥 dietaSemana.dias:", dietaSemana.dias);
       setDias(dietaSemana.dias || []);
       setObjetivoProteina(dietaSemana.objetivo_proteinas || 0);
       setObjetivoHidratos(dietaSemana.objetivo_hidratos || 0);
       setObjetivoGrasas(dietaSemana.objetivo_grasas || 0);
       setObjetivoCalorias(dietaSemana.objetivo_calorias || 0);
     } else {
-      fetchMenu();
-    }
+      console.error("❌ No se encontró 'dietaSemana' en localStorage");    }
   }, []);
 
   const guardarDiasEnLocalStorage = (nuevosDias) => {
@@ -94,12 +83,34 @@ export default function MenuPage() {
       ...Object.fromEntries(Object.keys(prev).map(k => [k, false])),
     }));
   };
+  
 
-  const toggleRealizada = (key) => {
-    setRealizadas((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
+  const toggleRealizada = (key, platos = []) => {
+    setRealizadas(prev => {
+      const yaEstaba = !!prev[key];
+      const nuevoEstado = { ...prev, [key]: !yaEstaba };
+
+      // Sumar o restar los valores de todos los platos
+      const suma = platos.reduce(
+        (acc, plato) => {
+          acc.calorias += plato.calorias || 0;
+          acc.proteinas += plato.proteinas || 0;
+          acc.hidratos += plato.hidratos || 0;
+          acc.grasas += plato.grasas || 0;
+          return acc;
+        },
+        { calorias: 0, proteinas: 0, hidratos: 0, grasas: 0 }
+      );
+
+      setResumen(prevResumen => ({
+        calorias: prevResumen.calorias + (yaEstaba ? -suma.calorias : suma.calorias),
+        proteinas: prevResumen.proteinas + (yaEstaba ? -suma.proteinas : suma.proteinas),
+        hidratos: prevResumen.hidratos + (yaEstaba ? -suma.hidratos : suma.hidratos),
+        grasas: prevResumen.grasas + (yaEstaba ? -suma.grasas : suma.grasas),
+      }));
+
+      return nuevoEstado;
+    });
   };
 
   const resumenDia = (() => {
@@ -157,6 +168,10 @@ export default function MenuPage() {
   const protRestantes = Math.max(objetivoProteina - macrosRealizadas.proteinas, 0);
   const hidrRestantes = Math.max(objetivoHidratos - macrosRealizadas.hidratos, 0);
   const grasaRestantes = Math.max(objetivoGrasas - macrosRealizadas.grasas, 0);
+
+  console.log("📦 Estado de dias:", dias);
+  console.log("📦 Longitud de dias:", dias?.length);
+
 
   if (!dias || !dias.length) {
     return (

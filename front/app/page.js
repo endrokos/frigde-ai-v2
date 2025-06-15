@@ -1,11 +1,9 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
-// Importa la función de API
 import { generarDietasSemana } from "@/data/generarDietasSemana";
 
-// Importa tus componentes
+// Componentes
 import ObjetivoSelect from "@/components/ObjetivoSelect";
 import AlergiasCheckbox from "@/components/AlergiasCheckbox";
 import DietasRadio from "@/components/DietasRadio";
@@ -26,6 +24,10 @@ export default function Home() {
   const [noGusta, setNoGusta] = useState("");
   const [comidasSeleccionadas, setComidasSeleccionadas] = useState([]);
 
+  // ✅ Nuevos estados
+  const [postreComida, setPostreComida] = useState(true);
+  const [postreCena, setPostreCena] = useState(false);
+
   const handleAlergiaChange = (item) => {
     setAlergiasSeleccionadas(prev =>
       prev.includes(item)
@@ -42,58 +44,56 @@ export default function Home() {
     );
   };
 
-  // --- Manejo del submit del formulario ---
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Prepara el array de alimentos no deseados
     let notRichFoods = noGusta
       .split(",")
       .map(item => item.trim())
       .filter(Boolean);
 
-    // Alergias: agrega "otra" si aplica
     let alergias = [...alergiasSeleccionadas];
     if (mostrarAlergiaOtra && alergiaOtra.trim()) {
       alergias.push(alergiaOtra.trim());
     }
 
-    // Dieta: usa "otra" si corresponde
     let dietaFinal = dieta === "Otra" && dietaOtra.trim()
       ? dietaOtra.trim()
       : dieta;
 
-    // Objetivo: igual
     let objetivoFinal = objetivo === "Otro" && objetivoOtro.trim()
       ? objetivoOtro.trim()
       : objetivo;
 
-    // Payload para el backend
+    const tiene = (momento) => comidasSeleccionadas.includes(momento);
+
     const payload = {
-      menu_goal: objetivoFinal,              // string
-      meals: comidasSeleccionadas,           // array
-      allergies: alergias,                   // array
-      diet: dietaFinal,                      // string
-      not_rich_foods: notRichFoods,          // array
+      menu_goal: objetivoFinal,
+      meals: comidasSeleccionadas,
+      allergies: alergias.length > 0 ? alergias : [""],
+      diet: dietaFinal || "",
+      not_rich_foods: notRichFoods.length > 0 ? notRichFoods : [""],
+      numero_de_platos_comida: tiene("Comida") ? 2 : 0,
+      postre_comida: postreComida ? "si" : "no",
+      numero_de_platos_cena: tiene("Cena") ? 1 : 0,
+      postre_cena: postreCena ? "si" : "no",
     };
 
     try {
       const dietaSemana = await generarDietasSemana(payload);
-      // Guarda la dieta para mostrarla luego (ejemplo: localStorage)
-      localStorage.setItem("dietaSemana", JSON.stringify(dietaSemana));
+      localStorage.setItem("dietaSemana", JSON.stringify(dietaSemana.menu));
       router.push("/menu-test");
     } catch (err) {
+      console.error(err);
       alert("Hubo un error generando la dieta.");
     }
   };
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-start pt-10 bg-gradient-to-tr from-emerald-100 via-white to-lime-100 relative overflow-hidden">
-      {/* Fondos decorativos */}
       <div className="absolute top-[-80px] left-[-80px] w-[350px] h-[350px] bg-emerald-200 rounded-full opacity-30 blur-2xl" />
       <div className="absolute bottom-[-100px] right-[-100px] w-[400px] h-[400px] bg-lime-200 rounded-full opacity-30 blur-2xl" />
 
-      {/* Card central MÁS ANCHA */}
       <div
         className={`
           relative z-10 bg-white/90 shadow-2xl rounded-3xl px-10 py-12 flex flex-col items-center gap-7
@@ -105,7 +105,6 @@ export default function Home() {
           filter: showForm ? "drop-shadow(0 15px 40px rgba(52,211,153,0.15))" : undefined,
         }}
       >
-        {/* Icono */}
         <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-tr from-emerald-300 to-lime-300 shadow-lg mb-2">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" className="text-emerald-700">
             <path d="M12 21c4.97 0 9-3.806 9-8.5S16.97 4 12 4 3 7.806 3 12.5 7.03 21 12 21z" stroke="currentColor" strokeWidth="1.6" />
@@ -119,7 +118,6 @@ export default function Home() {
           Crea tu plan alimenticio ideal, mejora tu salud y alcanza tus objetivos de manera sencilla y personalizada.
         </p>
 
-        {/* Botón para abrir el formulario */}
         {!showForm && (
           <button
             className="bg-emerald-500 text-white text-xl px-12 py-4 rounded-2xl shadow-lg hover:bg-emerald-600 hover:scale-105 active:scale-95 transition-all cursor-pointer font-semibold tracking-wide"
@@ -129,7 +127,6 @@ export default function Home() {
           </button>
         )}
 
-        {/* FORMULARIO */}
         {showForm && (
           <form
             className="flex flex-col gap-6 w-full max-w-2xl py-4 mx-auto animate-fade-in"
@@ -169,6 +166,31 @@ export default function Home() {
               seleccionadas={comidasSeleccionadas}
               onToggle={handleComidasChange}
             />
+
+            {/* ✅ NUEVOS CHECKBOXES para postres */}
+            {comidasSeleccionadas.includes("Comida") && (
+              <label className="flex items-center gap-2 text-sm text-gray-700">
+                <input
+                  type="checkbox"
+                  checked={postreComida}
+                  onChange={e => setPostreComida(e.target.checked)}
+                  className="accent-emerald-600"
+                />
+                ¿Quieres postre en la comida?
+              </label>
+            )}
+            {comidasSeleccionadas.includes("Cena") && (
+              <label className="flex items-center gap-2 text-sm text-gray-700">
+                <input
+                  type="checkbox"
+                  checked={postreCena}
+                  onChange={e => setPostreCena(e.target.checked)}
+                  className="accent-emerald-600"
+                />
+                ¿Quieres postre en la cena?
+              </label>
+            )}
+
             <button
               type="submit"
               className="mt-2 bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-700 active:scale-95 transition-all shadow-lg"
