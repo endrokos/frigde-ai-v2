@@ -1,10 +1,6 @@
-MODEL_NAME = "gpt-4.1-mini"
-MODEL_NAME_NANO = "gpt-4.1-nano"
-MODEL_NAME_VISION = "gpt-4.1-nano"
 DAY_LIST = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
 PROMPT_SHOPPING_LIST = """
 Dado el siguiente listado de platos: content,
-
 genera una lista de la compra para una semana, con cantidades aproximadas,
 formateada para que sea fácil de leer y entender para cualquier persona.
 
@@ -58,18 +54,20 @@ y el formato de salida debe ser una lista de python con los 20 platos nuevos bie
 Importante: Ten en cuenta que estos platos van para una App que la va a utilizar gente española, asi que haz más referencia a platos tipico europeos, variantes y demas, como espagueti bolloñesa, espagueti carbonara, etc
 """
 
+# TODO: Añadir métricas de la persona
 PROMPT_MAKE_MENU = """
-Quiero que me generes un json donde añadas en la estructura que te voy a pasar, 1 platos por comida por semana
-
-quiero que este menu se base en la dieta para bajar peso si mido 170 y peso 80 kg y hago deporte cada 3 días
-
-Para rellenar el json ten en cuenta los siguientes datos
+Quiero que me generes un json donde añadas en la estructura que te voy a pasar.
+Se trata de generar un menú semanal. Es necesario que generes {numero_de_platos} opciones (primer y segundo plato) para la -comida- y la -cena-, 
+y sólamente 1 opción para el resto.
+El usuario {postre} quiere postre. Si es un -Sí- incluye sólo en la comida y la cena. Si es un -No-, procura que no aparezca.
+Quiero que este menú se base en la dieta para bajar peso si mido 170 y peso 80 kg y hago deporte cada 3 días
+Para rellenar el json ten en cuenta los siguientes datos:
 
 El objetivo del menu es el siguiente: {objetivo_del_menu}
 Comidas al día: {comidas}
-Tiene alegia a: {alergias}
-Sigue la siguiente dieta: {dieta}, sino hay dieta sigue algo sano y variado 
-No le gusta estos alimentos: {alimentos_no_ricos}
+Tiene alergia a: {alergias}
+Sigue la siguiente dieta: {dieta}. Si no hay dieta, propón algo sano y variado 
+El usuario no tolera los siguientes alimentos: {alimentos_no_ricos}
 
 Ejemplo: 
 
@@ -152,11 +150,11 @@ Ejemplo:
     {
       "nombre": "Jueves",
       "comidas": {
-        "Desayuno": [...],
-        "Media mañana": [...],
-        "Comida": [...],
-        "Merienda": [...],
-        "Cena": [...],
+        "Comida 1": [...],
+        "Comida 2": [...],
+        "Comida 3": [...],
+        "Comida 4": [...],
+        "Comida 5": [...],
       }
     },
     {
@@ -192,23 +190,219 @@ Ejemplo:
   ]
 };
 
-[...] los debes rellenar con el formato que te he puesto de ejemplo con el lunes
+Si existiera la opción de incluir 2 platos, y postre un ejemplo sería:
+  "nombre": "Lunes",
+  "comidas": {
+    "Cena": [
+      {
+        "plato": ,
+        "calorias": ,
+        "proteinas": ,
+        "hidratos": ,
+        "grasas": ,
+      }
+      {
+        "plato": ,
+        "calorias": ,
+        "proteinas": ,
+        "hidratos": ,
+        "grasas": ,
+      }
+      {
+        "postre": ,
+        "calorias": ,
+        "proteinas": ,
+        "hidratos": ,
+        "grasas": ,
+      }
+    ]
+        
+Los campos de cada entrada se deben rellenar tal cual vienen ejemplificados el día LUNES
+"""
+
+PROMPT_MAKE_MENU_WITH_OPTIONS = """
+Quiero que me generes un json donde añadas en la estructura que te voy a pasar.
+Se trata de generar un menú semanal. 
+Es necesario que generes {numero_de_platos_comida} para las -comidas-, en caso de que sean dos, quiero que des un primer plato y luego un segundo plato
+Es necesario que generes {numero_de_platos_cena} para las -cenas-, en caso de que sean dos, quiero que des un primer plato y luego un segundo plato
+y sólamente 1 opción para el resto.
+El usuario {postre_comida} quiere postre. Si es un -Sí- incluye sólo en la comida. Si es un -No-, procura que no aparezca.
+El usuario {postre_cena} quiere postre. Si es un -Sí- incluye sólo en la cena. Si es un -No-, procura que no aparezca.
+Quiero que este menú se base en la dieta para bajar peso si mido 170 y peso 80 kg y hago deporte cada 3 días
+Para rellenar el json ten en cuenta los siguientes datos:
+
+El objetivo del menu es el siguiente: {objetivo_del_menu}
+Comidas al día: {comidas}
+Tiene alergia a: {alergias}
+Sigue la siguiente dieta: {dieta}. Si no hay dieta, propón algo sano y variado 
+El usuario no tolera los siguientes alimentos: {alimentos_no_ricos}
+
+Ejemplo: 
+
+{
+  "objetivo_calorias": ,
+  "objetivo_proteinas": ,
+  "objetivo_hidratos": ,
+  "objetivo_grasas": ,
+  "dias": [
+    {
+      "nombre": "Lunes",
+      "comidas": {
+        "Comida 1": [
+          {
+            "plato": ,
+            "calorias": ,
+            "proteinas": ,
+            "hidratos": ,
+            "grasas": ,
+          }
+        ],
+        "Comida 2": [
+          {
+            "plato": ,
+            "calorias": ,
+            "proteinas": ,
+            "hidratos": ,
+            "grasas": ,
+          }
+        ],
+        "Comida 3": [
+          {
+            "plato": ,
+            "calorias": ,
+            "proteinas": ,
+            "hidratos": ,
+            "grasas": ,
+          }
+        ],
+        "Comida 4": [
+          {
+            "plato": ,
+            "calorias": ,
+            "proteinas": ,
+            "hidratos": ,
+            "grasas": ,
+          }
+        ],
+        "Comida 5": [
+          {
+            "plato": ,
+            "calorias": ,
+            "proteinas": ,
+            "hidratos": ,
+            "grasas": ,
+          }
+        ]
+      }
+    },
+    {
+      "nombre": "Martes",
+      "comidas": {
+        "Comida 1": [...],
+        "Comida 2": [...],
+        "Comida 3": [...],
+        "Comida 4": [...],
+        "Comida 5": [...],
+      }
+    },
+    {
+      "nombre": "Miércoles",
+      "comidas": {
+        "Comida 1": [...],
+        "Comida 2": [...],
+        "Comida 3": [...],
+        "Comida 4": [...],
+        "Comida 5": [...],
+      }
+    },
+    {
+      "nombre": "Jueves",
+      "comidas": {
+        "Comida 1": [...],
+        "Comida 2": [...],
+        "Comida 3": [...],
+        "Comida 4": [...],
+        "Comida 5": [...],
+      }
+    },
+    {
+      "nombre": "Viernes",
+      "comidas": {
+        "Comida 1": [...],
+        "Comida 2": [...],
+        "Comida 3": [...],
+        "Comida 4": [...],
+        "Comida 5": [...],
+      }
+    },
+    {
+      "nombre": "Sábado",
+      "comidas": {
+        "Comida 1": [...],
+        "Comida 2": [...],
+        "Comida 3": [...],
+        "Comida 4": [...],
+        "Comida 5": [...],
+      }
+    },
+    {
+      "nombre": "Domingo",
+      ""comidas": {
+        "Comida 1": [...],
+        "Comida 2": [...],
+        "Comida 3": [...],
+        "Comida 4": [...],
+        "Comida 5": [...],
+      }
+    }
+  ]
+};
+
+Si existiera la opción de incluir 2 platos y postre en la cena, un ejemplo sería:
+  "nombre": "Lunes",
+  "comidas": {
+    "Cena": [
+      {
+        "primer_plato": ,
+        "calorias": ,
+        "proteinas": ,
+        "hidratos": ,
+        "grasas": ,
+      }
+      {
+        "segundo_plato": ,
+        "calorias": ,
+        "proteinas": ,
+        "hidratos": ,
+        "grasas": ,
+      }
+      {
+        "postre": ,
+        "calorias": ,
+        "proteinas": ,
+        "hidratos": ,
+        "grasas": ,
+      }
+    ]
+
+Los campos de cada entrada se deben rellenar tal cual vienen ejemplificados el día LUNES
 """
 
 
 PROMPT_MAKE_MENU_FOR_DAY = """
-Quiero que me generes un json donde añadas en la estructura que te voy a pasar, 3 platos por comida por semana
-
-quiero que este menu se base en la dieta para bajar peso si mido 170 y peso 80 kg y hago deporte cada 3 días
-
-Para rellenar el json ten en cuenta los siguientes datos
+Quiero que me generes un json donde añadas en la estructura que te voy a pasar.
+Se trata de generar un menú semanal. Es necesario que generes {numero_de_platos} opciones (primer y segundo plato) para la -comida- y la -cena-, 
+y sólamente 1 opción para el resto.
+El usuario {postre} quiere postre. Si es un -Sí- incluye sólo en la comida y la cena. Si es un -No-, procura que no aparezca.
+Quiero que este menu se base en la dieta para bajar peso si mido 170 y peso 80 kg y hago deporte cada 3 días
+Para rellenar el json ten en cuenta los siguientes datos:
 
 Cambia en el json Dia por {dia}
 El objetivo del menu es el siguiente: {objetivo_del_menu}
 Comidas al día: {comidas}
-Tiene alegia a: {alergias}
+Tiene alergia a: {alergias}
 Sigue la siguiente dieta: {dieta}, sino hay dieta sigue algo sano y variado 
-No le gusta estos alimentos: {alimentos_no_ricos}
+El usuario no tolera los siguientes alimentos: {alimentos_no_ricos}
 
 Ejemplo: 
 
@@ -270,24 +464,50 @@ Ejemplo:
     },
   ]
 }
+Si existiera la opción de incluir 2 platos, y postre un ejemplo sería:
+  "nombre": "Lunes",
+  "comidas": {
+    "Cena": [
+      {
+        "plato": ,
+        "calorias": ,
+        "proteinas": ,
+        "hidratos": ,
+        "grasas": ,
+      }
+      {
+        "plato": ,
+        "calorias": ,
+        "proteinas": ,
+        "hidratos": ,
+        "grasas": ,
+      }
+      {
+        "postre": ,
+        "calorias": ,
+        "proteinas": ,
+        "hidratos": ,
+        "grasas": ,
+      }
+    ]
 
-trata de crear menus variados
+Intenta encontrar opciones variadas y diferentes entre días y comidas.
 """
 
 
 PROMPT_MAKE_MENU_FOR_DAY_ITERATING = """
-Quiero que me generes un json donde añadas en la estructura que te voy a pasar, 3 platos por comida por semana
-
-quiero que este menu se base en la dieta para bajar peso si mido 170 y peso 80 kg y hago deporte cada 3 días
-
+Quiero que me generes un json donde añadas en la estructura que te voy a pasar.
+Se trata de generar un menú semanal. Es necesario que generes {numero_de_platos} opciones (primer y segundo plato) para la -comida- y la -cena-, 
+y sólamente 1 opción para el resto.
+El usuario {postre} quiere postre. Si es un -Sí- incluye sólo en la comida y la cena. Si es un -No-, procura que no aparezca.Quiero que este menu se base en la dieta para bajar peso si mido 170 y peso 80 kg y hago deporte cada 3 días
 Para rellenar el json ten en cuenta los siguientes datos
 
 Cambia en el json Dia por {dia}
 El objetivo del menu es el siguiente: {objetivo_del_menu}
 Comidas al día: {comidas}
-Tiene alegia a: {alergias}
+Tiene alergia a: {alergias}
 Sigue la siguiente dieta: {dieta}, sino hay dieta sigue algo sano y variado 
-No le gusta estos alimentos: {alimentos_no_ricos}
+El usuario no tolera los siguientes alimentos: {alimentos_no_ricos}
 
 Ejemplo: 
 
@@ -349,10 +569,35 @@ Ejemplo:
     },
   ]
 }
-
-trata de crear menus variados
+Si existiera la opción de incluir 2 platos, y postre un ejemplo sería:
+  "nombre": "Lunes",
+  "comidas": {
+    "Cena": [
+      {
+        "plato": ,
+        "calorias": ,
+        "proteinas": ,
+        "hidratos": ,
+        "grasas": ,
+      }
+      {
+        "plato": ,
+        "calorias": ,
+        "proteinas": ,
+        "hidratos": ,
+        "grasas": ,
+      }
+      {
+        "postre": ,
+        "calorias": ,
+        "proteinas": ,
+        "hidratos": ,
+        "grasas": ,
+      }
+    ]
 
 IMPORTANTE: El menu que se ha realizado para los días anteriores es el siguiente: {menu_para_dias_anteriores}
+Intenta encontrar opciones variadas y diferentes entre días y comidas.
 """
 
 

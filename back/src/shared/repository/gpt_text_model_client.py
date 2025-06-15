@@ -1,6 +1,7 @@
 import os
 from concurrent.futures import as_completed
 from concurrent.futures import ThreadPoolExecutor
+from typing import Optional
 
 from dotenv import load_dotenv
 import openai
@@ -35,16 +36,14 @@ class GptTextModelClient(TextModelClient):
         return response.choices[0].message.content
 
 
-    def generate_many(self, prompts: list[str], max_workers: int = 7) -> list[str]:
-
+    def generate_many(self, prompts: list[str], max_workers: int = 7) -> list[Optional[str]]:
         results = [None] * len(prompts)
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            # Asigna cada prompt a una posición (índice) para mantener el orden de resultados
             futures = {executor.submit(self.generate, prompt): idx for idx, prompt in enumerate(prompts)}
             for future in as_completed(futures):
                 idx = futures[future]
                 try:
                     results[idx] = future.result()
                 except Exception as exc:
-                    results[idx] = f"Error: {exc}"
+                    results[idx] = f"Error: {exc}" # TODO: Revisar este warning
         return results
