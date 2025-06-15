@@ -1,4 +1,4 @@
-from back.src.menu_generator.domain.menu_request import MenuRequest, OptionalsRequest
+from back.src.menu_generator.domain.menu_request import MenuRequest, MenuWithOptionalsRequest
 
 
 def prompt_injecting(content: str, prompt: str):
@@ -37,13 +37,15 @@ def prompt_injecting_menu_and_day_iterating(menu: MenuRequest, prompt: str, day:
 
             )
 
-def prompt_injecting_menu_with_optionals(menu: MenuRequest, optionals: OptionalsRequest, prompt: str):
+def prompt_injecting_menu_with_optionals(menu: MenuWithOptionalsRequest, prompt: str):
     return (prompt
             .replace("{objetivo_del_menu}", menu.menu_goal)
             .replace("{comidas}", str(menu.meals))
             .replace("{alergias}", str(menu.allergies))
             .replace("{dieta}", menu.diet)
             .replace("{alimentos_no_ricos}", str(menu.not_rich_foods))
-            .replace("{postre}", optionals.postre)
-            .replace("{numero_de_platos}", str(optionals.numero_de_platos))
+            .replace("{postre_comida}", menu.postre_comida)
+            .replace("{postre_cena}", menu.postre_cena)
+            .replace("{numero_de_platos_comida}", str(menu.numero_de_platos_comida))
+            .replace("{numero_de_platos_cena}", str(menu.numero_de_platos_cena))
             )

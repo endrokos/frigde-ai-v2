@@ -9,10 +9,18 @@ class MenuRequest(BaseModel):
     not_rich_foods: List[str]
 
 class OptionalsRequest(BaseModel):
-    numero_de_platos: int
-    postre: str
+    numero_de_platos_comida: int
+    postre_comida: str
+    numero_de_platos_cena: int
+    postre_cena: str
 
 class MenuWithOptionalsRequest(BaseModel):
-    menu: MenuRequest
-    optionals: OptionalsRequest
-
+    menu_goal: str
+    meals: List[str]
+    allergies: List[str]
+    diet: str
+    not_rich_foods: List[str]
+    numero_de_platos_comida: int
+    postre_comida: str
+    numero_de_platos_cena: int
+    postre_cena: str

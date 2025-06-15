@@ -150,11 +150,11 @@ Ejemplo:
     {
       "nombre": "Jueves",
       "comidas": {
-        "Desayuno": [...],
-        "Media mañana": [...],
-        "Comida": [...],
-        "Merienda": [...],
-        "Cena": [...],
+        "Comida 1": [...],
+        "Comida 2": [...],
+        "Comida 3": [...],
+        "Comida 4": [...],
+        "Comida 5": [...],
       }
     },
     {
@@ -217,6 +217,174 @@ Si existiera la opción de incluir 2 platos, y postre un ejemplo sería:
       }
     ]
         
+Los campos de cada entrada se deben rellenar tal cual vienen ejemplificados el día LUNES
+"""
+
+PROMPT_MAKE_MENU_WITH_OPTIONS = """
+Quiero que me generes un json donde añadas en la estructura que te voy a pasar.
+Se trata de generar un menú semanal. 
+Es necesario que generes {numero_de_platos_comida} para las -comidas-, en caso de que sean dos, quiero que des un primer plato y luego un segundo plato
+Es necesario que generes {numero_de_platos_cena} para las -cenas-, en caso de que sean dos, quiero que des un primer plato y luego un segundo plato
+y sólamente 1 opción para el resto.
+El usuario {postre_comida} quiere postre. Si es un -Sí- incluye sólo en la comida. Si es un -No-, procura que no aparezca.
+El usuario {postre_cena} quiere postre. Si es un -Sí- incluye sólo en la cena. Si es un -No-, procura que no aparezca.
+Quiero que este menú se base en la dieta para bajar peso si mido 170 y peso 80 kg y hago deporte cada 3 días
+Para rellenar el json ten en cuenta los siguientes datos:
+
+El objetivo del menu es el siguiente: {objetivo_del_menu}
+Comidas al día: {comidas}
+Tiene alergia a: {alergias}
+Sigue la siguiente dieta: {dieta}. Si no hay dieta, propón algo sano y variado 
+El usuario no tolera los siguientes alimentos: {alimentos_no_ricos}
+
+Ejemplo: 
+
+{
+  "objetivo_calorias": ,
+  "objetivo_proteinas": ,
+  "objetivo_hidratos": ,
+  "objetivo_grasas": ,
+  "dias": [
+    {
+      "nombre": "Lunes",
+      "comidas": {
+        "Comida 1": [
+          {
+            "plato": ,
+            "calorias": ,
+            "proteinas": ,
+            "hidratos": ,
+            "grasas": ,
+          }
+        ],
+        "Comida 2": [
+          {
+            "plato": ,
+            "calorias": ,
+            "proteinas": ,
+            "hidratos": ,
+            "grasas": ,
+          }
+        ],
+        "Comida 3": [
+          {
+            "plato": ,
+            "calorias": ,
+            "proteinas": ,
+            "hidratos": ,
+            "grasas": ,
+          }
+        ],
+        "Comida 4": [
+          {
+            "plato": ,
+            "calorias": ,
+            "proteinas": ,
+            "hidratos": ,
+            "grasas": ,
+          }
+        ],
+        "Comida 5": [
+          {
+            "plato": ,
+            "calorias": ,
+            "proteinas": ,
+            "hidratos": ,
+            "grasas": ,
+          }
+        ]
+      }
+    },
+    {
+      "nombre": "Martes",
+      "comidas": {
+        "Comida 1": [...],
+        "Comida 2": [...],
+        "Comida 3": [...],
+        "Comida 4": [...],
+        "Comida 5": [...],
+      }
+    },
+    {
+      "nombre": "Miércoles",
+      "comidas": {
+        "Comida 1": [...],
+        "Comida 2": [...],
+        "Comida 3": [...],
+        "Comida 4": [...],
+        "Comida 5": [...],
+      }
+    },
+    {
+      "nombre": "Jueves",
+      "comidas": {
+        "Comida 1": [...],
+        "Comida 2": [...],
+        "Comida 3": [...],
+        "Comida 4": [...],
+        "Comida 5": [...],
+      }
+    },
+    {
+      "nombre": "Viernes",
+      "comidas": {
+        "Comida 1": [...],
+        "Comida 2": [...],
+        "Comida 3": [...],
+        "Comida 4": [...],
+        "Comida 5": [...],
+      }
+    },
+    {
+      "nombre": "Sábado",
+      "comidas": {
+        "Comida 1": [...],
+        "Comida 2": [...],
+        "Comida 3": [...],
+        "Comida 4": [...],
+        "Comida 5": [...],
+      }
+    },
+    {
+      "nombre": "Domingo",
+      ""comidas": {
+        "Comida 1": [...],
+        "Comida 2": [...],
+        "Comida 3": [...],
+        "Comida 4": [...],
+        "Comida 5": [...],
+      }
+    }
+  ]
+};
+
+Si existiera la opción de incluir 2 platos y postre en la cena, un ejemplo sería:
+  "nombre": "Lunes",
+  "comidas": {
+    "Cena": [
+      {
+        "primer_plato": ,
+        "calorias": ,
+        "proteinas": ,
+        "hidratos": ,
+        "grasas": ,
+      }
+      {
+        "segundo_plato": ,
+        "calorias": ,
+        "proteinas": ,
+        "hidratos": ,
+        "grasas": ,
+      }
+      {
+        "postre": ,
+        "calorias": ,
+        "proteinas": ,
+        "hidratos": ,
+        "grasas": ,
+      }
+    ]
+
 Los campos de cada entrada se deben rellenar tal cual vienen ejemplificados el día LUNES
 """
 

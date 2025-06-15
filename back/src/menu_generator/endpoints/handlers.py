@@ -39,7 +39,7 @@ def generate_menu(menu: MenuRequest):
 @app.post("/generate-menu-with-optionals")
 def generate_menu_with_optionals(request: MenuWithOptionalsRequest):
     gpt_text_model_client = GptTextModelClient(model_name=MENU_GENERATION_MODEL)
-    return generate_menu_with_optionals_use_case(menu_request=request.menu, optionals=request.optionals, text_model_client=gpt_text_model_client)
+    return generate_menu_with_optionals_use_case(menu_request=request, text_model_client=gpt_text_model_client)
 
 
 @app.post("/generate-menu-many-calls")
