@@ -12,7 +12,12 @@ export default function SubirPlatoDesdeImagen({
 }) {
   const [subiendo, setSubiendo] = useState(false);
   const [platoDetectado, setPlatoDetectado] = useState(null);
-  const [mostrarOpcionesImagen, setMostrarOpcionesImagen] = useState(false);
+  const [mostrarOpciones, setMostrarOpciones] = useState(false);
+  const [mostrarInputManual, setMostrarInputManual] = useState(false);
+  const [nombrePlatoManual, setNombrePlatoManual] = useState("");
+  const [ingredientesManual, setIngredientesManual] = useState("");
+  const [recetaManual, setRecetaManual] = useState("");
+
   const fileInputRefGaleria = useRef(null);
   const fileInputRefCamara = useRef(null);
 
@@ -22,7 +27,7 @@ export default function SubirPlatoDesdeImagen({
     setSubiendo(true);
 
     try {
-      const res = await fetch("http://127.0.0.1:8001/calculate_macros", {
+      const res = await fetch("http://127.0.0.1:8001/calculate_macros_from_image", {
         method: "POST",
         body: formData,
       });
@@ -48,6 +53,41 @@ export default function SubirPlatoDesdeImagen({
     }
   };
 
+  const handleTexto = async () => {
+    if (!nombrePlatoManual.trim()) return;
+    setSubiendo(true);
+
+    try {
+      const res = await fetch("http://127.0.0.1:8001/calculate_macros_from_text", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          dish: nombrePlatoManual.trim(),
+          recipe: recetaManual.trim() || "",
+          ingredients: ingredientesManual.trim() || "",
+        }),
+      });
+
+      const result = await res.json();
+      const macros = result?.macros;
+
+      if (macros?.plato && typeof macros.calorias === "number") {
+        setPlatoDetectado(macros);
+        setMostrarInputManual(false);
+        setNombrePlatoManual("");
+        setIngredientesManual("");
+        setRecetaManual("");
+      } else {
+        alert(result?.error || "No se pudo interpretar el texto.");
+      }
+    } catch (err) {
+      console.error("Error al procesar nombre de plato:", err);
+      alert("Error al contactar con el servidor.");
+    } finally {
+      setSubiendo(false);
+    }
+  };
+
   const insertarPlato = (momento) => {
     const nuevoPlato = {
       plato: platoDetectado.plato,
@@ -62,7 +102,7 @@ export default function SubirPlatoDesdeImagen({
       const dia = copia[diaActivo];
       if (!dia.comidas[momento]) dia.comidas[momento] = [];
       dia.comidas[momento][0] = nuevoPlato;
-      guardarDiasEnLocalStorage(copia); // Guardar cambios
+      guardarDiasEnLocalStorage(copia);
       return copia;
     });
 
@@ -78,18 +118,17 @@ export default function SubirPlatoDesdeImagen({
     <>
       <div className="w-full flex justify-center mt-6">
         <button
-          onClick={() => setMostrarOpcionesImagen(true)}
+          onClick={() => setMostrarOpciones(true)}
           className="bg-emerald-500 text-white px-4 py-2 rounded-full hover:bg-emerald-600 font-semibold shadow-md"
         >
-          {subiendo ? "Subiendo..." : "+ Añadir plato desde imagen"}
+          {subiendo ? "Subiendo..." : "+ Añadir plato"}
         </button>
       </div>
 
-      {/* Opciones para elegir origen de la imagen */}
-      {mostrarOpcionesImagen && (
+      {mostrarOpciones && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 text-center space-y-4">
-            <h3 className="text-lg font-bold text-gray-800">Selecciona el origen de la imagen</h3>
+            <h3 className="text-lg font-bold text-gray-800">Selecciona cómo añadir el plato</h3>
 
             <div className="grid grid-cols-1 gap-3">
               <label className="cursor-pointer bg-emerald-100 text-emerald-800 font-semibold rounded-lg px-4 py-2 hover:bg-emerald-200">
@@ -103,7 +142,7 @@ export default function SubirPlatoDesdeImagen({
                     const file = e.target.files?.[0];
                     if (file) handleImagen(file);
                     e.target.value = null;
-                    setMostrarOpcionesImagen(false);
+                    setMostrarOpciones(false);
                   }}
                 />
               </label>
@@ -120,14 +159,24 @@ export default function SubirPlatoDesdeImagen({
                     const file = e.target.files?.[0];
                     if (file) handleImagen(file);
                     e.target.value = null;
-                    setMostrarOpcionesImagen(false);
+                    setMostrarOpciones(false);
                   }}
                 />
               </label>
+
+              <button
+                onClick={() => {
+                  setMostrarInputManual(true);
+                  setMostrarOpciones(false);
+                }}
+                className="bg-emerald-100 text-emerald-800 font-semibold rounded-lg px-4 py-2 hover:bg-emerald-200"
+              >
+                Escribir nombre del plato
+              </button>
             </div>
 
             <button
-              onClick={() => setMostrarOpcionesImagen(false)}
+              onClick={() => setMostrarOpciones(false)}
               className="text-sm text-gray-400 hover:text-gray-600"
             >
               Cancelar
@@ -136,7 +185,52 @@ export default function SubirPlatoDesdeImagen({
         </div>
       )}
 
-      {/* Modal para elegir momento */}
+      {mostrarInputManual && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 text-center space-y-4">
+            <h3 className="text-lg font-bold text-gray-800">Escribe el nombre del plato</h3>
+
+            <input
+              value={nombrePlatoManual}
+              onChange={(e) => setNombrePlatoManual(e.target.value)}
+              placeholder="Ej. Espaguetis con tomate"
+              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring focus:border-emerald-400"
+            />
+
+            <textarea
+              value={ingredientesManual}
+              onChange={(e) => setIngredientesManual(e.target.value)}
+              placeholder="Ingredientes (opcional)"
+              rows={2}
+              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring focus:border-emerald-200"
+            />
+
+            <textarea
+              value={recetaManual}
+              onChange={(e) => setRecetaManual(e.target.value)}
+              placeholder="Instrucciones o receta (opcional)"
+              rows={2}
+              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring focus:border-emerald-200"
+            />
+
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={handleTexto}
+                className="bg-emerald-500 text-white font-semibold rounded-lg px-4 py-2 hover:bg-emerald-600"
+              >
+                Enviar
+              </button>
+              <button
+                onClick={() => setMostrarInputManual(false)}
+                className="text-sm text-gray-400 hover:text-gray-600"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {platoDetectado && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 text-center space-y-4">

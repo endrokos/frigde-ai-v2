@@ -3,7 +3,7 @@ from typing import Optional
 
 
 @dataclass
-class DiskRequest:
-    disk: str
+class DishRequest:
+    dish: str
     recipe: Optional[str]
     ingredients: Optional[str]
