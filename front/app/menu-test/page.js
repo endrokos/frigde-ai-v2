@@ -6,6 +6,7 @@ import ProgresoResumen from "@/components/ProgresoResumen";
 import MacroCard from "@/components/MacroCard";
 import MenuCards from "@/components/MenuCards";
 import SubirPlatoDesdeImagen from "@/components/SubirPlatoDesdeImagen";
+import { generarDietasSemana } from "@/data/generarDietasSemana";
 
 const MOMENTOS = ["Desayuno", "Media mañana", "Comida", "Merienda", "Cena"];
 
@@ -23,20 +24,37 @@ export default function MenuPage() {
   const [objetivoCalorias, setObjetivoCalorias] = useState(0);
 
   useEffect(() => {
+    const fetchMenu = async () => {
+      try {
+        const payload = {}; // opcional: aquí puedes definir valores predeterminados
+        const response = await generarDietasSemana(payload);
+        const menu = response.menu;
+
+        localStorage.setItem("dietaSemana", JSON.stringify(menu));
+
+        setDias(menu.dias || []);
+        setObjetivoProteina(menu.objetivo_proteinas || 0);
+        setObjetivoHidratos(menu.objetivo_hidratos || 0);
+        setObjetivoGrasas(menu.objetivo_grasas || 0);
+        setObjetivoCalorias(menu.objetivo_calorias || 0);
+      } catch (error) {
+        console.error("Error generando el menú semanal:", error);
+      }
+    };
+
     const stored = localStorage.getItem("dietaSemana");
     if (stored) {
       const dietaSemana = JSON.parse(stored);
-      let diasArray = Array.isArray(dietaSemana.dias) ? dietaSemana.dias.flat() : [];
-
-      setDias(diasArray);
+      setDias(dietaSemana.dias || []);
       setObjetivoProteina(dietaSemana.objetivo_proteinas || 0);
       setObjetivoHidratos(dietaSemana.objetivo_hidratos || 0);
       setObjetivoGrasas(dietaSemana.objetivo_grasas || 0);
       setObjetivoCalorias(dietaSemana.objetivo_calorias || 0);
+    } else {
+      fetchMenu();
     }
   }, []);
 
-  // ✅ Nueva función: guarda el array actualizado en localStorage
   const guardarDiasEnLocalStorage = (nuevosDias) => {
     const stored = localStorage.getItem("dietaSemana");
     if (stored) {
@@ -190,7 +208,7 @@ export default function MenuPage() {
           diaActivo={diaActivo}
           setDias={setDias}
           setPlatoSeleccionado={setPlatoSeleccionado}
-          guardarDiasEnLocalStorage={guardarDiasEnLocalStorage} // ✅ nuevo prop
+          guardarDiasEnLocalStorage={guardarDiasEnLocalStorage}
         />
       </div>
     </main>

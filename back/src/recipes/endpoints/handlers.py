@@ -3,7 +3,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from back.src.recipes.application.use_case import generate_recipes_use_case, obtain_more_recipes_use_case, \
     calculate_macros_from_image_use_case, calculate_macros_from_text_use_case
-from back.src.recipes.domain.disk_request import DiskRequest
+from back.src.recipes.domain.dish_request import DishRequest
 from back.src.recipes.domain.recipes_request import RecipesRequest
 from back.src.shared.repository.gpt_text_model_client import GptTextModelClient
 from back.src.shared.repository.gpt_vision_model_client import GptVisionModelClient
@@ -40,6 +40,6 @@ async def calculate_macros_from_image(image: UploadFile = File(...)):
 app.include_router(router)
 
 @app.post("/calculate_macros_from_text")
-def obtain_more_recipes(disk_request: DiskRequest):
+def obtain_more_recipes(dish_request: DishRequest):
     gpt_text_model_client = GptTextModelClient(model_name=MODEL_NAME_NANO)
-    return calculate_macros_from_text_use_case(disk_request=disk_request, text_model_client=gpt_text_model_client)
+    return calculate_macros_from_text_use_case(dish_request=dish_request, text_model_client=gpt_text_model_client)

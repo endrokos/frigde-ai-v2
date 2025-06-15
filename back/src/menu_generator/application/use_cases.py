@@ -28,7 +28,7 @@ def generate_menu_use_case(menu_request: MenuRequest, text_model_client: GptText
     prompt = prompt_injecting_menu(menu=menu_request, prompt=PROMPT_MAKE_MENU)
     try:
         response = text_model_client.generate(prompt)
-        return {"menu": extract_json_menu(response)}
+        return extract_json_menu(response)
     except Exception as e:
         print(f"ERROR: {str(e)}")
         return {"menu": "Algo salió mal :("}

@@ -3,9 +3,9 @@ from typing import Dict
 
 from fastapi import UploadFile
 
-from back.src.recipes.domain.disk_request import DiskRequest
+from back.src.recipes.domain.dish_request import DishRequest
 from back.src.recipes.domain.recipes_request import RecipesRequest
-from back.src.recipes.repository.prompt_injecting_recipes import prompt_injecting_recipes, prompt_injecting_disk_request
+from back.src.recipes.repository.prompt_injecting_recipes import prompt_injecting_recipes, prompt_injecting_dish_request
 from back.src.shared.repository.code_base64 import process_image_content
 from back.src.shared.repository.extract_json import extract_json_macros
 from back.src.shared.repository.gpt_text_model_client import GptTextModelClient
@@ -48,8 +48,8 @@ async def calculate_macros_from_image_use_case(image_bytes: UploadFile, vision_m
         print(f"ERROR: {str(e)}")
         return {"macros": "Algo salió mal :("}
 
-def calculate_macros_from_text_use_case(disk_request: DiskRequest, text_model_client: GptTextModelClient) -> Dict:
-    prompt = prompt_injecting_disk_request(disk=disk_request, prompt=PROMPT_CALCULATE_MACROS_FROM_TEXT)
+def calculate_macros_from_text_use_case(dish_request: DishRequest, text_model_client: GptTextModelClient) -> Dict:
+    prompt = prompt_injecting_dish_request(dish=dish_request, prompt=PROMPT_CALCULATE_MACROS_FROM_TEXT)
     print(prompt)
     try:
         response = text_model_client.generate(prompt)
