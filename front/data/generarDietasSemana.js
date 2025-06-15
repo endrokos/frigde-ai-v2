@@ -1,6 +1,6 @@
 // /data/generarDietaSemana.js
 
-export async function generarDietasSemana(payload, endpoint = "http://127.0.0.1:8000/generate-menu-many-calls") {
+export async function generarDietasSemana(payload, endpoint = "http://127.0.0.1:8000/generate-menu") {
     console.log("Enviando payload:", payload);
     const response = await fetch(endpoint, {
         method: "POST",
