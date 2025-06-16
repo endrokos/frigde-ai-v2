@@ -104,12 +104,12 @@ export default function MenuCards({
             >
               <div className="flex items-center gap-2 mb-2">
                 <button
-                  onClick={()=>toggleRealizada(key, entradasValidas)}
+                  onClick={() => toggleRealizada(key, entradasValidas)}
                   className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
                     realizada ? "bg-emerald-100 border-emerald-400" : "bg-white border-gray-200"
                   }`}
                 >
-                  {realizada && <Check className="w-4 h-4 text-emerald-500"/>}
+                  {realizada && <Check className="w-4 h-4 text-emerald-500" />}
                 </button>
                 <span
                   className={`px-3 py-1 rounded-full text-sm font-semibold ${badgeCls}`}
@@ -117,21 +117,6 @@ export default function MenuCards({
                   {momento}
                 </span>
               </div>
-                <div className="flex items-center gap-2 mb-2">
-                  <button
-                    onClick={()=>toggleRealizada(key, entradasValidas)}
-                    className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                      realizada ? "bg-emerald-100 border-emerald-400" : "bg-white border-gray-200"
-                    }`}
-                  >
-                    {realizada && <Check className="w-4 h-4 text-emerald-500"/>}
-                  </button>
-                  <span
-                    className={`px-3 py-1 rounded-full text-sm font-semibold ${badgeCls}`}
-                  >
-                    {momento}
-                  </span>
-                </div>
 
               {entradasValidas.map((entrada, idx) =>
                 Object.entries(entrada)
@@ -166,7 +151,6 @@ export default function MenuCards({
                                 <span className="font-bold text-lg text-gray-900 break-words">
                                   {nombre}
                                 </span>
-                                <span className="text-sm text-gray-500">({tipo})</span>
                               </div>
                             </div>
                             <span className="font-bold text-lg whitespace-nowrap" style={{ color: COLOR_KCAL }}>
