@@ -39,7 +39,8 @@ async def calculate_macros_from_image(image: UploadFile = File(...)):
 
 app.include_router(router)
 
+
 @app.post("/calculate_macros_from_text")
-def obtain_more_recipes(disk_request: DiskRequest):
+def calculate_macros_from_text(dish_request: DishRequest):
     gpt_text_model_client = GptTextModelClient(model_name=RECIPE_GENERATION_MODEL)
-    return calculate_macros_from_text_use_case(disk_request=disk_request, text_model_client=gpt_text_model_client)
+    return calculate_macros_from_text_use_case(dish_request=dish_request, text_model_client=gpt_text_model_client)
