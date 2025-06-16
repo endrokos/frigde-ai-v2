@@ -8,11 +8,13 @@ import ObjetivoSelect from "@/components/ObjetivoSelect";
 import AlergiasCheckbox from "@/components/AlergiasCheckbox";
 import DietasRadio from "@/components/DietasRadio";
 import ComidasToggle from "@/components/ComidasToggle";
+import UserMetricsWizard from "@/components/UserMetricsWizard";
 
 export default function Home() {
   const router = useRouter();
 
   // Estados principales
+  const [stage, setStage] = useState("intro");
   const [showForm, setShowForm] = useState(false);
   const [objetivo, setObjetivo] = useState("");
   const [objetivoOtro, setObjetivoOtro] = useState("");
@@ -23,6 +25,14 @@ export default function Home() {
   const [dietaOtra, setDietaOtra] = useState("");
   const [noGusta, setNoGusta] = useState("");
   const [comidasSeleccionadas, setComidasSeleccionadas] = useState([]);
+
+  const [userMetrics, setUserMetrics] = useState({
+    sexo: "",
+    edad: "",
+    altura_cm: "",
+    peso_kg: "",
+    nivel_actividad: "",
+  });
 
   // ✅ Nuevos estados
   const [postreComida, setPostreComida] = useState(true);
@@ -67,8 +77,9 @@ export default function Home() {
 
     const tiene = (momento) => comidasSeleccionadas.includes(momento);
 
-    const payload = {
+  const payload = {
       menu_goal: objetivoFinal,
+      user_metrics: userMetrics,
       meals: comidasSeleccionadas,
       allergies: alergias.length > 0 ? alergias : [""],
       diet: dietaFinal || "",
@@ -121,13 +132,23 @@ export default function Home() {
         {!showForm && (
           <button
             className="bg-emerald-500 text-white text-xl px-12 py-4 rounded-2xl shadow-lg hover:bg-emerald-600 hover:scale-105 active:scale-95 transition-all cursor-pointer font-semibold tracking-wide"
-            onClick={() => setShowForm(true)}
+            onClick={() => {
+              setShowForm(true);
+              setStage("metrics");
+            }}
           >
             Crear una dieta
           </button>
         )}
 
-        {showForm && (
+        {showForm && stage === "metrics" && (
+          <UserMetricsWizard onComplete={(data) => {
+            setUserMetrics(data);
+            setStage("form");
+          }} />
+        )}
+
+        {showForm && stage === "form" && (
           <form
             className="flex flex-col gap-6 w-full max-w-2xl py-4 mx-auto animate-fade-in"
             onSubmit={handleSubmit}
