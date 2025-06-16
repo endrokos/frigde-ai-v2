@@ -51,6 +51,8 @@ export default function MenuCards({
   seleccionarPlato,
   realizadas,
   toggleRealizada,
+  setDias,
+  guardarDiasEnLocalStorage,
 }) {
   const [recetasGeneradas,  setRecetasGeneradas]   = useState({});
   const [openRecetas,       setOpenRecetas]        = useState({});
@@ -277,9 +279,14 @@ export default function MenuCards({
                                 {alt.map((op,i)=>(
                                   <li
                                     key={i}
-                                    onClick={()=>{
-                                      seleccionarPlato(key, i);
-                                      setOpenAlternativas(prev=>({...prev,[subKey]:false}));
+                                    onClick={() => {
+                                      setDias(prev => {
+                                        const copia = [...prev];
+                                        copia[diaActivo].comidas[momento][idx] = reemplazarEntrada(op);
+                                        guardarDiasEnLocalStorage(copia);
+                                        return copia;
+                                      });
+                                      setOpenAlternativas(prev => ({...prev, [subKey]: false}));
                                     }}
                                     className="flex items-center justify-between px-4 py-3 hover:bg-emerald-50 cursor-pointer"
                                   >
