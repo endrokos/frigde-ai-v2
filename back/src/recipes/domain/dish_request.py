@@ -1,9 +1,12 @@
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class DishRequest(BaseModel):
-    dish: str
-    recipe: Optional[str]
-    ingredients: Optional[str]
+    dish: str = Field(alias="plato")
+    recipe: Optional[str] = Field(default=None, alias="receta")
+    ingredients: Optional[str] = Field(default=None, alias="ingredientes")
+
+    class Config:
+        allow_population_by_field_name = True
