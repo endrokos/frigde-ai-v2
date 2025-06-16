@@ -221,174 +221,116 @@ Los campos de cada entrada se deben rellenar tal cual vienen ejemplificados el d
 """
 
 PROMPT_MAKE_MENU_WITH_OPTIONS = """
+Eres un experto en nutrición y planificación dietética. Tu tarea es generar menús semanalmente equilibrados, ajustados a las necesidades energéticas y preferencias de cada usuario.
 El menú debe generarse en base al siguiente perfil del usuario:
 {user_metrics}
 
-Quiero que me generes un json donde añadas en la estructura que te voy a pasar.
-Se trata de generar un menú semanal. 
-Es necesario que generes {numero_de_platos_comida} para las -comidas-, en caso de que sean dos, quiero que des un primer plato y luego un segundo plato
-Es necesario que generes {numero_de_platos_cena} para las -cenas-, en caso de que sean dos, quiero que des un primer plato y luego un segundo plato
-y sólamente 1 opción para el resto.
-El usuario {postre_comida} quiere postre. Si es un -Sí- incluye sólo en la comida. Si es un -No-, procura que no aparezca.
-El usuario {postre_cena} quiere postre. Si es un -Sí- incluye sólo en la cena. Si es un -No-, procura que no aparezca.
-Quiero que este menú se base en la dieta para bajar peso si mido 170 y peso 80 kg y hago deporte cada 3 días
-Para rellenar el json ten en cuenta los siguientes datos:
+Quiero que me generes un JSON con la estructura que te voy a indicar. El objetivo es generar un menú semanal completo.
 
-El objetivo del menu es el siguiente: {objetivo_del_menu}
-Comidas al día: {comidas}
-Tiene alergia a: {alergias}
-Sigue la siguiente dieta: {dieta}. Si no hay dieta, propón algo sano y variado 
-El usuario no tolera los siguientes alimentos: {alimentos_no_ricos}
+**Requisitos**:
+- Genera {numero_de_platos_comida} platos para las comidas principales (si son dos, deben estar diferenciados como primer plato y segundo plato).
+- Genera {numero_de_platos_cena} platos para las cenas (si son dos, igual que arriba).
+- El resto de comidas (como desayuno, merienda, etc.) deben tener un solo plato.
+- El usuario quiere postre en la comida: {postre_comida}.
+- El usuario quiere postre en la cena: {postre_cena}.
+- El objetivo del menú es: {objetivo_del_menu}.
+- Número de comidas al día: {comidas}
+- Tiene alergia a: {alergias}
+- Dieta preferida: {dieta}. Si no se especifica, propone algo saludable y variado.
+- No tolera los siguientes alimentos: {alimentos_no_ricos}
 
-Ejemplo: 
+**Reglas nutricionales**:
+- Debes estimar y mostrar los valores de calorías, proteínas, hidratos y grasas para **cada plato**.
+- Asegúrate de que las calorías de **cada día** sumen aproximadamente el objetivo calórico, con un margen de ±5%.
+- Cada valor calórico por plato debe ser **realista y coherente**. No exageres para cumplir con el total: divide las calorías de forma natural entre los platos.
+- Si no puedes estimar con exactitud, da valores aproximados, pero lógicos.
+
+**Ejemplo**:
 
 {
-  "objetivo_calorias": ,
-  "objetivo_proteinas": ,
-  "objetivo_hidratos": ,
-  "objetivo_grasas": ,
+  "objetivo_calorias": 2200,
+  "objetivo_proteinas": 140,
+  "objetivo_hidratos": 220,
+  "objetivo_grasas": 80,
   "dias": [
     {
       "nombre": "Lunes",
       "comidas": {
-        "Comida 1": [
+        "Desayuno": [
           {
-            "plato": ,
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
+            "plato": "Tostadas integrales con aguacate y huevo",
+            "calorias": 350,
+            "proteinas": 15,
+            "hidratos": 30,
+            "grasas": 18
           }
         ],
-        "Comida 2": [
+        "Comida": [
           {
-            "plato": ,
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
+            "primer_plato": "Ensalada de garbanzos con tomate y atún",
+            "calorias": 400,
+            "proteinas": 25,
+            "hidratos": 35,
+            "grasas": 15
+          },
+          {
+            "segundo_plato": "Pollo al horno con patatas",
+            "calorias": 500,
+            "proteinas": 40,
+            "hidratos": 30,
+            "grasas": 20
+          },
+          {
+            "postre": "Yogur natural con fresas",
+            "calorias": 100,
+            "proteinas": 6,
+            "hidratos": 10,
+            "grasas": 3
           }
         ],
-        "Comida 3": [
+        "Merienda": [
           {
-            "plato": ,
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
+            "plato": "Batido de plátano y proteína",
+            "calorias": 250,
+            "proteinas": 20,
+            "hidratos": 20,
+            "grasas": 5
           }
         ],
-        "Comida 4": [
+        "Cena": [
           {
-            "plato": ,
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
-          }
-        ],
-        "Comida 5": [
+            "primer_plato": "Crema de calabacín",
+            "calorias": 150,
+            "proteinas": 5,
+            "hidratos": 10,
+            "grasas": 5
+          },
           {
-            "plato": ,
-            "calorias": ,
-            "proteinas": ,
-            "hidratos": ,
-            "grasas": ,
+            "segundo_plato": "Tortilla de espinacas y queso fresco",
+            "calorias": 350,
+            "proteinas": 25,
+            "hidratos": 5,
+            "grasas": 25
           }
         ]
       }
-    },
-    {
-      "nombre": "Martes",
-      "comidas": {
-        "Comida 1": [...],
-        "Comida 2": [...],
-        "Comida 3": [...],
-        "Comida 4": [...],
-        "Comida 5": [...],
-      }
-    },
-    {
-      "nombre": "Miércoles",
-      "comidas": {
-        "Comida 1": [...],
-        "Comida 2": [...],
-        "Comida 3": [...],
-        "Comida 4": [...],
-        "Comida 5": [...],
-      }
-    },
-    {
-      "nombre": "Jueves",
-      "comidas": {
-        "Comida 1": [...],
-        "Comida 2": [...],
-        "Comida 3": [...],
-        "Comida 4": [...],
-        "Comida 5": [...],
-      }
-    },
-    {
-      "nombre": "Viernes",
-      "comidas": {
-        "Comida 1": [...],
-        "Comida 2": [...],
-        "Comida 3": [...],
-        "Comida 4": [...],
-        "Comida 5": [...],
-      }
-    },
-    {
-      "nombre": "Sábado",
-      "comidas": {
-        "Comida 1": [...],
-        "Comida 2": [...],
-        "Comida 3": [...],
-        "Comida 4": [...],
-        "Comida 5": [...],
-      }
-    },
-    {
-      "nombre": "Domingo",
-      ""comidas": {
-        "Comida 1": [...],
-        "Comida 2": [...],
-        "Comida 3": [...],
-        "Comida 4": [...],
-        "Comida 5": [...],
-      }
     }
   ]
-};
+}
 
-Si existiera la opción de incluir 2 platos y postre en la cena, un ejemplo sería:
-  "nombre": "Lunes",
-  "comidas": {
-    "Cena": [
-      {
-        "primer_plato": ,
-        "calorias": ,
-        "proteinas": ,
-        "hidratos": ,
-        "grasas": ,
-      }
-      {
-        "segundo_plato": ,
-        "calorias": ,
-        "proteinas": ,
-        "hidratos": ,
-        "grasas": ,
-      }
-      {
-        "postre": ,
-        "calorias": ,
-        "proteinas": ,
-        "hidratos": ,
-        "grasas": ,
-      }
-    ]
+**Formato**:
+Sigue exactamente este formato de JSON. Cada comida debe tener una lista con uno o más platos, y cada plato debe tener los campos:
+- plato / primer_plato / segundo_plato / postre
+- calorias
+- proteinas
+- hidratos
+- grasas
 
-Los campos de cada entrada se deben rellenar tal cual vienen ejemplificados el día LUNES
+**Importante**:
+No te olvides de que las calorías de cada comida deben ser exactamente igual a las calorías objetivo. Esto es:
+Calorías Objetivo = Calorías Comida 1 + Calorías Comida 2 + Calorías Comida 3 - Primer Plato + Calorías Comida 3 - Segundo Plato + ...
+
+No te salgas del formato ni generes texto fuera del JSON.
 """
 
 
