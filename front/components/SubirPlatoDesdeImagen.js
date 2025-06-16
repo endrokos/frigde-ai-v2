@@ -14,6 +14,7 @@ export default function SubirPlatoDesdeImagen({
   const [platoDetectado, setPlatoDetectado] = useState(null);
   const [mostrarOpciones, setMostrarOpciones] = useState(false);
   const [mostrarInputManual, setMostrarInputManual] = useState(false);
+  const [preguntarParte, setPreguntarParte] = useState(null);
   const [nombrePlatoManual, setNombrePlatoManual] = useState("");
   const [ingredientesManual, setIngredientesManual] = useState("");
   const [recetaManual, setRecetaManual] = useState("");
@@ -88,7 +89,7 @@ export default function SubirPlatoDesdeImagen({
     }
   };
 
-  const insertarPlato = (momento) => {
+  const insertarPlato = (momento, indice = 0) => {
     const nuevoPlato = {
       plato: platoDetectado.plato,
       calorias: platoDetectado.calorias,
@@ -101,7 +102,7 @@ export default function SubirPlatoDesdeImagen({
       const copia = [...prev];
       const dia = copia[diaActivo];
       if (!dia.comidas[momento]) dia.comidas[momento] = [];
-      dia.comidas[momento][0] = nuevoPlato;
+      dia.comidas[momento][indice] = nuevoPlato;
       guardarDiasEnLocalStorage(copia);
       return copia;
     });
@@ -112,6 +113,7 @@ export default function SubirPlatoDesdeImagen({
     }));
 
     setPlatoDetectado(null);
+    setPreguntarParte(null);
   };
 
   return (
@@ -231,7 +233,7 @@ export default function SubirPlatoDesdeImagen({
         </div>
       )}
 
-      {platoDetectado && (
+      {platoDetectado && !preguntarParte && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 text-center space-y-4">
             <h3 className="text-lg font-bold text-gray-800">
@@ -245,7 +247,13 @@ export default function SubirPlatoDesdeImagen({
               {MOMENTOS.map((momento) => (
                 <button
                   key={momento}
-                  onClick={() => insertarPlato(momento)}
+                  onClick={() => {
+                    if (momento === "Comida" || momento === "Cena") {
+                      setPreguntarParte(momento);
+                    } else {
+                      insertarPlato(momento);
+                    }
+                  }}
                   className="bg-emerald-100 text-emerald-800 font-semibold rounded-lg px-4 py-2 hover:bg-emerald-200 transition"
                 >
                   {momento}
@@ -255,6 +263,40 @@ export default function SubirPlatoDesdeImagen({
 
             <button
               onClick={() => setPlatoDetectado(null)}
+              className="text-sm text-gray-400 hover:text-gray-600 mt-2"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      )}
+
+      {preguntarParte && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 text-center space-y-4">
+            <h3 className="text-lg font-bold text-gray-800">¿En qué parte?</h3>
+            <div className="grid grid-cols-1 gap-2">
+              <button
+                onClick={() => insertarPlato(preguntarParte, 0)}
+                className="bg-emerald-100 text-emerald-800 font-semibold rounded-lg px-4 py-2 hover:bg-emerald-200"
+              >
+                Primer plato
+              </button>
+              <button
+                onClick={() => insertarPlato(preguntarParte, 1)}
+                className="bg-emerald-100 text-emerald-800 font-semibold rounded-lg px-4 py-2 hover:bg-emerald-200"
+              >
+                Segundo plato
+              </button>
+              <button
+                onClick={() => insertarPlato(preguntarParte, 2)}
+                className="bg-emerald-100 text-emerald-800 font-semibold rounded-lg px-4 py-2 hover:bg-emerald-200"
+              >
+                Postre
+              </button>
+            </div>
+            <button
+              onClick={() => setPreguntarParte(null)}
               className="text-sm text-gray-400 hover:text-gray-600 mt-2"
             >
               Cancelar

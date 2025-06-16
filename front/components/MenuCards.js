@@ -21,6 +21,14 @@ const colorPorMomento = {
   Cena:           "bg-indigo-200 text-indigo-800",
 };
 
+const cajaPorMomento = {
+  Desayuno:       "bg-yellow-50 border-yellow-200",
+  "Media mañana": "bg-orange-50 border-orange-200",
+  Comida:         "bg-green-50  border-green-200",
+  Merienda:       "bg-pink-50   border-pink-200",
+  Cena:           "bg-indigo-50 border-indigo-200",
+};
+
 const MOMENTOS = ["Desayuno", "Media mañana", "Comida", "Merienda", "Cena"];
 
 async function enviarPeticion(endpoint, datos, key, setRecetasGeneradas) {
@@ -51,6 +59,8 @@ export default function MenuCards({
   seleccionarPlato,
   realizadas,
   toggleRealizada,
+  setDias,
+  guardarDiasEnLocalStorage,
 }) {
   const [recetasGeneradas,  setRecetasGeneradas]   = useState({});
   const [openRecetas,       setOpenRecetas]        = useState({});
@@ -83,20 +93,30 @@ export default function MenuCards({
             )
           );
 
-          const realizada   = !!realizadas[key];
-          const badgeCls    = colorPorMomento[momento] || "bg-gray-200 text-gray-700";
-          const mostrarCaja = ["Comida","Cena"].includes(momento) && entradasValidas.length > 1;
+          const realizada = !!realizadas[key];
+          const badgeCls  = colorPorMomento[momento] || "bg-gray-200 text-gray-700";
+          const cajaCls   = cajaPorMomento[momento] || "bg-emerald-50 border-emerald-200";
 
           return (
             <div
               key={key}
-              className={
-                mostrarCaja
-                  ? "rounded-2xl border border-emerald-200 bg-emerald-50 p-4 flex flex-col gap-2"
-                  : "flex flex-col gap-4"
-              }
+              className={`rounded-2xl border p-4 flex flex-col gap-2 ${cajaCls}`}
             >
-              {mostrarCaja && (
+              <div className="flex items-center gap-2 mb-2">
+                <button
+                  onClick={()=>toggleRealizada(key, entradasValidas)}
+                  className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+                    realizada ? "bg-emerald-100 border-emerald-400" : "bg-white border-gray-200"
+                  }`}
+                >
+                  {realizada && <Check className="w-4 h-4 text-emerald-500"/>}
+                </button>
+                <span
+                  className={`px-3 py-1 rounded-full text-sm font-semibold ${badgeCls}`}
+                >
+                  {momento}
+                </span>
+              </div>
                 <div className="flex items-center gap-2 mb-2">
                   <button
                     onClick={()=>toggleRealizada(key, entradasValidas)}
@@ -112,7 +132,6 @@ export default function MenuCards({
                     {momento}
                   </span>
                 </div>
-              )}
 
               {entradasValidas.map((entrada, idx) =>
                 Object.entries(entrada)
@@ -143,27 +162,14 @@ export default function MenuCards({
                           {/* cabecera */}
                           <div className="flex items-center justify-between p-4">
                             <div className="flex items-center gap-3 min-w-0">
-                              {!mostrarCaja && (
-                                <button
-                                  onClick={()=>toggleRealizada(key,[entrada])}
-                                  className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                                    realizada ? "bg-emerald-100 border-emerald-400" : "bg-white border-gray-200"
-                                  }`}
-                                >
-                                  {realizada && <Check className="w-4 h-4 text-emerald-500"/>}
-                                </button>
-                              )}
-                              {!mostrarCaja && (
-                                <span className={`px-3 py-1 rounded-full text-sm font-semibold ${badgeCls}`}>
-                                  {momento}
+                              <div className="flex flex-col min-w-0">
+                                <span className="font-bold text-lg text-gray-900 break-words">
+                                  {nombre}
                                 </span>
-                              )}
-                              <span className="font-bold text-lg text-gray-900 truncate">
-                                {nombre}
-                                <span className="text-sm text-gray-500"> ({tipo})</span>
-                              </span>
+                                <span className="text-sm text-gray-500">({tipo})</span>
+                              </div>
                             </div>
-                            <span className="font-bold text-lg" style={{ color: COLOR_KCAL }}>
+                            <span className="font-bold text-lg whitespace-nowrap" style={{ color: COLOR_KCAL }}>
                               {entrada.calorias||0}
                               <span className="text-xs font-medium"> kcal</span>
                             </span>
@@ -261,7 +267,7 @@ export default function MenuCards({
 
                           {/* dropdown alternativas */}
                           <AnimatePresence>
-                            {altOpen && alt.length>0 && (
+                            {altOpen && (
                               <motion.ul
                                 initial={{ opacity:0, y:-8 }}
                                 animate={{ opacity:1, y:0 }}
@@ -274,61 +280,61 @@ export default function MenuCards({
                                   shadow-lg z-20
                                 "
                               >
+                                <li
+                                  key="keep"
+                                  onClick={() =>
+                                    setOpenAlternativas(prev => ({ ...prev, [subKey]: false }))
+                                  }
+                                  className="text-sm font-medium text-center text-emerald-700 px-4 py-3 hover:bg-emerald-50 cursor-pointer"
+                                >
+                                  No cambiar plato actual
+                                </li>
                                 {alt.map((op,i)=>(
                                   <li
                                     key={i}
-                                    onClick={()=>{
-                                      seleccionarPlato(key, i);
-                                      setOpenAlternativas(prev=>({...prev,[subKey]:false}));
+                                    onClick={() => {
+                                      setDias(prev => {
+                                        const copia = [...prev];
+                                        copia[diaActivo].comidas[momento][idx] = reemplazarEntrada(op);
+                                        guardarDiasEnLocalStorage(copia);
+                                        return copia;
+                                      });
+                                      setOpenAlternativas(prev => ({...prev, [subKey]: false}));
                                     }}
-                                    className="flex items-center justify-between px-4 py-3 hover:bg-emerald-50 cursor-pointer"
+                                    className="grid grid-cols-[minmax(0,1fr)_auto_auto_auto_auto] items-center gap-2 px-4 py-3 hover:bg-emerald-50 cursor-pointer"
                                   >
                                     <span className="text-sm font-medium text-gray-900 truncate">
                                       {op.plato}
                                     </span>
-                                    <div className="flex items-center gap-2">
-                                      <span
-                                        className="text-sm font-semibold"
-                                        style={{ color: COLOR_KCAL }}
-                                      >
-                                        {op.calorias} kcal
+                                    <span className="text-sm font-semibold" style={{ color: COLOR_KCAL }}>
+                                      {op.calorias} kcal
+                                    </span>
+                                    <div
+                                      className="rounded-full px-2 py-0.5 flex items-center gap-1 text-xs"
+                                      style={{ background: BG_PROTEINA }}
+                                    >
+                                      <span className="font-bold" style={{ color: COLOR_PROTEINA }}>
+                                        {op.proteinas}g
                                       </span>
-                                      <div
-                                        className="rounded-full px-2 py-0.5 flex items-center gap-1 text-xs"
-                                        style={{ background: BG_PROTEINA }}
-                                      >
-                                        <span
-                                          className="font-bold"
-                                          style={{ color: COLOR_PROTEINA }}
-                                        >
-                                          {op.proteinas}g
-                                        </span>
-                                        <ChickenIcon width={12} height={12} color={COLOR_PROTEINA}/>
-                                      </div>
-                                      <div
-                                        className="rounded-full px-2 py-0.5 flex items-center gap-1 text-xs"
-                                        style={{ background: BG_HIDRATOS }}
-                                      >
-                                        <span
-                                          className="font-bold"
-                                          style={{ color: COLOR_HIDRATOS }}
-                                        >
-                                          {op.hidratos}g
-                                        </span>
-                                        <WheatIcon width={12} height={12} color={COLOR_HIDRATOS}/>
-                                      </div>
-                                      <div
-                                        className="rounded-full px-2 py-0.5 flex items-center gap-1 text-xs"
-                                        style={{ background: BG_GRASAS }}
-                                      >
-                                        <span
-                                          className="font-bold"
-                                          style={{ color: COLOR_GRASAS }}
-                                        >
-                                          {op.grasas}g
-                                        </span>
-                                        <AvocadoIcon width={12} height={12} color={COLOR_GRASAS}/>
-                                      </div>
+                                      <ChickenIcon width={12} height={12} color={COLOR_PROTEINA}/>
+                                    </div>
+                                    <div
+                                      className="rounded-full px-2 py-0.5 flex items-center gap-1 text-xs"
+                                      style={{ background: BG_HIDRATOS }}
+                                    >
+                                      <span className="font-bold" style={{ color: COLOR_HIDRATOS }}>
+                                        {op.hidratos}g
+                                      </span>
+                                      <WheatIcon width={12} height={12} color={COLOR_HIDRATOS}/>
+                                    </div>
+                                    <div
+                                      className="rounded-full px-2 py-0.5 flex items-center gap-1 text-xs"
+                                      style={{ background: BG_GRASAS }}
+                                    >
+                                      <span className="font-bold" style={{ color: COLOR_GRASAS }}>
+                                        {op.grasas}g
+                                      </span>
+                                      <AvocadoIcon width={12} height={12} color={COLOR_GRASAS}/>
                                     </div>
                                   </li>
                                 ))}
