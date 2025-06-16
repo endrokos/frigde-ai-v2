@@ -147,20 +147,26 @@ export default function MenuPage() {
 
   const macrosRealizadas = (() => {
     const comidas = dias[diaActivo]?.comidas || {};
-    let cal = 0, prot = 0, hidr = 0, grasa = 0;
+    let cal = 0,
+      prot = 0,
+      hidr = 0,
+      grasa = 0;
+
     Object.entries(comidas).forEach(([momento, opciones]) => {
-      if (opciones && opciones.length > 0) {
-        const key = `${diaActivo}-${momento}`;
-        if (realizadas[key]) {
-          const idx = platoSeleccionado[key] ?? 0;
-          const plato = opciones[idx] || opciones[0];
-          cal += plato.calorias || 0;
-          prot += plato.proteinas || 0;
-          hidr += plato.hidratos || 0;
-          grasa += plato.grasas || 0;
-        }
-      }
+      if (!Array.isArray(opciones)) return;
+
+      const key = `${diaActivo}-${momento}`;
+      if (!realizadas[key]) return;
+
+      opciones.forEach(entrada => {
+        if (typeof entrada !== "object") return;
+        cal += entrada.calorias || 0;
+        prot += entrada.proteinas || 0;
+        hidr += entrada.hidratos || 0;
+        grasa += entrada.grasas || 0;
+      });
     });
+
     return { calorias: cal, proteinas: prot, hidratos: hidr, grasas: grasa };
   })();
 
@@ -217,6 +223,8 @@ export default function MenuPage() {
           toggleIngredientes={toggleIngredientes}
           realizadas={realizadas}
           toggleRealizada={toggleRealizada}
+          setDias={setDias}
+          guardarDiasEnLocalStorage={guardarDiasEnLocalStorage}
         />
 
         <SubirPlatoDesdeImagen
