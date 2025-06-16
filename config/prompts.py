@@ -221,6 +221,9 @@ Los campos de cada entrada se deben rellenar tal cual vienen ejemplificados el d
 """
 
 PROMPT_MAKE_MENU_WITH_OPTIONS = """
+El menú debe generarse en base al siguiente perfil del usuario:
+{user_metrics}
+
 Quiero que me generes un json donde añadas en la estructura que te voy a pasar.
 Se trata de generar un menú semanal. 
 Es necesario que generes {numero_de_platos_comida} para las -comidas-, en caso de que sean dos, quiero que des un primer plato y luego un segundo plato
