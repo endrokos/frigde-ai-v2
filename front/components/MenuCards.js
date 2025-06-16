@@ -263,7 +263,7 @@ export default function MenuCards({
 
                           {/* dropdown alternativas */}
                           <AnimatePresence>
-                            {altOpen && alt.length>0 && (
+                            {altOpen && (
                               <motion.ul
                                 initial={{ opacity:0, y:-8 }}
                                 animate={{ opacity:1, y:0 }}
@@ -276,6 +276,15 @@ export default function MenuCards({
                                   shadow-lg z-20
                                 "
                               >
+                                <li
+                                  key="keep"
+                                  onClick={() =>
+                                    setOpenAlternativas(prev => ({ ...prev, [subKey]: false }))
+                                  }
+                                  className="text-sm font-medium text-center text-emerald-700 px-4 py-3 hover:bg-emerald-50 cursor-pointer"
+                                >
+                                  No cambiar plato actual
+                                </li>
                                 {alt.map((op,i)=>(
                                   <li
                                     key={i}
@@ -288,54 +297,40 @@ export default function MenuCards({
                                       });
                                       setOpenAlternativas(prev => ({...prev, [subKey]: false}));
                                     }}
-                                    className="flex items-center justify-between px-4 py-3 hover:bg-emerald-50 cursor-pointer"
+                                    className="grid grid-cols-[minmax(0,1fr)_auto_auto_auto_auto] items-center gap-2 px-4 py-3 hover:bg-emerald-50 cursor-pointer"
                                   >
                                     <span className="text-sm font-medium text-gray-900 truncate">
                                       {op.plato}
                                     </span>
-                                    <div className="flex items-center gap-2">
-                                      <span
-                                        className="text-sm font-semibold"
-                                        style={{ color: COLOR_KCAL }}
-                                      >
-                                        {op.calorias} kcal
+                                    <span className="text-sm font-semibold" style={{ color: COLOR_KCAL }}>
+                                      {op.calorias} kcal
+                                    </span>
+                                    <div
+                                      className="rounded-full px-2 py-0.5 flex items-center gap-1 text-xs"
+                                      style={{ background: BG_PROTEINA }}
+                                    >
+                                      <span className="font-bold" style={{ color: COLOR_PROTEINA }}>
+                                        {op.proteinas}g
                                       </span>
-                                      <div
-                                        className="rounded-full px-2 py-0.5 flex items-center gap-1 text-xs"
-                                        style={{ background: BG_PROTEINA }}
-                                      >
-                                        <span
-                                          className="font-bold"
-                                          style={{ color: COLOR_PROTEINA }}
-                                        >
-                                          {op.proteinas}g
-                                        </span>
-                                        <ChickenIcon width={12} height={12} color={COLOR_PROTEINA}/>
-                                      </div>
-                                      <div
-                                        className="rounded-full px-2 py-0.5 flex items-center gap-1 text-xs"
-                                        style={{ background: BG_HIDRATOS }}
-                                      >
-                                        <span
-                                          className="font-bold"
-                                          style={{ color: COLOR_HIDRATOS }}
-                                        >
-                                          {op.hidratos}g
-                                        </span>
-                                        <WheatIcon width={12} height={12} color={COLOR_HIDRATOS}/>
-                                      </div>
-                                      <div
-                                        className="rounded-full px-2 py-0.5 flex items-center gap-1 text-xs"
-                                        style={{ background: BG_GRASAS }}
-                                      >
-                                        <span
-                                          className="font-bold"
-                                          style={{ color: COLOR_GRASAS }}
-                                        >
-                                          {op.grasas}g
-                                        </span>
-                                        <AvocadoIcon width={12} height={12} color={COLOR_GRASAS}/>
-                                      </div>
+                                      <ChickenIcon width={12} height={12} color={COLOR_PROTEINA}/>
+                                    </div>
+                                    <div
+                                      className="rounded-full px-2 py-0.5 flex items-center gap-1 text-xs"
+                                      style={{ background: BG_HIDRATOS }}
+                                    >
+                                      <span className="font-bold" style={{ color: COLOR_HIDRATOS }}>
+                                        {op.hidratos}g
+                                      </span>
+                                      <WheatIcon width={12} height={12} color={COLOR_HIDRATOS}/>
+                                    </div>
+                                    <div
+                                      className="rounded-full px-2 py-0.5 flex items-center gap-1 text-xs"
+                                      style={{ background: BG_GRASAS }}
+                                    >
+                                      <span className="font-bold" style={{ color: COLOR_GRASAS }}>
+                                        {op.grasas}g
+                                      </span>
+                                      <AvocadoIcon width={12} height={12} color={COLOR_GRASAS}/>
                                     </div>
                                   </li>
                                 ))}
