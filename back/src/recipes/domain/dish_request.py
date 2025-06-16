@@ -1,9 +1,9 @@
-from dataclasses import dataclass
 from typing import Optional
 
+from pydantic import BaseModel
 
-@dataclass
-class DishRequest:
+
+class DishRequest(BaseModel):
     dish: str
     recipe: Optional[str]
     ingredients: Optional[str]

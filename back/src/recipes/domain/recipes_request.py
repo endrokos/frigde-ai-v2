@@ -1,7 +1,7 @@
-from dataclasses import dataclass
+from pydantic import BaseModel
 
-@dataclass
-class RecipesRequest:
+
+class RecipesRequest(BaseModel):
     plato: str
     calories: int
     protein: int
