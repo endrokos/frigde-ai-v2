@@ -1,3 +1,6 @@
+import json
+from xml.etree.ElementTree import indent
+
 from back.src.menu_generator.domain.menu_request import MenuRequest, MenuWithOptionalsRequest
 
 
@@ -48,4 +51,5 @@ def prompt_injecting_menu_with_optionals(menu: MenuWithOptionalsRequest, prompt:
             .replace("{postre_cena}", menu.postre_cena)
             .replace("{numero_de_platos_comida}", str(menu.numero_de_platos_comida))
             .replace("{numero_de_platos_cena}", str(menu.numero_de_platos_cena))
+            .replace("{user_metrics}", json.dumps(menu.user_metrics, indent=2))
             )

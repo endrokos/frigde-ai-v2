@@ -1,5 +1,6 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Dict, Union
+
 
 class MenuRequest(BaseModel):
     menu_goal: str
@@ -16,6 +17,7 @@ class OptionalsRequest(BaseModel):
 
 class MenuWithOptionalsRequest(BaseModel):
     menu_goal: str
+    user_metrics: Dict[str, Union[str, int]]
     meals: List[str]
     allergies: List[str]
     diet: str
