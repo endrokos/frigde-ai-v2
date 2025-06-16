@@ -217,6 +217,8 @@ export default function MenuPage() {
           toggleIngredientes={toggleIngredientes}
           realizadas={realizadas}
           toggleRealizada={toggleRealizada}
+          setDias={setDias}
+          guardarDiasEnLocalStorage={guardarDiasEnLocalStorage}
         />
 
         <SubirPlatoDesdeImagen
