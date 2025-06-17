@@ -191,7 +191,10 @@ export default function UserMetricsWizard({ onComplete }) {
             <button
               key={value}
               type="button"
-              onClick={() => setMetrics({ ...metrics, objetivo: value })}
+              onClick={() => {
+                setObjetivo(value);
+                setMetrics({ ...metrics, objetivo: value });
+              }}
               className={`flex flex-col items-center px-3 py-2 rounded-xl border transition select-none
                 ${objetivo === value ? "bg-emerald-500 text-white border-emerald-500" : "bg-emerald-50 border-emerald-200 text-emerald-600"}`}
             >
@@ -201,7 +204,10 @@ export default function UserMetricsWizard({ onComplete }) {
           ))}
           <button
             type="button"
-            onClick={() => setMetrics({ ...metrics, objetivo: value })}
+            onClick={() => {
+              setObjetivo("Otro");
+              setMetrics({ ...metrics, objetivo: "Otro" });
+            }}
             className={`flex flex-col items-center px-3 py-2 rounded-xl border transition select-none col-span-2
               ${objetivo === "Otro" ? "bg-emerald-500 text-white border-emerald-500" : "bg-emerald-50 border-emerald-200 text-emerald-600"}`}
           >
