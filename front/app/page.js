@@ -4,9 +4,6 @@ import { useRouter } from "next/navigation";
 import { generarDietasSemana } from "@/data/generarDietasSemana";
 
 // Componentes
-import ObjetivoSelect from "@/components/ObjetivoSelect";
-import AlergiasCheckbox from "@/components/AlergiasCheckbox";
-import DietasRadio from "@/components/DietasRadio";
 import ComidasToggle from "@/components/ComidasToggle";
 import UserMetricsWizard from "@/components/UserMetricsWizard";
 
@@ -16,14 +13,7 @@ export default function Home() {
   // Estados principales
   const [stage, setStage] = useState("intro");
   const [showForm, setShowForm] = useState(false);
-  const [objetivo, setObjetivo] = useState("");
-  const [objetivoOtro, setObjetivoOtro] = useState("");
-  const [alergiasSeleccionadas, setAlergiasSeleccionadas] = useState([]);
-  const [mostrarAlergiaOtra, setMostrarAlergiaOtra] = useState(false);
-  const [alergiaOtra, setAlergiaOtra] = useState("");
-  const [dieta, setDieta] = useState("");
-  const [dietaOtra, setDietaOtra] = useState("");
-  const [noGusta, setNoGusta] = useState("");
+  const [wizardData, setWizardData] = useState(null);
   const [comidasSeleccionadas, setComidasSeleccionadas] = useState([]);
 
   const [userMetrics, setUserMetrics] = useState({
@@ -39,14 +29,6 @@ export default function Home() {
   const [postreCena, setPostreCena] = useState(false);
   const [platosComida, setPlatosComida] = useState(1);
   const [platosCena, setPlatosCena] = useState(1);
-
-  const handleAlergiaChange = (item) => {
-    setAlergiasSeleccionadas(prev =>
-      prev.includes(item)
-        ? prev.filter(a => a !== item)
-        : [...prev, item]
-    );
-  };
 
   const handleComidasChange = (item) => {
     setComidasSeleccionadas(prev =>
@@ -68,6 +50,17 @@ export default function Home() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const {
+      objetivo,
+      objetivoOtro,
+      alergiasSeleccionadas,
+      mostrarAlergiaOtra,
+      alergiaOtra,
+      dieta,
+      dietaOtra,
+      noGusta,
+    } = wizardData;
 
     let notRichFoods = noGusta
       .split(",")
@@ -155,7 +148,8 @@ export default function Home() {
 
         {showForm && stage === "metrics" && (
           <UserMetricsWizard onComplete={(data) => {
-            setUserMetrics(data);
+            setUserMetrics(data.user_metrics);
+            setWizardData(data);
             setStage("form");
           }} />
         )}
@@ -165,36 +159,6 @@ export default function Home() {
             className="flex flex-col gap-6 w-full max-w-2xl py-4 mx-auto animate-fade-in"
             onSubmit={handleSubmit}
           >
-            <ObjetivoSelect
-              value={objetivo}
-              onChange={e => setObjetivo(e.target.value)}
-              otroValue={objetivoOtro}
-              onOtroChange={e => setObjetivoOtro(e.target.value)}
-            />
-            <AlergiasCheckbox
-              seleccionadas={alergiasSeleccionadas}
-              onToggle={handleAlergiaChange}
-              mostrarOtra={mostrarAlergiaOtra}
-              setMostrarOtra={setMostrarAlergiaOtra}
-              otraValue={alergiaOtra}
-              onOtraChange={e => setAlergiaOtra(e.target.value)}
-            />
-            <DietasRadio
-              value={dieta}
-              onChange={setDieta}
-              otraValue={dietaOtra}
-              onOtraChange={e => setDietaOtra(e.target.value)}
-            />
-            <label className="font-semibold text-gray-700">
-              ¿Hay algún alimento que no te guste o no quieras incluir?
-              <textarea
-                className="mt-2 w-full px-4 py-3 rounded-lg border border-emerald-200 focus:ring-2 focus:ring-emerald-400 outline-none transition resize-none"
-                placeholder="Por ejemplo: Pimiento, setas, pescado azul..."
-                rows={2}
-                value={noGusta}
-                onChange={e => setNoGusta(e.target.value)}
-              />
-            </label>
             <ComidasToggle
               seleccionadas={comidasSeleccionadas}
               onToggle={handleComidasChange}
