@@ -28,52 +28,76 @@ export default function UserMetricsWizard({ onComplete }) {
       key: "sexo",
       label: "¿Cuál es tu sexo?",
       input: (
-        <select
-          className="mt-4 w-full px-4 py-3 rounded-lg border border-emerald-200 focus:ring-2 focus:ring-emerald-400 outline-none transition"
-          value={metrics.sexo}
-          onChange={handleChange("sexo")}
-        >
-          <option value="" disabled>Selecciona</option>
-          {sexos.map(s => (
-            <option key={s} value={s.toLowerCase()}>{s}</option>
+        <div className="mt-4 flex justify-center gap-4 w-full">
+          {sexos.slice(0, 2).map(s => (
+            <button
+              key={s}
+              type="button"
+              onClick={() => setMetrics({ ...metrics, sexo: s.toLowerCase() })}
+              className={`px-4 py-2 rounded-xl border transition select-none w-full
+                ${metrics.sexo === s.toLowerCase()
+                  ? "bg-emerald-500 text-white border-emerald-500"
+                  : "bg-emerald-50 border-emerald-200"}`}
+            >
+              {s}
+            </button>
           ))}
-        </select>
+        </div>
       ),
     },
     {
       key: "edad",
       label: "¿Cuál es tu edad?",
       input: (
-        <input
-          type="number"
-          className="mt-4 w-full px-4 py-3 rounded-lg border border-emerald-200 focus:ring-2 focus:ring-emerald-400 outline-none transition"
-          value={metrics.edad}
-          onChange={handleChange("edad")}
-        />
+        <div className="mt-4 w-full flex flex-col items-center">
+          <input
+            type="range"
+            min="18"
+            max="100"
+            value={metrics.edad || 18}
+            onChange={handleChange("edad")}
+            className="w-full"
+          />
+          <span className="mt-2 text-lg font-semibold text-emerald-600">
+            {metrics.edad || 18} años
+          </span>
+        </div>
       ),
     },
     {
       key: "altura_cm",
       label: "¿Cuál es tu altura en cm?",
       input: (
-        <input
-          type="number"
-          className="mt-4 w-full px-4 py-3 rounded-lg border border-emerald-200 focus:ring-2 focus:ring-emerald-400 outline-none transition"
-          value={metrics.altura_cm}
-          onChange={handleChange("altura_cm")}
-        />
+        <div className="mt-4 w-full flex justify-center">
+          <select
+            size={5}
+            className="w-full text-center py-2 rounded-lg border border-emerald-200 focus:ring-2 focus:ring-emerald-400 outline-none overflow-y-scroll"
+            value={metrics.altura_cm || 170}
+            onChange={handleChange("altura_cm")}
+          >
+            {Array.from({ length: 81 }, (_, i) => i + 140).map(n => (
+              <option key={n} value={n}>{n} cm</option>
+            ))}
+          </select>
+        </div>
       ),
     },
     {
       key: "peso_kg",
       label: "¿Cuál es tu peso en kg?",
       input: (
-        <input
-          type="number"
-          className="mt-4 w-full px-4 py-3 rounded-lg border border-emerald-200 focus:ring-2 focus:ring-emerald-400 outline-none transition"
-          value={metrics.peso_kg}
-          onChange={handleChange("peso_kg")}
-        />
+        <div className="mt-4 w-full flex justify-center">
+          <select
+            size={5}
+            className="w-full text-center py-2 rounded-lg border border-emerald-200 focus:ring-2 focus:ring-emerald-400 outline-none overflow-y-scroll"
+            value={metrics.peso_kg || 70}
+            onChange={handleChange("peso_kg")}
+          >
+            {Array.from({ length: 121 }, (_, i) => i + 40).map(n => (
+              <option key={n} value={n}>{n} kg</option>
+            ))}
+          </select>
+        </div>
       ),
     },
     {
