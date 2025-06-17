@@ -248,69 +248,65 @@ Quiero que me generes un JSON con la estructura que te voy a indicar. El objetiv
 **Ejemplo**:
 
 {
-  "objetivo_calorias": 2200,
-  "objetivo_proteinas": 140,
-  "objetivo_hidratos": 220,
-  "objetivo_grasas": 80,
   "dias": [
     {
       "nombre": "Lunes",
       "comidas": {
-        "Desayuno": [
+        "Comida 1": [
           {
-            "plato": "Tostadas integrales con aguacate y huevo",
-            "calorias": 350,
-            "proteinas": 15,
-            "hidratos": 30,
-            "grasas": 18
+            "plato": plato,
+            "calorias": plato_calorias,
+            "proteinas": proteinas_calorias,
+            "hidratos": hidratos_calorias,
+            "grasas": grasas_calorias
           }
         ],
-        "Comida": [
+        "Comida 2": [
           {
-            "primer_plato": "Ensalada de garbanzos con tomate y atún",
-            "calorias": 400,
-            "proteinas": 25,
-            "hidratos": 35,
-            "grasas": 15
+            "primer_plato": plato,
+            "calorias": plato_calorias,
+            "proteinas": proteinas_calorias,
+            "hidratos": hidratos_calorias,
+            "grasas": grasas_calorias
           },
           {
-            "segundo_plato": "Pollo al horno con patatas",
-            "calorias": 500,
-            "proteinas": 40,
-            "hidratos": 30,
-            "grasas": 20
+            "segundo_plato": plato,
+            "calorias": plato_calorias,
+            "proteinas": proteinas_calorias,
+            "hidratos": hidratos_calorias,
+            "grasas": grasas_calorias
           },
           {
-            "postre": "Yogur natural con fresas",
-            "calorias": 100,
-            "proteinas": 6,
-            "hidratos": 10,
-            "grasas": 3
+            "postre": plato,
+            "calorias": plato_calorias,
+            "proteinas": proteinas_calorias,
+            "hidratos": hidratos_calorias,
+            "grasas": grasas_calorias
           }
         ],
-        "Merienda": [
+        "Comida 3": [
           {
-            "plato": "Batido de plátano y proteína",
-            "calorias": 250,
-            "proteinas": 20,
-            "hidratos": 20,
-            "grasas": 5
+            "plato": plato,
+            "calorias": plato_calorias,
+            "proteinas": proteinas_calorias,
+            "hidratos": hidratos_calorias,
+            "grasas": grasas_calorias
           }
         ],
-        "Cena": [
+        "Comida 4": [
           {
-            "primer_plato": "Crema de calabacín",
-            "calorias": 150,
-            "proteinas": 5,
-            "hidratos": 10,
-            "grasas": 5
+            "primer_plato": plato,
+            "calorias": plato_calorias,
+            "proteinas": proteinas_calorias,
+            "hidratos": hidratos_calorias,
+            "grasas": grasas_calorias
           },
           {
-            "segundo_plato": "Tortilla de espinacas y queso fresco",
-            "calorias": 350,
-            "proteinas": 25,
-            "hidratos": 5,
-            "grasas": 25
+            "segundo_plato": plato,
+            "calorias": plato_calorias,
+            "proteinas": proteinas_calorias,
+            "hidratos": hidratos_calorias,
+            "grasas": grasas_calorias
           }
         ]
       }
