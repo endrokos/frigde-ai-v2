@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { comidas } from "@/data/options";
 
-export default function ComidasToggle({ seleccionadas, onToggle }) {
+export default function ComidasToggle({ seleccionadas, onToggle, onConfigChange, values = {} }) {
   const [configOpen, setConfigOpen] = useState(null); // "Comida" o "Cena" o null
   const [platosPorComida, setPlatosPorComida] = useState({});
   const [postrePorComida, setPostrePorComida] = useState({});
@@ -23,8 +23,31 @@ export default function ComidasToggle({ seleccionadas, onToggle }) {
 
   const handlePostre = (item, quierePostre) => {
     setPostrePorComida(prev => ({ ...prev, [item]: quierePostre }));
+  };
+
+  const guardarConfig = () => {
+    if (onConfigChange && configOpen) {
+      onConfigChange({
+        item: configOpen,
+        platos: platosPorComida[configOpen] || 1,
+        postre: !!postrePorComida[configOpen],
+      });
+    }
     setConfigOpen(null);
   };
+
+  useEffect(() => {
+    if (configOpen && values[configOpen]) {
+      setPlatosPorComida(prev => ({
+        ...prev,
+        [configOpen]: values[configOpen].platos,
+      }));
+      setPostrePorComida(prev => ({
+        ...prev,
+        [configOpen]: values[configOpen].postre,
+      }));
+    }
+  }, [configOpen]);
 
   const closeModal = () => setConfigOpen(null);
 
@@ -114,7 +137,7 @@ export default function ComidasToggle({ seleccionadas, onToggle }) {
       <div className="flex justify-center">
         <button
           type="button"
-          onClick={() => setConfigOpen(null)}
+          onClick={guardarConfig}
           className="mt-1 bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow"
         >
           Guardar
