@@ -229,7 +229,7 @@ Quiero que me generes un JSON con la estructura que te voy a indicar. El objetiv
 
 **Requisitos**:
 - Genera {numero_de_platos_comida} platos para las comidas principales (si son dos, deben estar diferenciados como primer plato y segundo plato).
-- Genera {numero_de_platos_cena} platos para las cenas (si son dos, igual que arriba).
+- Genera {numero_de_platos_cena} platos para las cenas (si son dos, deben estar diferenciados como primer plato y segundo plato).
 - El resto de comidas (como desayuno, merienda, etc.) deben tener un solo plato.
 - El usuario quiere postre en la comida: {postre_comida}.
 - El usuario quiere postre en la cena: {postre_cena}.
