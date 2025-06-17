@@ -35,6 +35,7 @@ def generate_menu_use_case(menu_request: MenuRequest, text_model_client: GptText
 
 def generate_menu_with_optionals_use_case(menu_request: MenuWithOptionalsRequest, text_model_client: GptTextModelClient) -> Dict:
     prompt = prompt_injecting_menu_with_optionals(menu=menu_request, prompt=PROMPT_MAKE_MENU_WITH_OPTIONS)
+    print(prompt)
     try:
         response = text_model_client.generate(prompt)
         return {"menu": extract_json_menu(response)}

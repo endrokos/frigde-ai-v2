@@ -229,7 +229,7 @@ Quiero que me generes un JSON con la estructura que te voy a indicar. El objetiv
 
 **Requisitos**:
 - Genera {numero_de_platos_comida} platos para las comidas principales (si son dos, deben estar diferenciados como primer plato y segundo plato).
-- Genera {numero_de_platos_cena} platos para las cenas (si son dos, igual que arriba).
+- Genera {numero_de_platos_cena} platos para las cenas (si son dos, deben estar diferenciados como primer plato y segundo plato).
 - El resto de comidas (como desayuno, merienda, etc.) deben tener un solo plato.
 - El usuario quiere postre en la comida: {postre_comida}.
 - El usuario quiere postre en la cena: {postre_cena}.
@@ -327,8 +327,9 @@ Sigue exactamente este formato de JSON. Cada comida debe tener una lista con uno
 - grasas
 
 **Importante**:
-No te olvides de que las calorías de cada comida deben ser exactamente igual a las calorías objetivo. Esto es:
+No te olvides de que las calorías y los gramos de cada comida deben ser exactamente igual a las calorías objetivo. Esto es:
 Calorías Objetivo = Calorías Comida 1 + Calorías Comida 2 + Calorías Comida 3 - Primer Plato + Calorías Comida 3 - Segundo Plato + ...
+Gramos Objetivo = Gramos Comida 1 + Gramos Comida 2 + Gramos Comida 3 - Primer Plato + Gramos Comida 3 - Segundo Plato + ...
 
 No te salgas del formato ni generes texto fuera del JSON.
 """
