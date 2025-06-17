@@ -2,6 +2,7 @@ from typing import Dict
 
 from back.src.menu_generator.domain.dish_request import DishRequest
 from back.src.menu_generator.domain.menu_request import MenuRequest, OptionalsRequest, MenuWithOptionalsRequest
+from back.src.menu_generator.repository.agregar_objetivos_nutricionales import agregar_objetivos_nutricionales
 from back.src.shared.repository.extract_json import extract_json_menu, compact_jsons
 from back.src.shared.repository.gpt_text_model_client import GptTextModelClient
 from back.src.menu_generator.repository.prompt_injecting import (
@@ -38,7 +39,9 @@ def generate_menu_with_optionals_use_case(menu_request: MenuWithOptionalsRequest
     print(prompt)
     try:
         response = text_model_client.generate(prompt)
-        return {"menu": extract_json_menu(response)}
+        print(response)
+        response = agregar_objetivos_nutricionales(extract_json_menu(response))
+        return {"menu": response}
     except Exception as e:
         print(f"ERROR: {str(e)}")
         return {"menu": "Algo salió mal :("}
