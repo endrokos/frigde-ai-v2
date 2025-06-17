@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { sexos, nivelesActividad } from "@/data/options";
+import { sexos, nivelesActividad, objetivos } from "@/data/options";
+import ObjetivoSelect from "@/components/ObjetivoSelect";
+import AlergiasCheckbox from "@/components/AlergiasCheckbox";
+import DietasRadio from "@/components/DietasRadio";
+import FlameIcon from "@/components/icons/FlameIcon";
+import ChickenIcon from "@/components/icons/ChickenIcon";
+import AvocadoIcon from "@/components/icons/AvocadoIcon";
+import WheatIcon from "@/components/icons/WheatIcon";
 import Picker from "react-mobile-picker";
 import { FaBed, FaWalking, FaRunning, FaDumbbell } from "react-icons/fa";
 
@@ -13,13 +20,40 @@ export default function UserMetricsWizard({ onComplete }) {
     nivel_actividad: "",
   });
 
+  const [objetivo, setObjetivo] = useState("");
+  const [objetivoOtro, setObjetivoOtro] = useState("");
+  const [alergiasSeleccionadas, setAlergiasSeleccionadas] = useState([]);
+  const [mostrarAlergiaOtra, setMostrarAlergiaOtra] = useState(false);
+  const [alergiaOtra, setAlergiaOtra] = useState("");
+  const [dieta, setDieta] = useState("");
+  const [dietaOtra, setDietaOtra] = useState("");
+  const [noGusta, setNoGusta] = useState("");
+
   const handleChange = (key) => (e) => {
     setMetrics({ ...metrics, [key]: e.target.value });
   };
 
+  const handleAlergiaChange = (item) => {
+    setAlergiasSeleccionadas(prev =>
+      prev.includes(item)
+        ? prev.filter(a => a !== item)
+        : [...prev, item]
+    );
+  };
+
   const next = () => {
     if (step >= preguntas.length - 1) {
-      onComplete(metrics);
+      onComplete({
+        user_metrics: metrics,
+        objetivo,
+        objetivoOtro,
+        alergiasSeleccionadas,
+        mostrarAlergiaOtra,
+        alergiaOtra,
+        dieta,
+        dietaOtra,
+        noGusta,
+      });
     } else {
       setStep(step + 1);
     }
@@ -143,6 +177,88 @@ export default function UserMetricsWizard({ onComplete }) {
         </div>
       ),
     },
+    {
+      key: "objetivo",
+      label: "Objetivo del menú",
+      input: (
+        <div className="mt-4 grid grid-cols-2 gap-4 w-full">
+          {[
+            { label: "Perder peso", value: "Perder peso", Icon: FlameIcon },
+            { label: "Ganar músculo", value: "Ganar músculo", Icon: ChickenIcon },
+            { label: "Mejorar salud", value: "Mejorar salud", Icon: AvocadoIcon },
+            { label: "Mantener peso", value: "Mantener peso", Icon: WheatIcon },
+          ].map(({ label, value, Icon }) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => setObjetivo(value)}
+              className={`flex flex-col items-center px-3 py-2 rounded-xl border transition select-none
+                ${objetivo === value ? "bg-emerald-500 text-white border-emerald-500" : "bg-emerald-50 border-emerald-200 text-emerald-600"}`}
+            >
+              <Icon className="w-6 h-6 mb-1" />
+              {label}
+            </button>
+          ))}
+          <button
+            type="button"
+            onClick={() => setObjetivo("Otro")}
+            className={`flex flex-col items-center px-3 py-2 rounded-xl border transition select-none col-span-2
+              ${objetivo === "Otro" ? "bg-emerald-500 text-white border-emerald-500" : "bg-emerald-50 border-emerald-200 text-emerald-600"}`}
+          >
+            Otro
+          </button>
+        </div>
+      ),
+      extra:
+        objetivo === "Otro" ? (
+          <input
+            type="text"
+            className="mt-3 w-full px-4 py-3 rounded-lg border border-emerald-200 focus:ring-2 focus:ring-emerald-400 outline-none transition"
+            placeholder="Escribe tu objetivo"
+            value={objetivoOtro}
+            onChange={e => setObjetivoOtro(e.target.value)}
+          />
+        ) : null,
+    },
+    {
+      key: "alergias",
+      label: "¿Tienes alguna alergia o intolerancia alimentaria?",
+      input: (
+        <AlergiasCheckbox
+          seleccionadas={alergiasSeleccionadas}
+          onToggle={handleAlergiaChange}
+          mostrarOtra={mostrarAlergiaOtra}
+          setMostrarOtra={setMostrarAlergiaOtra}
+          otraValue={alergiaOtra}
+          onOtraChange={e => setAlergiaOtra(e.target.value)}
+        />
+      ),
+    },
+    {
+      key: "dieta",
+      label: "¿Sigues alguna dieta especial?",
+      input: (
+        <DietasRadio
+          value={dieta}
+          onChange={setDieta}
+          otraValue={dietaOtra}
+          onOtraChange={e => setDietaOtra(e.target.value)}
+        />
+      ),
+    },
+    {
+      key: "nogusta",
+      label: "¿Hay algún alimento que no te guste o no quieras incluir?",
+      input: (
+        <textarea
+          className="mt-4 w-full px-4 py-3 rounded-lg border border-emerald-200 focus:ring-2 focus:ring-emerald-400 outline-none transition resize-none"
+          placeholder="Por ejemplo: Pimiento, setas, pescado azul..."
+          rows={2}
+          value={noGusta}
+          onChange={e => setNoGusta(e.target.value)}
+        />
+      ),
+    },
   ];
 
   const pregunta = preguntas[step];
@@ -153,6 +269,7 @@ export default function UserMetricsWizard({ onComplete }) {
         {pregunta.label}
       </h2>
       {pregunta.input}
+      {pregunta.extra}
       <div className="flex justify-between items-center w-full mt-4">
         <span className="text-sm text-gray-500">Paso {step + 1} de {preguntas.length}</span>
         <button
