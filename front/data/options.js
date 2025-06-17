@@ -34,3 +34,12 @@ export const comidas = [
   "Merienda",
   "Cena",
 ];
+
+export const sexos = ["Hombre", "Mujer", "Otro"];
+
+export const nivelesActividad = [
+  "Sedentario",
+  "Ligero",
+  "Moderado",
+  "Intenso",
+];

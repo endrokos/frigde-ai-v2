@@ -361,7 +361,7 @@ export default function MenuCards({
                               </AnimatePresence>
                             </>
                           )}
-                        </div>
+                          </div>
                       </div>
                     );
                   })

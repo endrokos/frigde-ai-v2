@@ -8,11 +8,13 @@ import ObjetivoSelect from "@/components/ObjetivoSelect";
 import AlergiasCheckbox from "@/components/AlergiasCheckbox";
 import DietasRadio from "@/components/DietasRadio";
 import ComidasToggle from "@/components/ComidasToggle";
+import UserMetricsWizard from "@/components/UserMetricsWizard";
 
 export default function Home() {
   const router = useRouter();
 
   // Estados principales
+  const [stage, setStage] = useState("intro");
   const [showForm, setShowForm] = useState(false);
   const [objetivo, setObjetivo] = useState("");
   const [objetivoOtro, setObjetivoOtro] = useState("");
@@ -24,9 +26,19 @@ export default function Home() {
   const [noGusta, setNoGusta] = useState("");
   const [comidasSeleccionadas, setComidasSeleccionadas] = useState([]);
 
-  // ✅ Nuevos estados
+  const [userMetrics, setUserMetrics] = useState({
+    sexo: "",
+    edad: "",
+    altura_cm: "",
+    peso_kg: "",
+    nivel_actividad: "",
+  });
+
+  // Configuración de comidas
   const [postreComida, setPostreComida] = useState(true);
   const [postreCena, setPostreCena] = useState(false);
+  const [platosComida, setPlatosComida] = useState(1);
+  const [platosCena, setPlatosCena] = useState(1);
 
   const handleAlergiaChange = (item) => {
     setAlergiasSeleccionadas(prev =>
@@ -42,6 +54,16 @@ export default function Home() {
         ? prev.filter(c => c !== item)
         : [...prev, item]
     );
+  };
+
+  const handleConfigChange = ({ item, platos, postre }) => {
+    if (item === "Comida") {
+      setPlatosComida(platos);
+      setPostreComida(postre);
+    } else if (item === "Cena") {
+      setPlatosCena(platos);
+      setPostreCena(postre);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -67,15 +89,16 @@ export default function Home() {
 
     const tiene = (momento) => comidasSeleccionadas.includes(momento);
 
-    const payload = {
+  const payload = {
       menu_goal: objetivoFinal,
+      user_metrics: userMetrics,
       meals: comidasSeleccionadas,
       allergies: alergias.length > 0 ? alergias : [""],
       diet: dietaFinal || "",
       not_rich_foods: notRichFoods.length > 0 ? notRichFoods : [""],
-      numero_de_platos_comida: tiene("Comida") ? 2 : 0,
+      numero_de_platos_comida: tiene("Comida") ? platosComida : 0,
       postre_comida: postreComida ? "si" : "no",
-      numero_de_platos_cena: tiene("Cena") ? 1 : 0,
+      numero_de_platos_cena: tiene("Cena") ? platosCena : 0,
       postre_cena: postreCena ? "si" : "no",
     };
 
@@ -121,13 +144,23 @@ export default function Home() {
         {!showForm && (
           <button
             className="bg-emerald-500 text-white text-xl px-12 py-4 rounded-2xl shadow-lg hover:bg-emerald-600 hover:scale-105 active:scale-95 transition-all cursor-pointer font-semibold tracking-wide"
-            onClick={() => setShowForm(true)}
+            onClick={() => {
+              setShowForm(true);
+              setStage("metrics");
+            }}
           >
             Crear una dieta
           </button>
         )}
 
-        {showForm && (
+        {showForm && stage === "metrics" && (
+          <UserMetricsWizard onComplete={(data) => {
+            setUserMetrics(data);
+            setStage("form");
+          }} />
+        )}
+
+        {showForm && stage === "form" && (
           <form
             className="flex flex-col gap-6 w-full max-w-2xl py-4 mx-auto animate-fade-in"
             onSubmit={handleSubmit}
@@ -165,32 +198,12 @@ export default function Home() {
             <ComidasToggle
               seleccionadas={comidasSeleccionadas}
               onToggle={handleComidasChange}
+              onConfigChange={handleConfigChange}
+              values={{
+                Comida: { platos: platosComida, postre: postreComida },
+                Cena: { platos: platosCena, postre: postreCena },
+              }}
             />
-
-            {/* ✅ NUEVOS CHECKBOXES para postres */}
-            {comidasSeleccionadas.includes("Comida") && (
-              <label className="flex items-center gap-2 text-sm text-gray-700">
-                <input
-                  type="checkbox"
-                  checked={postreComida}
-                  onChange={e => setPostreComida(e.target.checked)}
-                  className="accent-emerald-600"
-                />
-                ¿Quieres postre en la comida?
-              </label>
-            )}
-            {comidasSeleccionadas.includes("Cena") && (
-              <label className="flex items-center gap-2 text-sm text-gray-700">
-                <input
-                  type="checkbox"
-                  checked={postreCena}
-                  onChange={e => setPostreCena(e.target.checked)}
-                  className="accent-emerald-600"
-                />
-                ¿Quieres postre en la cena?
-              </label>
-            )}
-
             <button
               type="submit"
               className="mt-2 bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-700 active:scale-95 transition-all shadow-lg"
