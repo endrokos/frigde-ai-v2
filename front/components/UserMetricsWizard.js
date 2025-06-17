@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { sexos, nivelesActividad } from "@/data/options";
+import Picker from "react-mobile-picker";
+import { FaBed, FaWalking, FaRunning, FaDumbbell } from "react-icons/fa";
 
 export default function UserMetricsWizard({ onComplete }) {
   const [step, setStep] = useState(0);
@@ -68,17 +70,24 @@ export default function UserMetricsWizard({ onComplete }) {
       key: "altura_cm",
       label: "¿Cuál es tu altura en cm?",
       input: (
-        <div className="mt-4 w-full flex justify-center">
-          <select
-            size={5}
-            className="w-full text-center py-2 rounded-lg border border-emerald-200 focus:ring-2 focus:ring-emerald-400 outline-none overflow-y-scroll"
-            value={metrics.altura_cm || 170}
-            onChange={handleChange("altura_cm")}
+        <div className="mt-4 flex justify-center">
+          <Picker
+            value={{ altura: String(metrics.altura_cm || 170) }}
+            onChange={v => setMetrics({ ...metrics, altura_cm: parseInt(v.altura) })}
+            wheelMode="natural"
+            height={160}
+            itemHeight={36}
           >
-            {Array.from({ length: 81 }, (_, i) => i + 140).map(n => (
-              <option key={n} value={n}>{n} cm</option>
-            ))}
-          </select>
+            <Picker.Column name="altura">
+              {Array.from({ length: 81 }, (_, i) => i + 140).map(n => (
+                <Picker.Item key={n} value={String(n)}>
+                  {({ selected }) => (
+                    <div className={`text-center ${selected ? "text-emerald-600 font-semibold" : "text-gray-600"}`}>{n} cm</div>
+                  )}
+                </Picker.Item>
+              ))}
+            </Picker.Column>
+          </Picker>
         </div>
       ),
     },
@@ -86,17 +95,24 @@ export default function UserMetricsWizard({ onComplete }) {
       key: "peso_kg",
       label: "¿Cuál es tu peso en kg?",
       input: (
-        <div className="mt-4 w-full flex justify-center">
-          <select
-            size={5}
-            className="w-full text-center py-2 rounded-lg border border-emerald-200 focus:ring-2 focus:ring-emerald-400 outline-none overflow-y-scroll"
-            value={metrics.peso_kg || 70}
-            onChange={handleChange("peso_kg")}
+        <div className="mt-4 flex justify-center">
+          <Picker
+            value={{ peso: String(metrics.peso_kg || 70) }}
+            onChange={v => setMetrics({ ...metrics, peso_kg: parseInt(v.peso) })}
+            wheelMode="natural"
+            height={160}
+            itemHeight={36}
           >
-            {Array.from({ length: 121 }, (_, i) => i + 40).map(n => (
-              <option key={n} value={n}>{n} kg</option>
-            ))}
-          </select>
+            <Picker.Column name="peso">
+              {Array.from({ length: 121 }, (_, i) => i + 40).map(n => (
+                <Picker.Item key={n} value={String(n)}>
+                  {({ selected }) => (
+                    <div className={`text-center ${selected ? "text-emerald-600 font-semibold" : "text-gray-600"}`}>{n} kg</div>
+                  )}
+                </Picker.Item>
+              ))}
+            </Picker.Column>
+          </Picker>
         </div>
       ),
     },
@@ -104,16 +120,27 @@ export default function UserMetricsWizard({ onComplete }) {
       key: "nivel_actividad",
       label: "¿Cuál es tu nivel de actividad física?",
       input: (
-        <select
-          className="mt-4 w-full px-4 py-3 rounded-lg border border-emerald-200 focus:ring-2 focus:ring-emerald-400 outline-none transition"
-          value={metrics.nivel_actividad}
-          onChange={handleChange("nivel_actividad")}
-        >
-          <option value="" disabled>Selecciona</option>
-          {nivelesActividad.map(n => (
-            <option key={n} value={n.toLowerCase()}>{n}</option>
+        <div className="mt-4 grid grid-cols-2 gap-4 w-full">
+          {[
+            { label: "Sedentario", value: "sedentario", Icon: FaBed },
+            { label: "Ligero", value: "ligero", Icon: FaWalking },
+            { label: "Moderado", value: "moderado", Icon: FaRunning },
+            { label: "Intenso", value: "intenso", Icon: FaDumbbell },
+          ].map(({ label, value, Icon }) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => setMetrics({ ...metrics, nivel_actividad: value })}
+              className={`flex flex-col items-center px-3 py-2 rounded-xl border transition select-none
+                ${metrics.nivel_actividad === value
+                  ? "bg-emerald-500 text-white border-emerald-500"
+                  : "bg-emerald-50 border-emerald-200 text-emerald-600"}`}
+            >
+              <Icon className="w-6 h-6 mb-1" />
+              {label}
+            </button>
           ))}
-        </select>
+        </div>
       ),
     },
   ];
