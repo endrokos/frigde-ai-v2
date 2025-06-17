@@ -191,7 +191,7 @@ export default function UserMetricsWizard({ onComplete }) {
             <button
               key={value}
               type="button"
-              onClick={() => setObjetivo(value)}
+              onClick={() => setMetrics({ ...metrics, objetivo: value })}
               className={`flex flex-col items-center px-3 py-2 rounded-xl border transition select-none
                 ${objetivo === value ? "bg-emerald-500 text-white border-emerald-500" : "bg-emerald-50 border-emerald-200 text-emerald-600"}`}
             >
@@ -201,7 +201,7 @@ export default function UserMetricsWizard({ onComplete }) {
           ))}
           <button
             type="button"
-            onClick={() => setObjetivo("Otro")}
+            onClick={() => setMetrics({ ...metrics, objetivo: value })}
             className={`flex flex-col items-center px-3 py-2 rounded-xl border transition select-none col-span-2
               ${objetivo === "Otro" ? "bg-emerald-500 text-white border-emerald-500" : "bg-emerald-50 border-emerald-200 text-emerald-600"}`}
           >
@@ -215,8 +215,8 @@ export default function UserMetricsWizard({ onComplete }) {
             type="text"
             className="mt-3 w-full px-4 py-3 rounded-lg border border-emerald-200 focus:ring-2 focus:ring-emerald-400 outline-none transition"
             placeholder="Escribe tu objetivo"
-            value={objetivoOtro}
-            onChange={e => setObjetivoOtro(e.target.value)}
+            value={metrics.otroObjetivo || ""}
+            onChange={e => setMetrics({ ...metrics, otroObjetivo: e.target.value })}
           />
         ) : null,
     },
@@ -263,6 +263,15 @@ export default function UserMetricsWizard({ onComplete }) {
 
   const pregunta = preguntas[step];
 
+
+  const noValidar = ["peso_kg", "edad", "altura_cm", "alergias", "dieta", "nogusta"];
+  const isStepValid = noValidar.includes(pregunta.key) || Boolean(metrics[pregunta.key]);
+
+  const prev = () => {
+    if (step > 0) setStep(step - 1);
+};
+
+
   return (
     <div className="w-full max-w-md flex flex-col items-center gap-6 animate-fade-in">
       <h2 className="text-2xl font-bold text-emerald-600 text-center">
@@ -275,7 +284,9 @@ export default function UserMetricsWizard({ onComplete }) {
         <button
           type="button"
           onClick={next}
-          className="bg-emerald-600 text-white font-semibold px-6 py-2 rounded-xl shadow hover:bg-emerald-700 active:scale-95 transition"
+          disabled={!isStepValid}  // <-- aquí lo añades
+          className={`bg-emerald-600 text-white font-semibold px-6 py-2 rounded-xl shadow hover:bg-emerald-700 active:scale-95 transition
+            ${!isStepValid ? "opacity-50 cursor-not-allowed" : ""}`}  // <-- así se ve deshabilitado
         >
           {step >= preguntas.length - 1 ? "Continuar" : "Siguiente"}
         </button>
