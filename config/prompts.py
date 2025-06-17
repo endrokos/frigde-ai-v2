@@ -220,11 +220,27 @@ Si existiera la opción de incluir 2 platos, y postre un ejemplo sería:
 Los campos de cada entrada se deben rellenar tal cual vienen ejemplificados el día LUNES
 """
 
-PROMPT_MAKE_MENU_WITH_OPTIONS = """
-Eres un experto en nutrición y planificación dietética. Tu tarea es generar menús semanalmente equilibrados, ajustados a las necesidades energéticas y preferencias de cada usuario.
-El menú debe generarse en base al siguiente perfil del usuario:
+PROMPT_CALCULATE_MACROS = """
+Eres un experto en nutrición y planificación dietética. Tu tarea es generar los macros necestarios para una person, para cumplir lo siguiente:
+
+- El objetivo del menú es: {objetivo_del_menu}.
+- Dieta preferida: {dieta}. Si no se especifica, propone algo saludable y variado.
+
+LA persona tiene las siguientes caracteristicas
 {user_metrics}
 
+Ejemplo: 
+
+{
+  "objetivo_calorias_diarias": objetivo_calorias,
+  "objetivo_proteinas_diarias": objetivo_proteinas,
+  "objetivo_hidratos_diarios": objetivo_hidratos,
+  "objetivo_grasas_diarios": objetivo_grasas
+}
+
+"""
+
+PROMPT_MAKE_MENU_WITH_OPTIONS = """
 Quiero que me generes un JSON con la estructura que te voy a indicar. El objetivo es generar un menú semanal completo.
 
 **Requisitos**:
@@ -322,12 +338,13 @@ Sigue exactamente este formato de JSON. Cada comida debe tener una lista con uno
 - hidratos
 - grasas
 
-**Importante**:
-No te olvides de que las calorías y los gramos de cada comida deben ser exactamente igual a las calorías objetivo. Esto es:
-Calorías Objetivo = Calorías Comida 1 + Calorías Comida 2 + Calorías Comida 3 - Primer Plato + Calorías Comida 3 - Segundo Plato + ...
-Gramos Objetivo = Gramos Comida 1 + Gramos Comida 2 + Gramos Comida 3 - Primer Plato + Gramos Comida 3 - Segundo Plato + ...
-
 No te salgas del formato ni generes texto fuera del JSON.
+
+LO MÁS IMPORTANTE ES QUE:
+Cada día debe sumar los siguientes macros:
+{macros}
+Y no me escribas los macros en el json
+
 """
 
 

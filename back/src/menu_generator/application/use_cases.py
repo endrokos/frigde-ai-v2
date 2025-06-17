@@ -12,7 +12,7 @@ from back.src.menu_generator.repository.prompt_injecting import (
     prompt_injecting_menu_and_day_iterating, prompt_injecting_menu_with_optionals,
 )
 from config.prompts import PROMPT_SHOPPING_LIST, PROMPT_MAKE_MENU, DAY_LIST, PROMPT_MAKE_MENU_FOR_DAY, \
-    PROMPT_MAKE_MENU_FOR_DAY_ITERATING, PROMPT_MAKE_MENU_WITH_OPTIONS
+    PROMPT_MAKE_MENU_FOR_DAY_ITERATING, PROMPT_MAKE_MENU_WITH_OPTIONS, PROMPT_CALCULATE_MACROS
 
 
 def generate_shopping_list_use_case(dish_request: DishRequest, text_model_client: GptTextModelClient) -> Dict:
@@ -35,10 +35,14 @@ def generate_menu_use_case(menu_request: MenuRequest, text_model_client: GptText
         return {"menu": "Algo salió mal :("}
 
 def generate_menu_with_optionals_use_case(menu_request: MenuWithOptionalsRequest, text_model_client: GptTextModelClient) -> Dict:
+    prompt_macros = prompt_injecting_menu_with_optionals(menu=menu_request, prompt=PROMPT_CALCULATE_MACROS)
     prompt = prompt_injecting_menu_with_optionals(menu=menu_request, prompt=PROMPT_MAKE_MENU_WITH_OPTIONS)
-    print(prompt)
+    print(prompt_macros)
     try:
-        response = text_model_client.generate(prompt)
+        response_macros = text_model_client.generate(prompt_macros)
+        print(prompt.replace("{macros}", response_macros))
+        print(response_macros)
+        response = text_model_client.generate(prompt.replace("{macros}", response_macros))
         print(response)
         response = agregar_objetivos_nutricionales(extract_json_menu(response))
         return {"menu": response}

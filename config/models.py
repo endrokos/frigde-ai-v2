@@ -1,3 +1,3 @@
-MENU_GENERATION_MODEL = "gpt-4.1-mini"
+MENU_GENERATION_MODEL = "gpt-4.1"
 RECIPE_GENERATION_MODEL = "gpt-4.1-nano"
 VISION_MODEL = "gpt-4.1-nano"
