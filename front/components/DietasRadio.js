@@ -3,15 +3,15 @@ import { dietas } from "@/data/options";
 export default function DietasRadio({ value, onChange, otraValue, onOtraChange }) {
   return (
     <div>
-      <div className="font-semibold text-gray-700 mb-2">
+      <h3 className="text-xl font-bold text-emerald-600 text-center mb-2">
         ¿Sigues alguna dieta especial?
-      </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-2 w-full">
+      </h3>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full">
         {dietas.map(item => (
           <label
             key={item}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl border cursor-pointer transition select-none
-              ${value === item ? "bg-emerald-50 border-emerald-300 font-semibold" : "bg-emerald-50/30 border-emerald-100"}
+            className={`flex flex-col items-center justify-center px-3 py-2 rounded-xl border cursor-pointer transition select-none text-center
+              ${value === item ? "bg-emerald-500 text-white border-emerald-500" : "bg-emerald-50 border-emerald-200 text-emerald-600"}
             `}
           >
             <input
@@ -20,9 +20,9 @@ export default function DietasRadio({ value, onChange, otraValue, onOtraChange }
               checked={value === item}
               onClick={() => onChange(value === item ? "" : item)}
               readOnly
-              className="accent-emerald-500 w-4 h-4"
+              className="accent-emerald-500 w-4 h-4 hidden"
             />
-            {item}
+            <span className="text-lg">{item}</span>
           </label>
         ))}
       </div>

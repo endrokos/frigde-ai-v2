@@ -53,24 +53,31 @@ export default function ComidasToggle({ seleccionadas, onToggle, onConfigChange,
 
   return (
     <div>
-      <div className="font-semibold text-gray-700 mb-2">
+      <h3 className="text-xl font-bold text-emerald-600 text-center mb-2">
         ¿Cuántas comidas al día quieres planificar?
-      </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-2 w-full">
+      </h3>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full">
         {comidas.map(item => (
           <button
             key={item}
             type="button"
             onClick={() => handleClick(item)}
-            className={`
-              w-full px-4 py-2 rounded-xl border transition
+            className={`flex flex-col items-center px-3 py-2 rounded-xl border transition select-none text-center
               ${
                 seleccionadas.includes(item)
-                  ? "bg-lime-100 border-lime-400 font-semibold scale-105"
-                  : "bg-lime-50/50 border-lime-200"
-              }
-            `}
+                  ? "bg-lime-500 text-white border-lime-500"
+                  : "bg-lime-50 border-lime-200 text-lime-700"
+              }`}
           >
+            <span className="text-2xl mb-1">
+              {{
+                Desayuno: "🍳",
+                "Media mañana": "🥐",
+                Comida: "🍽️",
+                Merienda: "☕",
+                Cena: "🌙",
+              }[item]}
+            </span>
             {item}
           </button>
         ))}
