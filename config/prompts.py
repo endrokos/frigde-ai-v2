@@ -241,28 +241,60 @@ Ejemplo:
 """
 
 PROMPT_MAKE_MENU_WITH_OPTIONS = """
-Quiero que me generes un JSON con la estructura que te voy a indicar. El objetivo es generar un menú semanal completo.
+Quiero que generes un JSON con la estructura exacta que te indico al final. El objetivo es crear un **menú semanal completo**, realista y equilibrado.
 
-**Requisitos**:
-- Genera {numero_de_platos_comida} platos para las comidas principales (si son dos, deben estar diferenciados como primer plato y segundo plato).
-- Genera {numero_de_platos_cena} platos para las cenas (si son dos, deben estar diferenciados como primer plato y segundo plato).
-- El resto de comidas (como desayuno, merienda, etc.) deben tener un solo plato.
-- El usuario quiere postre en la comida: {postre_comida}.
-- El usuario quiere postre en la cena: {postre_cena}.
-- El objetivo del menú es: {objetivo_del_menu}.
+### 📋 PARÁMETROS DEL USUARIO:
 - Número de comidas al día: {comidas}
-- Tiene alergia a: {alergias}
-- Dieta preferida: {dieta}. Si no se especifica, propone algo saludable y variado.
-- No tolera los siguientes alimentos: {alimentos_no_ricos}
+- Número de platos por comida principal (comida): {numero_de_platos_comida}
+- Número de platos por cena: {numero_de_platos_cena}
+- Postre en la comida: {postre_comida}
+- Postre en la cena: {postre_cena}
+- Alergias: {alergias}
+- Alimentos no tolerados: {alimentos_no_ricos}
+- Dieta preferida: {dieta} (si está vacío, asume dieta saludable y variada)
+- Objetivo del menú: {objetivo_del_menu} (por ejemplo: pérdida de grasa, mantenimiento, aumento muscular)
 
-**Reglas nutricionales**:
-- Debes estimar y mostrar los valores de calorías, proteínas, hidratos y grasas para **cada plato**.
-- Asegúrate de que las calorías de **cada día** sumen aproximadamente el objetivo calórico, con un margen de ±5%.
-- Cada valor calórico por plato debe ser **realista y coherente**. No exageres para cumplir con el total: divide las calorías de forma natural entre los platos.
-- Si no puedes estimar con exactitud, da valores aproximados, pero lógicos.
+### 🧮 OBJETIVO NUTRICIONAL DIARIO:
+**IMPORTANTE:** El total de calorías, proteínas, hidratos y grasas **de cada día** debe ser exactamente (±5%) el siguiente:
+{macros}
+Haz todos los ajustes necesarios en la elección y tamaño de los platos para que la suma diaria se acerque a esos valores, aunque tengas que aumentar las porciones o cambiar ingredientes.
 
-**Ejemplo**:
+### ⚖️ INSTRUCCIONES NUTRICIONALES:
+- Estima los valores nutricionales para **cada plato**: calorías, proteínas, hidratos y grasas.
+- Ajusta de forma inteligente los platos para **cumplir los totales diarios** de {macros}.
+    - Si hay pocas comidas, usa platos más calóricos.
+    - Si hay muchas comidas, usa platos más ligeros.
+- No distribuyas las calorías de forma uniforme: respeta la lógica de una comida más contundente al mediodía, por ejemplo.
 
+### 🍽️ ESTRUCTURA DEL MENÚ:
+- Para las comidas principales (almuerzo y cena), si se indican 2 platos, usa los campos `primer_plato` y `segundo_plato`.
+- Si hay postre, añádelo como un tercer elemento con campo `postre`.
+- El resto de comidas (desayuno, merienda, etc.) solo debe tener un `plato`.
+
+### ⚠️ FORMATO OBLIGATORIO:
+- No escribas texto fuera del JSON.
+- Cada día debe tener una entrada con:
+  - `"nombre": "Lunes"` (u otro día)
+  - `"comidas"`: diccionario donde cada clave es `"Comida 1"`, `"Comida 2"`, etc.
+  - Cada comida contiene una lista de 1 o más elementos, y cada uno debe incluir:
+    - `plato`, `primer_plato`, `segundo_plato` o `postre`
+    - `calorias`
+    - `proteinas`
+    - `hidratos`
+    - `grasas`
+    
+Antes de finalizar el menú del día, revisa internamente si la suma de calorías, proteínas, hidratos y grasas se ajusta al objetivo diario (±5%). Si no es así, ajusta los valores de los platos para conseguirlo sin perder realismo.
+
+Debes generar un menú completo para cada día por separado. 
+⚠️ **Repite este proceso día por día**. 
+Para cada día:
+- Calcula los valores totales de calorías, proteínas, hidratos y grasas.
+- Asegúrate de que **la suma diaria cumpla los objetivos nutricionales indicados (±5%)**.
+- Si te desvías en un día, reajusta los platos para que encajen.
+- No uses el mismo valor exacto por plato cada día, pero **mantén el total diario coherente**.
+
+### ✅ EJEMPLO DE FORMATO:
+```json
 {
   "dias": [
     {
@@ -270,59 +302,43 @@ Quiero que me generes un JSON con la estructura que te voy a indicar. El objetiv
       "comidas": {
         "Comida 1": [
           {
-            "plato": plato,
-            "calorias": plato_calorias,
-            "proteinas": proteinas_calorias,
-            "hidratos": hidratos_calorias,
-            "grasas": grasas_calorias
+            "plato": "Avena con frutas",
+            "calorias": 350,
+            "proteinas": 12,
+            "hidratos": 50,
+            "grasas": 10
           }
         ],
         "Comida 2": [
           {
-            "primer_plato": plato,
-            "calorias": plato_calorias,
-            "proteinas": proteinas_calorias,
-            "hidratos": hidratos_calorias,
-            "grasas": grasas_calorias
+            "primer_plato": "Ensalada de quinoa",
+            "calorias": 400,
+            "proteinas": 15,
+            "hidratos": 45,
+            "grasas": 12
           },
           {
-            "segundo_plato": plato,
-            "calorias": plato_calorias,
-            "proteinas": proteinas_calorias,
-            "hidratos": hidratos_calorias,
-            "grasas": grasas_calorias
+            "segundo_plato": "Pollo al horno con patatas",
+            "calorias": 550,
+            "proteinas": 40,
+            "hidratos": 35,
+            "grasas": 20
           },
           {
-            "postre": plato,
-            "calorias": plato_calorias,
-            "proteinas": proteinas_calorias,
-            "hidratos": hidratos_calorias,
-            "grasas": grasas_calorias
+            "postre": "Yogur natural con nueces",
+            "calorias": 200,
+            "proteinas": 10,
+            "hidratos": 15,
+            "grasas": 10
           }
         ],
         "Comida 3": [
           {
-            "plato": plato,
-            "calorias": plato_calorias,
-            "proteinas": proteinas_calorias,
-            "hidratos": hidratos_calorias,
-            "grasas": grasas_calorias
-          }
-        ],
-        "Comida 4": [
-          {
-            "primer_plato": plato,
-            "calorias": plato_calorias,
-            "proteinas": proteinas_calorias,
-            "hidratos": hidratos_calorias,
-            "grasas": grasas_calorias
-          },
-          {
-            "segundo_plato": plato,
-            "calorias": plato_calorias,
-            "proteinas": proteinas_calorias,
-            "hidratos": hidratos_calorias,
-            "grasas": grasas_calorias
+            "plato": "Tostadas integrales con aguacate",
+            "calorias": 300,
+            "proteinas": 8,
+            "hidratos": 25,
+            "grasas": 18
           }
         ]
       }
@@ -330,21 +346,7 @@ Quiero que me generes un JSON con la estructura que te voy a indicar. El objetiv
   ]
 }
 
-**Formato**:
-Sigue exactamente este formato de JSON. Cada comida debe tener una lista con uno o más platos, y cada plato debe tener los campos:
-- plato / primer_plato / segundo_plato / postre
-- calorias
-- proteinas
-- hidratos
-- grasas
-
-No te salgas del formato ni generes texto fuera del JSON.
-
-LO MÁS IMPORTANTE ES QUE:
-Cada día debe sumar los siguientes macros:
-{macros}
-Y no me escribas los macros en el json
-
+No repitas el ejemplo ni escribas explicaciones. Solo genera el JSON.
 """
 
 

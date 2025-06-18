@@ -1,3 +1,4 @@
+import json
 from typing import Dict
 
 from back.src.menu_generator.domain.dish_request import DishRequest
@@ -39,10 +40,11 @@ def generate_menu_with_optionals_use_case(menu_request: MenuWithOptionalsRequest
     prompt = prompt_injecting_menu_with_optionals(menu=menu_request, prompt=PROMPT_MAKE_MENU_WITH_OPTIONS)
     print(prompt_macros)
     try:
+
         response_macros = text_model_client.generate(prompt_macros)
-        print(prompt.replace("{macros}", response_macros))
+        print(prompt.replace("{macros}", json.dumps(extract_json_menu(response_macros), indent=2)))
         print(response_macros)
-        response = text_model_client.generate(prompt.replace("{macros}", response_macros))
+        response = text_model_client.generate(prompt.replace("{macros}", json.dumps(extract_json_menu(response_macros), indent=2)))
         print(response)
         response = agregar_objetivos_nutricionales(extract_json_menu(response))
         return {"menu": response}
