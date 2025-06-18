@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import Link from "next/link";
 
 const MOMENTOS = ["Desayuno", "Media mañana", "Comida", "Merienda", "Cena"];
 
@@ -118,13 +119,19 @@ export default function SubirPlatoDesdeImagen({
 
   return (
     <>
-      <div className="w-full flex justify-center mt-6">
+      <div className="w-full flex justify-center mt-6 gap-4">
         <button
           onClick={() => setMostrarOpciones(true)}
           className="bg-emerald-500 text-white px-4 py-2 rounded-full hover:bg-emerald-600 font-semibold shadow-md"
         >
           {subiendo ? "Subiendo..." : "+ Añadir plato"}
         </button>
+        <Link
+          href="/lista-compra"
+          className="bg-emerald-500 text-white px-4 py-2 rounded-full hover:bg-emerald-600 font-semibold shadow-md"
+        >
+          Generar lista de la compra
+        </Link>
       </div>
 
       {mostrarOpciones && (
