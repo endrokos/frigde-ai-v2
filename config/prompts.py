@@ -575,7 +575,7 @@ Ejemplo:
 """
 
 PROMPT_OBTAIN_MORE_RECIPES="""
-A partir del siguiente plato: "{plato}", genera 5 platos distintos pero similares en estilo y perfil nutricional.
+A partir del siguiente plato: "{plato}", genera 5 platos distintos que tengan un perfil nutricional parecido y que sean variedas las posibilidades.
 
 Cada plato debe tener valores aproximados a:
 - Calorías: {calories}
@@ -600,7 +600,7 @@ No escribas ninguna explicación ni texto adicional. Solo devuelve el JSON.
 """
 
 PROMPT_CALCULATE_MACROS_FROM_IMAGE= """
-Actúa como un experto nutricionista, quiero que dada la foto que acabas de recibir, me calcules de manera más exacta que puedas los diferentes parámetros.
+Actúa como un experto nutricionista, quiero que dada la foto que acabas de recibir, me calcules los diferentes parámetros, trata de ser preciso, pero prefiero que me des una solucion antes que no me des los parametros.
 
 Nombre del Plato, Calorías, Proteinas, Hidratos de carbono y grasas
 
