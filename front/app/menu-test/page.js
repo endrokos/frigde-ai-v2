@@ -6,7 +6,6 @@ import ProgresoResumen from "@/components/ProgresoResumen";
 import MacroCard from "@/components/MacroCard";
 import MenuCards from "@/components/MenuCards";
 import SubirPlatoDesdeImagen from "@/components/SubirPlatoDesdeImagen";
-import { generarDietasSemana } from "@/data/generarDietasSemana";
 
 const MOMENTOS = ["Desayuno", "Media mañana", "Comida", "Merienda", "Cena"];
 
