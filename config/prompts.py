@@ -1,46 +1,26 @@
 DAY_LIST = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
 PROMPT_SHOPPING_LIST = """
-Dado el siguiente listado de platos: content,
-genera una lista de la compra para una semana, con cantidades aproximadas,
-formateada para que sea fácil de leer y entender para cualquier persona.
+Analiza el siguiente menú semanal en formato JSON:
+content
 
-1. Agrupa los ingredientes por categorías (como Verduras, Lácteos, Proteínas...).
-2. Usa emojis para cada categoría (por ejemplo 🥦 Verduras, 🧀 Lácteos, 🥩 Proteínas).
-3. Dentro de cada categoría, usa una lista con guiones (-) para los ingredientes.
-4. Evita repetir ingredientes si se repiten en varias recetas (suma cantidades si es razonable).
-5. **Ignora ingredientes comunes básicos** como sal, azúcar, agua, aceite de oliva, pimienta, etc.
-6. No incluyas instrucciones de preparación ni formato de receta, solo la lista de la compra.
-7. Al principio, añade un bloque opcional con los nombres de los platos seleccionados, con un emoji al lado (ej: 🍕 Pizza Margarita).
+Devuelve únicamente un JSON con la compra necesaria usando **exactamente** la estructura que se indica a continuación. No añadas explicaciones ni texto extra:
 
-Formato final:
-- Lista de platos seleccionados (con emojis)
-- Lista de la compra agrupada por categorías
+{
+  "platos_seleccionados": ["🍕 Pizza Margarita"],
+  "lista_compra": {
+    "verduras_y_frutas": [],
+    "cereales_y_derivados": [],
+    "proteinas": [],
+    "lacteos": [],
+    "otros": []
+  }
+}
 
-El resultado debe ser un texto plano legible.
-
-Quiero que cada ingrediente, venga con el formato: Nombre ingrediente (cantidad requerida)
-
-Ejemplo de salida:
-
-🍽️ **Platos seleccionados:**
-🍕 Pizza Margarita
-🌮 Tacos
-🍋 Ceviche Peruano
-
-🧀 **Lácteos**
-- Queso mozzarella (250 g)
-- Qeso rallado (200 g)
-
-🥦 **Verduras y frutas**
-- 2 tomates
-- 1 cebolla roja
-
-🌶️ **Especias y condimentos** 
-- Cúrcuma (2 cucharaditas)
-- Comino (1 cucharadita)
-...
-
-Empieza tu respuesta directamente con los platos y la lista.
+Reglas:
+1. Agrupa todos los ingredientes de los platos en las categorías indicadas.
+2. No repitas ingredientes, suma cantidades cuando tenga sentido.
+3. Omite ingredientes básicos como sal, agua o aceite de oliva.
+4. Cada ingrediente debe ir como texto con la cantidad entre paréntesis.
 """
 
 
