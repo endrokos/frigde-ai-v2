@@ -31,8 +31,9 @@ export default function ListaCompraPage() {
       return;
     }
     try {
-      await generarListaCompra(menuCompleto, dias);
-      alert("Lista de la compra solicitada");
+      const lista = await generarListaCompra(menuCompleto, dias);
+      localStorage.setItem("shoppingList", JSON.stringify(lista));
+      router.push("/lista-compra/resultado");
     } catch (err) {
       console.error(err);
       alert("Error generando la lista de la compra");

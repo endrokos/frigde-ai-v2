@@ -25,8 +25,9 @@ export default function ListaCompraCustomPage() {
   const handleGenerar = async () => {
     if (!menuCompleto) return;
     try {
-      await generarListaCompra(menuCompleto, seleccionados);
-      alert("Lista de la compra solicitada");
+      const lista = await generarListaCompra(menuCompleto, seleccionados);
+      localStorage.setItem("shoppingList", JSON.stringify(lista));
+      router.push("/lista-compra/resultado");
     } catch (err) {
       console.error(err);
       alert("Error generando la lista de la compra");
