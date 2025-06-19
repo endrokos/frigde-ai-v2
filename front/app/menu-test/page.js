@@ -6,7 +6,6 @@ import ProgresoResumen from "@/components/ProgresoResumen";
 import MacroCard from "@/components/MacroCard";
 import MenuCards from "@/components/MenuCards";
 import SubirPlatoDesdeImagen from "@/components/SubirPlatoDesdeImagen";
-import { generarDietasSemana } from "@/data/generarDietasSemana";
 
 const MOMENTOS = ["Desayuno", "Media mañana", "Comida", "Merienda", "Cena"];
 
@@ -24,10 +23,6 @@ export default function MenuPage() {
   }); 
   const [dias, setDias] = useState([]);
 
-  const [objetivoProteina, setObjetivoProteina] = useState(0);
-  const [objetivoHidratos, setObjetivoHidratos] = useState(0);
-  const [objetivoGrasas, setObjetivoGrasas] = useState(0);
-  const [objetivoCalorias, setObjetivoCalorias] = useState(0);
 
   useEffect(() => {
     const stored = localStorage.getItem("dietaSemana");
@@ -36,10 +31,6 @@ export default function MenuPage() {
       console.log("📥 Recuperado de localStorage:", dietaSemana);
       console.log("📥 dietaSemana.dias:", dietaSemana.dias);
       setDias(dietaSemana.dias || []);
-      setObjetivoProteina(dietaSemana.objetivo_proteinas || 0);
-      setObjetivoHidratos(dietaSemana.objetivo_hidratos || 0);
-      setObjetivoGrasas(dietaSemana.objetivo_grasas || 0);
-      setObjetivoCalorias(dietaSemana.objetivo_calorias || 0);
     } else {
       console.error("❌ No se encontró 'dietaSemana' en localStorage");    }
   }, []);
@@ -169,6 +160,11 @@ export default function MenuPage() {
 
     return { calorias: cal, proteinas: prot, hidratos: hidr, grasas: grasa };
   })();
+
+  const objetivoCalorias = dias[diaActivo]?.objetivo_calorias || 0;
+  const objetivoProteina = dias[diaActivo]?.objetivo_proteinas || 0;
+  const objetivoHidratos = dias[diaActivo]?.objetivo_hidratos || 0;
+  const objetivoGrasas   = dias[diaActivo]?.objetivo_grasas   || 0;
 
   const kcalRestantes = Math.max(objetivoCalorias - macrosRealizadas.calorias, 0);
   const protRestantes = Math.max(objetivoProteina - macrosRealizadas.proteinas, 0);

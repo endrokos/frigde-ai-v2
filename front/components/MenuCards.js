@@ -346,7 +346,7 @@ export default function MenuCards({
                                   >
                                     <p className="font-semibold text-sm mb-2">Ingredientes:</p>
                                     <ul className="list-disc pl-5 space-y-1 text-sm text-gray-700">
-                                      {data.ingredientes.map((ing,i)=>(
+                                      {Array.isArray(data?.ingredientes) && data.ingredientes.map((ing, i)=>(
                                         <li key={i}>{ing.name} – {ing.quantity} {ing.item}</li>
                                       ))}
                                     </ul>

@@ -8,7 +8,7 @@ from back.src.menu_generator.application.use_cases import (
     generate_menu_use_case_many_calls,
     generate_menu_use_case_iterating, generate_menu_with_optionals_use_case,
 )
-from back.src.menu_generator.domain.dish_request import DishRequest
+from back.src.menu_generator.domain.week_menu_request import WeekMenuRequest
 from back.src.shared.repository.gpt_text_model_client import GptTextModelClient
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -26,9 +26,9 @@ app.add_middleware(
 )
 
 @app.post("/generate-shopping-list")
-def generate_shopping_list(dishes: DishRequest):
+def generate_shopping_list(week_menu: WeekMenuRequest):
     gpt_text_model_client = GptTextModelClient(model_name=MENU_GENERATION_MODEL)
-    return generate_shopping_list_use_case(dish_request=dishes, text_model_client=gpt_text_model_client)
+    return generate_shopping_list_use_case(week_menu_request=week_menu, text_model_client=gpt_text_model_client)
 
 @app.post("/generate-menu")
 def generate_menu(menu: MenuRequest):
