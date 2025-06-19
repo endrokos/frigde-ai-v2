@@ -11,10 +11,10 @@ export const objetivos = [
 export const alergias = [
   "🌾 Gluten",
   "🥛 Lactosa",
-  "🥜 Frutos secos",
+  "🥜 Frutos Secos",
   "🍤 Mariscos",
   "🥚 Huevo",
-  "Otro",
+  "🌱 Soja"
 ];
 
 export const dietas = [
@@ -23,7 +23,7 @@ export const dietas = [
   "✡️ Kosher",
   "🚫 Sin azúcar",
   "🧂 Sin sal",
-  "Otro",
+  "🫖 Halal",
 ];
 
 export const comidas = [

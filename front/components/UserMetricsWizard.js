@@ -27,6 +27,8 @@ export default function UserMetricsWizard({ onComplete }) {
   const [alergiaOtra, setAlergiaOtra] = useState("");
   const [dieta, setDieta] = useState("");
   const [dietaOtra, setDietaOtra] = useState("");
+  const [mostrarDietaOtra, setMostrarDietaOtra] = useState(false);
+  const [dietasSeleccionadas, setDietasSeleccionadas] = useState([]);
   const [noGusta, setNoGusta] = useState("");
 
   const handleChange = (key) => (e) => {
@@ -35,6 +37,14 @@ export default function UserMetricsWizard({ onComplete }) {
 
   const handleAlergiaChange = (item) => {
     setAlergiasSeleccionadas(prev =>
+      prev.includes(item)
+        ? prev.filter(a => a !== item)
+        : [...prev, item]
+    );
+  };
+
+  const handleDietaChange = (item) => {
+    setDietasSeleccionadas(prev =>
       prev.includes(item)
         ? prev.filter(a => a !== item)
         : [...prev, item]
@@ -50,7 +60,7 @@ export default function UserMetricsWizard({ onComplete }) {
         alergiasSeleccionadas,
         mostrarAlergiaOtra,
         alergiaOtra,
-        dieta,
+        dietasSeleccionadas,
         dietaOtra,
         noGusta,
       });
@@ -245,8 +255,10 @@ export default function UserMetricsWizard({ onComplete }) {
       label: "¿Sigues alguna dieta especial?",
       input: (
         <DietasRadio
-          value={dieta}
-          onChange={setDieta}
+          seleccionadas={dietasSeleccionadas}
+          onToggle={handleDietaChange}
+          mostrarOtra={mostrarDietaOtra}
+          setMostrarOtra={setMostrarDietaOtra}
           otraValue={dietaOtra}
           onOtraChange={e => setDietaOtra(e.target.value)}
         />
@@ -287,15 +299,26 @@ export default function UserMetricsWizard({ onComplete }) {
       {pregunta.extra}
       <div className="flex justify-between items-center w-full mt-4">
         <span className="text-sm text-gray-500">Paso {step + 1} de {preguntas.length}</span>
-        <button
-          type="button"
-          onClick={next}
-          disabled={!isStepValid}  // <-- aquí lo añades
-          className={`bg-emerald-600 text-white font-semibold px-6 py-2 rounded-xl shadow hover:bg-emerald-700 active:scale-95 transition
-            ${!isStepValid ? "opacity-50 cursor-not-allowed" : ""}`}  // <-- así se ve deshabilitado
-        >
-          {step >= preguntas.length - 1 ? "Continuar" : "Siguiente"}
-        </button>
+        <div className="flex gap-3">
+          {step > 0 && (
+            <button
+              type="button"
+              onClick={prev}
+              className="bg-gray-200 text-gray-700 font-semibold px-4 py-2 rounded-xl shadow hover:bg-gray-300 active:scale-95 transition"
+            >
+              Atrás
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={next}
+            disabled={!isStepValid}
+            className={`bg-emerald-600 text-white font-semibold px-6 py-2 rounded-xl shadow hover:bg-emerald-700 active:scale-95 transition
+              ${!isStepValid ? "opacity-50 cursor-not-allowed" : ""}`}
+          >
+            {step >= preguntas.length - 1 ? "Continuar" : "Siguiente"}
+          </button>
+        </div>
       </div>
     </div>
   );

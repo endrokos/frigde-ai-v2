@@ -10,14 +10,11 @@ export default function AlergiasCheckbox({
 }) {
   return (
     <div>
-      <h3 className="text-xl font-bold text-emerald-600 text-center mb-2">
-        ¿Tienes alguna alergia o intolerancia alimentaria?
-      </h3>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full">
+      <div className="grid grid-cols-3 gap-3 w-full">
         {alergias.map(item => (
           <label
             key={item}
-            className={`flex flex-col items-center justify-center px-3 py-2 rounded-xl border cursor-pointer transition select-none text-center
+            className={`flex flex-col items-center justify-center px-6 py-4 rounded-xl border cursor-pointer transition select-none text-center
               ${seleccionadas.includes(item) ? "bg-emerald-500 text-white border-emerald-500" : "bg-emerald-50 border-emerald-200 text-emerald-600"}
             `}
           >
@@ -31,7 +28,7 @@ export default function AlergiasCheckbox({
           </label>
         ))}
         <label
-          className={`flex flex-col items-center justify-center px-3 py-2 rounded-xl border cursor-pointer transition select-none text-center col-span-2
+          className={`col-span-3 flex flex-col items-center justify-center px-3 py-2 rounded-xl border cursor-pointer transition select-none text-center
             ${mostrarOtra ? "bg-emerald-500 text-white border-emerald-500" : "bg-emerald-50 border-emerald-200 text-emerald-600"}
           `}
         >

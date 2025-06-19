@@ -20,7 +20,7 @@ class MenuWithOptionalsRequest(BaseModel):
     user_metrics: Dict[str, Union[str, int]]
     meals: List[str]
     allergies: List[str]
-    diet: str
+    diet: List[str]
     not_rich_foods: List[str]
     numero_de_platos_comida: int
     postre_comida: str

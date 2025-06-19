@@ -53,36 +53,39 @@ export default function ComidasToggle({ seleccionadas, onToggle, onConfigChange,
 
   return (
     <div>
-      <h3 className="text-xl font-bold text-emerald-600 text-center mb-2">
+      <h3 className="text-xl font-bold text-emerald-500 text-center mb-2">
         ¿Cuántas comidas al día quieres planificar?
       </h3>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full">
-        {comidas.map(item => (
-          <button
-            key={item}
-            type="button"
-            onClick={() => handleClick(item)}
-            className={`flex flex-col items-center px-3 py-2 rounded-xl border transition select-none text-center
-              ${
-                seleccionadas.includes(item)
-                  ? "bg-lime-500 text-white border-lime-500"
-                  : "bg-lime-50 border-lime-200 text-lime-700"
-              }`}
-          >
-            <span className="text-2xl mb-1">
-              {{
-                Desayuno: "🍳",
-                "Media mañana": "🥐",
-                Comida: "🍽️",
-                Merienda: "☕",
-                Cena: "🌙",
-              }[item]}
-            </span>
-            {item}
-          </button>
-        ))}
+      <div className="flex justify-center w-full">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full">
+          {comidas.map(item => (
+            <button
+              key={item}
+              type="button"
+              onClick={() => handleClick(item)}
+              className={`flex flex-col items-center px-3 py-2 rounded-xl border transition select-none text-center
+                ${
+                  seleccionadas.includes(item)
+                    ? "bg-emerald-500 text-white border-emerald-500"
+                    : "bg-emerald-50 border-emerald-200 text-emerald-60"
+                }`}
+            >
+              <span className="text-3xl mb-1">
+                {{
+                  Desayuno: "🍳",
+                  "Media mañana": "🥐",
+                  Comida: "🍽️",
+                  Merienda: "☕",
+                  Cena: "🌙",
+                }[item]}
+              </span>
+              {item}
+            </button>
+          ))}
+          {/* Espaciador SOLO en desktop para centrar la última fila */}
+          <div className="hidden md:block"></div>
+        </div>
       </div>
-
       {/* MODAL CENTRAL */}
       {configOpen && (
   <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
