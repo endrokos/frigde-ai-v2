@@ -3,6 +3,23 @@ import ChickenIcon from './icons/ChickenIcon';
 import WheatIcon from './icons/WheatIcon';
 import AvocadoIcon from './icons/AvocadoIcon';
 
+function lightenColor(hex, amount = 40) {
+  let color = hex.replace('#', '');
+  if (color.length === 3) {
+    color = color.split('').map((c) => c + c).join('');
+  }
+  const num = parseInt(color, 16);
+  let r = (num >> 16) + amount;
+  let g = ((num >> 8) & 0xff) + amount;
+  let b = (num & 0xff) + amount;
+  r = Math.min(255, r);
+  g = Math.min(255, g);
+  b = Math.min(255, b);
+  return (
+    '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)
+  );
+}
+
 export default function ProgresoCircular({
   progreso,
   exceso = 0,
@@ -21,7 +38,11 @@ export default function ProgresoCircular({
     wheat: "#F59E42",
     droplet: "#22C55E",
   };
-  const iconColor = color || colorByIcon[icon] || "#3B82F6";
+  const baseColor = color || colorByIcon[icon] || "#3B82F6";
+
+  const totalProgress = progreso + exceso;
+  const iconColor = totalProgress > 1 ? lightenColor(baseColor) : baseColor;
+  const extraColor = totalProgress > 1 ? lightenColor(baseColor, 80) : excesoColor;
 
   const icons = {
     flame: <FlameIcon width={24} height={24} color={iconColor} />,
@@ -63,7 +84,7 @@ export default function ProgresoCircular({
             cy={size / 2}
             r={radius}
             fill="none"
-            stroke={excesoColor}
+            stroke={extraColor}
             strokeWidth={stroke}
             strokeDasharray={circ * Math.min(exceso, 1) + "," + circ}
             strokeDashoffset={circ * (1 - Math.min(progreso, 1))}
