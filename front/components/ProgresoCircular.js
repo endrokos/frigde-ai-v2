@@ -66,7 +66,7 @@ export default function ProgresoCircular({
             stroke={excesoColor}
             strokeWidth={stroke}
             strokeDasharray={circ * Math.min(exceso, 1) + "," + circ}
-            strokeDashoffset={circ * (1 - Math.min(progreso + exceso, 1))}
+            strokeDashoffset={circ * (1 - Math.min(progreso, 1))}
             strokeLinecap="round"
             style={{ transition: "stroke-dashoffset 0.7s cubic-bezier(.42,0,.58,1)" }}
           />
