@@ -8,6 +8,7 @@ export default function ListaCompraPage() {
   const [diasMenu, setDiasMenu] = useState([]);
   const [menuCompleto, setMenuCompleto] = useState(null);
   const [opcion, setOpcion] = useState("");
+  const [generando, setGenerando] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem("dietaSemana");
@@ -31,12 +32,15 @@ export default function ListaCompraPage() {
       return;
     }
     try {
+      setGenerando(true);
       const lista = await generarListaCompra(menuCompleto, dias);
       localStorage.setItem("shoppingList", JSON.stringify(lista));
       router.push("/lista-compra/resultado");
     } catch (err) {
       console.error(err);
       alert("Error generando la lista de la compra");
+    } finally {
+      setGenerando(false);
     }
   };
 
@@ -55,7 +59,9 @@ export default function ListaCompraPage() {
           <button className={botonClase("custom")} onClick={()=>router.push("/lista-compra/custom")}>Personalizar</button>
         </div>
         {opcion && opcion!=="custom" && (
-          <button onClick={handleGenerar} className="mt-4 bg-emerald-500 text-white px-4 py-2 rounded-full hover:bg-emerald-600 font-semibold">Generar lista de la compra</button>
+          <button onClick={handleGenerar} className="mt-4 bg-emerald-500 text-white px-4 py-2 rounded-full hover:bg-emerald-600 font-semibold" disabled={generando}>
+            {generando ? "Generando..." : "Generar lista de la compra"}
+          </button>
         )}
       </div>
     </main>

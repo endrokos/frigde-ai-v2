@@ -35,6 +35,26 @@ export default function MenuPage() {
       console.error("❌ No se encontró 'dietaSemana' en localStorage");    }
   }, []);
 
+  // Cargar estado persistido de la selección de platos y comidas realizadas
+  useEffect(() => {
+    const stored = localStorage.getItem("menuState");
+    if (stored) {
+      try {
+        const data = JSON.parse(stored);
+        if (data.platoSeleccionado) setPlatoSeleccionado(data.platoSeleccionado);
+        if (data.realizadas) setRealizadas(data.realizadas);
+      } catch {
+        /* ignore */
+      }
+    }
+  }, []);
+
+  // Guardar cambios en localStorage
+  useEffect(() => {
+    const data = { platoSeleccionado, realizadas };
+    localStorage.setItem("menuState", JSON.stringify(data));
+  }, [platoSeleccionado, realizadas]);
+
   const guardarDiasEnLocalStorage = (nuevosDias) => {
     const stored = localStorage.getItem("dietaSemana");
     if (stored) {
