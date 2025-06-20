@@ -8,6 +8,7 @@ export default function ListaCompraCustomPage() {
   const [diasMenu, setDiasMenu] = useState([]);
   const [menuCompleto, setMenuCompleto] = useState(null);
   const [seleccionados, setSeleccionados] = useState([]);
+  const [generando, setGenerando] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem("dietaSemana");
@@ -25,12 +26,15 @@ export default function ListaCompraCustomPage() {
   const handleGenerar = async () => {
     if (!menuCompleto) return;
     try {
+      setGenerando(true);
       const lista = await generarListaCompra(menuCompleto, seleccionados);
       localStorage.setItem("shoppingList", JSON.stringify(lista));
       router.push("/lista-compra/resultado");
     } catch (err) {
       console.error(err);
       alert("Error generando la lista de la compra");
+    } finally {
+      setGenerando(false);
     }
   };
 
@@ -46,7 +50,9 @@ export default function ListaCompraCustomPage() {
             </label>
           ))}
         </div>
-        <button onClick={handleGenerar} className="mt-4 bg-emerald-500 text-white px-4 py-2 rounded-full hover:bg-emerald-600 font-semibold">Generar lista de la compra</button>
+        <button onClick={handleGenerar} className="mt-4 bg-emerald-500 text-white px-4 py-2 rounded-full hover:bg-emerald-600 font-semibold" disabled={generando}>
+          {generando ? "Generando..." : "Generar lista de la compra"}
+        </button>
         <button onClick={()=>router.back()} className="text-sm text-gray-500 mt-2">Volver</button>
       </div>
     </main>

@@ -66,6 +66,8 @@ export default function MenuCards({
   const [openRecetas,       setOpenRecetas]        = useState({});
   const [alternativasPlato, setAlternativasPlato]  = useState({});
   const [openAlternativas,  setOpenAlternativas]   = useState({});
+  const [loadingReceta,     setLoadingReceta]      = useState({});
+  const [loadingCambio,     setLoadingCambio]      = useState({});
 
   if (!dias?.length || !dias[diaActivo]) {
     return <div className="text-center text-lg py-10">Cargando tu menú…</div>;
@@ -201,8 +203,9 @@ export default function MenuCards({
                             </div>
                             <div className="flex gap-2">
                               <button
-                                onClick={()=> {
-                                  enviarPeticion(
+                                onClick={async()=> {
+                                  setLoadingReceta(prev => ({...prev, [subKey]: true}));
+                                  await enviarPeticion(
                                     "http://127.0.0.1:8001/generate_recipe",
                                     {
                                       plato:        nombre,
@@ -215,36 +218,41 @@ export default function MenuCards({
                                     setRecetasGeneradas
                                   );
                                   setOpenRecetas(prev=>({...prev,[subKey]:true}));
+                                  setLoadingReceta(prev => ({...prev, [subKey]: false}));
                                 }}
                                 className="px-3 py-1 text-xs font-semibold rounded-full bg-emerald-100 hover:bg-emerald-200 text-emerald-800"
                               >
-                                Generar receta
+                                {loadingReceta[subKey] ? "Generando..." : "Generar receta"}
                               </button>
                               <button
-                                onClick={()=> {
-                                  fetch("http://127.0.0.1:8001/obtain_more_recipes",{
-                                    method:"POST",
-                                    headers:{"Content-Type":"application/json"},
-                                    body:JSON.stringify({
-                                      plato:        nombre,
-                                      calories:     entrada.calorias,
-                                      protein:      entrada.proteinas,
-                                      carbohydrate: entrada.hidratos,
-                                      fat:          entrada.grasas,
-                                    })
-                                  })
-                                  .then(r=>r.json())
-                                  .then(data=>{
+                                onClick={async()=> {
+                                  setLoadingCambio(prev => ({...prev, [subKey]: true}));
+                                  try {
+                                    const res = await fetch("http://127.0.0.1:8001/obtain_more_recipes",{
+                                      method:"POST",
+                                      headers:{"Content-Type":"application/json"},
+                                      body:JSON.stringify({
+                                        plato:        nombre,
+                                        calories:     entrada.calorias,
+                                        protein:      entrada.proteinas,
+                                        carbohydrate: entrada.hidratos,
+                                        fat:          entrada.grasas,
+                                      })
+                                    });
+                                    const data = await res.json();
                                     if(data.recipes){
                                       setAlternativasPlato(prev=>({...prev,[subKey]:data.recipes}));
                                       setOpenAlternativas(prev=>({...prev,[subKey]:true}));
                                     }
-                                  })
-                                  .catch(console.error);
+                                  } catch (err) {
+                                    console.error(err);
+                                  } finally {
+                                    setLoadingCambio(prev => ({...prev, [subKey]: false}));
+                                  }
                                 }}
                                 className="px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 hover:bg-blue-200 text-blue-800"
                               >
-                                Cambiar plato
+                                {loadingCambio[subKey] ? "Cargando..." : "Cambiar plato"}
                               </button>
                             </div>
                           </div>
