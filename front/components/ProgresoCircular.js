@@ -64,20 +64,22 @@ export default function ProgresoCircular({
           strokeLinecap="round"
           style={{ transition: "stroke-dashoffset 0.7s cubic-bezier(.42,0,.58,1)" }}
         />
-        {overflow > 0 && (
-          <circle
-            cx={size / 2}
-            cy={size / 2}
-            r={radius}
-            fill="none"
-            stroke={overshootColor}
-            strokeWidth={stroke}
-            strokeDasharray={circ}
-            strokeDashoffset={overflowOffset}
-            strokeLinecap="round"
-            style={{ transition: "stroke-dashoffset 0.7s cubic-bezier(.42,0,.58,1)" }}
-          />
-        )}
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke={overshootColor}
+          strokeWidth={stroke}
+          strokeDasharray={circ}
+          strokeDashoffset={overflow > 0 ? overflowOffset : circ}
+          strokeLinecap="round"
+          opacity={overflow > 0 ? 1 : 0}
+          style={{
+            transition:
+              "stroke-dashoffset 0.7s cubic-bezier(.42,0,.58,1), opacity 0.7s",
+          }}
+        />
       </svg>
       <div className="absolute inset-0 flex items-center justify-center">
         {Icon}
