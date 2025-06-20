@@ -1,8 +1,21 @@
 import ProgresoCircular from "./ProgresoCircular";
 
-const excesoColor = "#9333ea"; // El mismo color que el stroke de la barra
+// Color usado para los excesos. Cambia este valor si quieres otro tono.
+// Algunos ejemplos que suelen funcionar bien:
+//  - "#9333ea" (morado)
+//  - "#dc2626" (rojo)
+//  - "#2563eb" (azul)
+const excesoColorDefault = "#9333ea";
 
-export default function MacroCard({ cantidad, macro, icon, color, objetivo, realizado }) {
+export default function MacroCard({
+  cantidad,
+  macro,
+  icon,
+  color,
+  objetivo,
+  realizado,
+  excesoColor = excesoColorDefault,
+}) {
   const progreso = objetivo
     ? realizado <= objetivo
       ? realizado / objetivo
@@ -45,6 +58,7 @@ export default function MacroCard({ cantidad, macro, icon, color, objetivo, real
         size={56}
         icon={icon}
         color={color}
+        excesoColor={excesoColor}
       />
       <div className="text-xs text-gray-300 mt-1">
         Objetivo: {objetivo}{macro === "Calorías" ? "kcal" : "g"}
