@@ -193,7 +193,7 @@ export default function Home() {
                     fill="none"
                   />
                 </svg>
-                <span className="text-5xl font-extrabold text-emerald-600 drop-shadow-lg mb-3">
+                <span className="text-4xl font-extrabold text-emerald-600 drop-shadow-lg mb-3">
                   ¡Dieta generada!
                 </span>
               </>
@@ -218,7 +218,7 @@ export default function Home() {
             <path d="M8.5 14l2.5-3 2 2.5 2.5-3.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
-        <h1 className="text-4xl md:text-4xl font-extrabold text-gray-800 text-center leading-tight">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800 text-center leading-tight">
           Bienvenido al <span className="text-emerald-600">Generador de Dietas</span>
         </h1>
         <p className="text-lg text-gray-500 text-center max-w-2xl">

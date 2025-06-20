@@ -1,4 +1,14 @@
 export default function DiaSelector({ dias, diaActivo, setDiaActivo }) {
+  const iniciales = {
+    lunes: "L",
+    martes: "M",
+    miércoles: "X",
+    jueves: "J",
+    viernes: "V",
+    sábado: "S",
+    domingo: "D",
+  };
+
   return (
     <div className="w-full flex justify-center overflow-x-auto py-2">
       <div className="flex gap-2 min-w-max px-2">
@@ -15,7 +25,11 @@ export default function DiaSelector({ dias, diaActivo, setDiaActivo }) {
             `}
             style={{ minWidth: 70 }}
           >
-            {dia.nombre[0].toUpperCase()}
+            {
+              // Si el nombre del día es "miércoles", muestra "X"
+              iniciales[dia.nombre.toLowerCase()] ||
+              dia.nombre[0].toUpperCase()
+            }
           </button>
         ))}
       </div>

@@ -138,16 +138,13 @@ export default function MenuPage() {
 
   const macrosRealizadas = (() => {
     const comidas = dias[diaActivo]?.comidas || {};
-    let cal = 0,
-      prot = 0,
-      hidr = 0,
-      grasa = 0;
+    let cal = 0, prot = 0, hidr = 0, grasa = 0;
 
     Object.entries(comidas).forEach(([momento, opciones]) => {
       if (!Array.isArray(opciones)) return;
 
       const key = `${diaActivo}-${momento}`;
-      if (!realizadas[key]) return;
+      if (!realizadas[key]) return; // Solo suma si fue marcada como realizada
 
       opciones.forEach(entrada => {
         if (typeof entrada !== "object") return;
@@ -166,10 +163,10 @@ export default function MenuPage() {
   const objetivoHidratos = dias[diaActivo]?.objetivo_hidratos || 0;
   const objetivoGrasas   = dias[diaActivo]?.objetivo_grasas   || 0;
 
-  const kcalRestantes = Math.max(objetivoCalorias - macrosRealizadas.calorias, 0);
-  const protRestantes = Math.max(objetivoProteina - macrosRealizadas.proteinas, 0);
-  const hidrRestantes = Math.max(objetivoHidratos - macrosRealizadas.hidratos, 0);
-  const grasaRestantes = Math.max(objetivoGrasas - macrosRealizadas.grasas, 0);
+  const kcalRestantes = objetivoCalorias - macrosRealizadas.calorias;
+  const protRestantes = objetivoProteina - macrosRealizadas.proteinas;
+  const hidrRestantes = objetivoHidratos - macrosRealizadas.hidratos;
+  const grasaRestantes = objetivoGrasas - macrosRealizadas.grasas;
 
   console.log("📦 Estado de dias:", dias);
   console.log("📦 Longitud de dias:", dias?.length);
