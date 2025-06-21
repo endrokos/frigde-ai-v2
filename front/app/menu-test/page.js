@@ -138,13 +138,16 @@ export default function MenuPage() {
 
   const macrosRealizadas = (() => {
     const comidas = dias[diaActivo]?.comidas || {};
-    let cal = 0, prot = 0, hidr = 0, grasa = 0;
+    let cal = 0,
+      prot = 0,
+      hidr = 0,
+      grasa = 0;
 
     Object.entries(comidas).forEach(([momento, opciones]) => {
       if (!Array.isArray(opciones)) return;
 
       const key = `${diaActivo}-${momento}`;
-      if (!realizadas[key]) return; // Solo suma si fue marcada como realizada
+      if (!realizadas[key]) return;
 
       opciones.forEach(entrada => {
         if (typeof entrada !== "object") return;
@@ -199,7 +202,7 @@ export default function MenuPage() {
         />
 
         <div className="w-full grid grid-cols-1 sm:grid-cols-4 gap-4 mb-2">
-          <MacroCard cantidad={kcalRestantes} macro="Calorías" icon="flame" color="#111" objetivo={objetivoCalorias} realizado={macrosRealizadas.calorias} />
+          <MacroCard cantidad={kcalRestantes} macro="Calorías" icon="fire" color="#111" objetivo={objetivoCalorias} realizado={macrosRealizadas.calorias} />
           <MacroCard cantidad={protRestantes} macro="Proteína" icon="chicken" color="#EF4444" objetivo={objetivoProteina} realizado={macrosRealizadas.proteinas} />
           <MacroCard cantidad={hidrRestantes} macro="Hidratos" icon="wheat" color="#F59E42" objetivo={objetivoHidratos} realizado={macrosRealizadas.hidratos} />
           <MacroCard cantidad={grasaRestantes} macro="Grasas" icon="droplet" color="#22C55E" objetivo={objetivoGrasas} realizado={macrosRealizadas.grasas} />
