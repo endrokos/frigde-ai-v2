@@ -199,7 +199,7 @@ export default function MenuPage() {
         />
 
         <div className="w-full grid grid-cols-1 sm:grid-cols-4 gap-4 mb-2">
-          <MacroCard cantidad={kcalRestantes} macro="Calorías" icon="fire" color="#111" objetivo={objetivoCalorias} realizado={macrosRealizadas.calorias} />
+          <MacroCard cantidad={kcalRestantes} macro="Calorías" icon="flame" color="#111" objetivo={objetivoCalorias} realizado={macrosRealizadas.calorias} />
           <MacroCard cantidad={protRestantes} macro="Proteína" icon="chicken" color="#EF4444" objetivo={objetivoProteina} realizado={macrosRealizadas.proteinas} />
           <MacroCard cantidad={hidrRestantes} macro="Hidratos" icon="wheat" color="#F59E42" objetivo={objetivoHidratos} realizado={macrosRealizadas.hidratos} />
           <MacroCard cantidad={grasaRestantes} macro="Grasas" icon="droplet" color="#22C55E" objetivo={objetivoGrasas} realizado={macrosRealizadas.grasas} />

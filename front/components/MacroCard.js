@@ -1,11 +1,45 @@
 import ProgresoCircular from "./ProgresoCircular";
 
-// Color usado para los excesos. Cambia este valor si quieres otro tono.
-// Algunos ejemplos que suelen funcionar bien:
-//  - "#9333ea" (morado)
-//  - "#dc2626" (rojo)
-//  - "#2563eb" (azul)
-const excesoColorDefault = "#9333ea";
+const excesoColorDefault = "#9C9C9C";
+
+// Colores para el círculo principal (por macro)
+const colorByIcon = {
+  flame: "#111827",      // Negro (calorías)
+  chicken: "#EF4444",    // Rojo (proteína)
+  wheat: "#F59E42",      // Naranja (hidratos)
+  droplet: "#22C55E",    // Verde (grasas)
+};
+
+// Colores para el círculo de exceso (por macro)
+const excesoColorByIcon = {
+  flame: "#CDCDCD",      // Gris claro
+  chicken: "#7F1D1D",    // Granate oscuro
+  wheat: "#FDE047",      // Amarillo
+  droplet: "#065F46",    // Verde oscuro
+};
+
+// Colores de texto normal (por macro)
+const textoColorByIcon = {
+  flame: "#111827",      // Negro (calorías)
+  chicken: "#EF4444",    // Rojo (proteína)
+  wheat: "#F59E42",      // Naranja (hidratos)
+  droplet: "#22C55E",    // Verde (grasas)
+};
+
+// Colores de texto en exceso (por macro)
+const textoColorExcesoByIcon = {
+  flame: "#CDCDCD",      // Gris claro
+  chicken: "#7F1D1D",    // Granate oscuro
+  wheat: "#FDE047",      // Amarillo
+  droplet: "#065F46",    // Verde oscuro
+};
+
+// Opcional: para robustez si usas nombres diferentes
+function normalizarIcon(icon) {
+  if (icon === "fire") return "flame";
+  if (icon === "avocado") return "droplet";
+  return icon;
+}
 
 export default function MacroCard({
   cantidad,
@@ -14,8 +48,10 @@ export default function MacroCard({
   color,
   objetivo,
   realizado,
-  excesoColor = excesoColorDefault,
+  excesoColor, // <-- puedes omitirlo, ya no es necesario
 }) {
+  const iconNorm = normalizarIcon(icon);
+
   const progreso = objetivo
     ? realizado <= objetivo
       ? realizado / objetivo
@@ -41,11 +77,19 @@ export default function MacroCard({
     return Number.isInteger(num) ? num : num.toFixed(1);
   }
 
+  // Colores para el círculo e icono
+  const colorUsar = color || colorByIcon[iconNorm] || "#3B82F6";
+  const excesoColorUsar = excesoColorByIcon[iconNorm] || excesoColorDefault;
+  // Color del texto principal
+  const textoColor = esExceso
+    ? textoColorExcesoByIcon[iconNorm] || "#6366F1"
+    : textoColorByIcon[iconNorm] || "#111";
+
   return (
     <div className="bg-white rounded-3xl p-4 flex flex-col items-center shadow-md min-w-[110px]">
       <div
         className="text-2xl font-extrabold mb-1"
-        style={esExceso ? { color: excesoColor } : { color: "#111" }}
+        style={{ color: textoColor }}
       >
         {cantidadMostrar}{macro === "Calorías" ? "kcal" : "g"}
       </div>
@@ -56,9 +100,9 @@ export default function MacroCard({
         progreso={progreso}
         exceso={extra}
         size={56}
-        icon={icon}
-        color={color}
-        excesoColor={excesoColor}
+        icon={iconNorm}
+        color={colorUsar}
+        excesoColor={excesoColorUsar}
       />
       <div className="text-xs text-gray-300 mt-1">
         Objetivo: {objetivo}{macro === "Calorías" ? "kcal" : "g"}
