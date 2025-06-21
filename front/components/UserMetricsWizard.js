@@ -27,6 +27,8 @@ export default function UserMetricsWizard({ onComplete }) {
   const [alergiaOtra, setAlergiaOtra] = useState("");
   const [dieta, setDieta] = useState("");
   const [dietaOtra, setDietaOtra] = useState("");
+  const [mostrarDietaOtra, setMostrarDietaOtra] = useState(false);
+  const [dietasSeleccionadas, setDietasSeleccionadas] = useState([]);
   const [noGusta, setNoGusta] = useState("");
 
   const handleChange = (key) => (e) => {
@@ -35,6 +37,14 @@ export default function UserMetricsWizard({ onComplete }) {
 
   const handleAlergiaChange = (item) => {
     setAlergiasSeleccionadas(prev =>
+      prev.includes(item)
+        ? prev.filter(a => a !== item)
+        : [...prev, item]
+    );
+  };
+
+  const handleDietaChange = (item) => {
+    setDietasSeleccionadas(prev =>
       prev.includes(item)
         ? prev.filter(a => a !== item)
         : [...prev, item]
@@ -50,7 +60,7 @@ export default function UserMetricsWizard({ onComplete }) {
         alergiasSeleccionadas,
         mostrarAlergiaOtra,
         alergiaOtra,
-        dieta,
+        dietasSeleccionadas,
         dietaOtra,
         noGusta,
       });
@@ -191,7 +201,10 @@ export default function UserMetricsWizard({ onComplete }) {
             <button
               key={value}
               type="button"
-              onClick={() => setObjetivo(value)}
+              onClick={() => {
+                setObjetivo(value);
+                setMetrics({ ...metrics, objetivo: value });
+              }}
               className={`flex flex-col items-center px-3 py-2 rounded-xl border transition select-none
                 ${objetivo === value ? "bg-emerald-500 text-white border-emerald-500" : "bg-emerald-50 border-emerald-200 text-emerald-600"}`}
             >
@@ -201,7 +214,10 @@ export default function UserMetricsWizard({ onComplete }) {
           ))}
           <button
             type="button"
-            onClick={() => setObjetivo("Otro")}
+            onClick={() => {
+              setObjetivo("Otro");
+              setMetrics({ ...metrics, objetivo: "Otro" });
+            }}
             className={`flex flex-col items-center px-3 py-2 rounded-xl border transition select-none col-span-2
               ${objetivo === "Otro" ? "bg-emerald-500 text-white border-emerald-500" : "bg-emerald-50 border-emerald-200 text-emerald-600"}`}
           >
@@ -215,8 +231,8 @@ export default function UserMetricsWizard({ onComplete }) {
             type="text"
             className="mt-3 w-full px-4 py-3 rounded-lg border border-emerald-200 focus:ring-2 focus:ring-emerald-400 outline-none transition"
             placeholder="Escribe tu objetivo"
-            value={objetivoOtro}
-            onChange={e => setObjetivoOtro(e.target.value)}
+            value={metrics.otroObjetivo || ""}
+            onChange={e => setMetrics({ ...metrics, otroObjetivo: e.target.value })}
           />
         ) : null,
     },
@@ -239,8 +255,10 @@ export default function UserMetricsWizard({ onComplete }) {
       label: "¿Sigues alguna dieta especial?",
       input: (
         <DietasRadio
-          value={dieta}
-          onChange={setDieta}
+          seleccionadas={dietasSeleccionadas}
+          onToggle={handleDietaChange}
+          mostrarOtra={mostrarDietaOtra}
+          setMostrarOtra={setMostrarDietaOtra}
           otraValue={dietaOtra}
           onOtraChange={e => setDietaOtra(e.target.value)}
         />
@@ -263,6 +281,15 @@ export default function UserMetricsWizard({ onComplete }) {
 
   const pregunta = preguntas[step];
 
+
+  const noValidar = ["peso_kg", "edad", "altura_cm", "alergias", "dieta", "nogusta"];
+  const isStepValid = noValidar.includes(pregunta.key) || Boolean(metrics[pregunta.key]);
+
+  const prev = () => {
+    if (step > 0) setStep(step - 1);
+};
+
+
   return (
     <div className="w-full max-w-md flex flex-col items-center gap-6 animate-fade-in">
       <h2 className="text-2xl font-bold text-emerald-600 text-center">
@@ -272,13 +299,26 @@ export default function UserMetricsWizard({ onComplete }) {
       {pregunta.extra}
       <div className="flex justify-between items-center w-full mt-4">
         <span className="text-sm text-gray-500">Paso {step + 1} de {preguntas.length}</span>
-        <button
-          type="button"
-          onClick={next}
-          className="bg-emerald-600 text-white font-semibold px-6 py-2 rounded-xl shadow hover:bg-emerald-700 active:scale-95 transition"
-        >
-          {step >= preguntas.length - 1 ? "Continuar" : "Siguiente"}
-        </button>
+        <div className="flex gap-3">
+          {step > 0 && (
+            <button
+              type="button"
+              onClick={prev}
+              className="bg-gray-200 text-gray-700 font-semibold px-4 py-2 rounded-xl shadow hover:bg-gray-300 active:scale-95 transition"
+            >
+              Atrás
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={next}
+            disabled={!isStepValid}
+            className={`bg-emerald-600 text-white font-semibold px-6 py-2 rounded-xl shadow hover:bg-emerald-700 active:scale-95 transition
+              ${!isStepValid ? "opacity-50 cursor-not-allowed" : ""}`}
+          >
+            {step >= preguntas.length - 1 ? "Continuar" : "Siguiente"}
+          </button>
+        </div>
       </div>
     </div>
   );

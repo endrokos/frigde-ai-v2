@@ -9,22 +9,21 @@ export const objetivos = [
 ];
 
 export const alergias = [
-  "Gluten",
-  "Lactosa",
-  "Frutos secos",
-  "Mariscos",
-  "Huevo",
-  "Soja",
+  "🌾 Gluten",
+  "🥛 Lactosa",
+  "🥜 Frutos Secos",
+  "🍤 Mariscos",
+  "🥚 Huevo",
+  "🌱 Soja"
 ];
 
 export const dietas = [
-  "Vegetariana",
-  "Vegana",
-  "Keto",
-  "Paleo",
-  "Sin azúcar",
-  "Sin sal",
-  "Otra",
+  "🥦 Vegana",
+  "🥗 Vegetariana",
+  "✡️ Kosher",
+  "🚫 Sin azúcar",
+  "🧂 Sin sal",
+  "🫖 Halal",
 ];
 
 export const comidas = [

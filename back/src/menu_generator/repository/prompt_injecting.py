@@ -45,7 +45,7 @@ def prompt_injecting_menu_with_optionals(menu: MenuWithOptionalsRequest, prompt:
             .replace("{objetivo_del_menu}", menu.menu_goal)
             .replace("{comidas}", str(menu.meals))
             .replace("{alergias}", str(menu.allergies))
-            .replace("{dieta}", menu.diet)
+            .replace("{dieta}", str(menu.diet))
             .replace("{alimentos_no_ricos}", str(menu.not_rich_foods))
             .replace("{postre_comida}", menu.postre_comida)
             .replace("{postre_cena}", menu.postre_cena)
