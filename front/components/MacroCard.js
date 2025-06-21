@@ -2,7 +2,7 @@ import ProgresoCircular from "./ProgresoCircular";
 
 
 
-export default function MacroCard({ cantidad, macro, icon, color, objetivo, realizado }) {
+export default function MacroCard({ cantidad, macro, icon, color, overshootColor, objetivo, realizado }) {
   const progresoBruto = objetivo ? realizado / objetivo : 0;
   // Texto de subtítulo adaptado
   const subtitle =
@@ -31,7 +31,7 @@ export default function MacroCard({ cantidad, macro, icon, color, objetivo, real
           size={56}
           icon={icon}
           color={color}
-          overshootColor="#DC2626"
+          overshootColor={overshootColor}
         />
       <div className="text-xs text-gray-300 mt-1">
         Objetivo: {objetivo}{macro === "Calorías" ? "kcal" : "g"}
