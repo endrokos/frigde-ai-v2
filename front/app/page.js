@@ -45,10 +45,10 @@ export default function Home() {
   };
 
   const handleConfigChange = ({ item, platos, postre }) => {
-    if (item === "Comida") {
+    if (item === "Lunch") {
       setPlatosComida(platos);
       setPostreComida(postre);
-    } else if (item === "Cena") {
+    } else if (item === "Dinner") {
       setPlatosCena(platos);
       setPostreCena(postre);
     }
@@ -84,7 +84,7 @@ export default function Home() {
       dietas.push(dietaOtra.trim());
     }
 
-    let objetivoFinal = objetivo === "Otro" && objetivoOtro.trim()
+    let objetivoFinal = objetivo === "Other" && objetivoOtro.trim()
       ? objetivoOtro.trim()
       : objetivo;
 
@@ -97,9 +97,9 @@ export default function Home() {
       allergies: alergias.length > 0 ? alergias : [""],
       diet: dietas.length > 0 ? dietas : [""],
       not_rich_foods: notRichFoods.length > 0 ? notRichFoods : [""],
-      numero_de_platos_comida: tiene("Comida") ? platosComida : 0,
+      numero_de_platos_comida: tiene("Lunch") ? platosComida : 0,
       postre_comida: postreComida ? "si" : "no",
-      numero_de_platos_cena: tiene("Cena") ? platosCena : 0,
+      numero_de_platos_cena: tiene("Dinner") ? platosCena : 0,
       postre_cena: postreCena ? "si" : "no",
     };
 
@@ -167,9 +167,9 @@ export default function Home() {
                     style={{ width: `${progress}%` }}
                   ></div>
                 </div>
-                <span className="text-2xl font-bold text-emerald-700 mb-2">Generando dieta...</span>
+                <span className="text-2xl font-bold text-emerald-700 mb-2">Generating diet...</span>
                 <span className="text-lg text-gray-600 text-center">
-                  ¡Tranquil@! Puede tardar un par de minutos,<br /> estamos trabajando en ello...
+                  Relax! It may take a couple of minutes,<br /> we're working on it...
                 </span>
               </>
             ) : (
@@ -194,7 +194,7 @@ export default function Home() {
                   />
                 </svg>
                 <span className="text-4xl font-extrabold text-emerald-600 drop-shadow-lg mb-3">
-                  ¡Dieta generada!
+                  Diet generated!
                 </span>
               </>
             )}
@@ -219,10 +219,10 @@ export default function Home() {
           </svg>
         </div>
         <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800 text-center leading-tight">
-          Bienvenido al <span className="text-emerald-600">Generador de Dietas</span>
+          Welcome to the <span className="text-emerald-600">Diet Generator</span>
         </h1>
         <p className="text-lg text-gray-500 text-center max-w-2xl">
-          Crea tu plan alimenticio ideal, mejora tu salud y alcanza tus objetivos de manera sencilla y personalizada.
+          Create your ideal meal plan, improve your health and reach your goals easily and personally.
         </p>
 
         {!showForm && (
@@ -233,7 +233,7 @@ export default function Home() {
               setStage("metrics");
             }}
           >
-            Crear una dieta
+            Create a diet
           </button>
         )}
 
@@ -255,15 +255,15 @@ export default function Home() {
               onToggle={handleComidasChange}
               onConfigChange={handleConfigChange}
               values={{
-                Comida: { platos: platosComida, postre: postreComida },
-                Cena: { platos: platosCena, postre: postreCena },
+                Lunch: { platos: platosComida, postre: postreComida },
+                Dinner: { platos: platosCena, postre: postreCena },
               }}
             />
             <button
               type="submit"
               className="mt-2 bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-700 active:scale-95 transition-all shadow-lg"
             >
-              Generar mi dieta
+              Generate my diet
             </button>
           </form>
         )}

@@ -3,7 +3,7 @@
 import { useState, useRef } from "react";
 import Link from "next/link";
 
-const MOMENTOS = ["Desayuno", "Media mañana", "Comida", "Merienda", "Cena"];
+const MOMENTOS = ["Breakfast", "Mid-morning", "Lunch", "Snack", "Dinner"];
 
 export default function SubirPlatoDesdeImagen({
   diaActivo,
@@ -35,7 +35,7 @@ export default function SubirPlatoDesdeImagen({
       });
 
       if (!res.ok) {
-        alert("Error al contactar con el servidor.");
+        alert("Error contacting the server.");
         return;
       }
 
@@ -45,11 +45,11 @@ export default function SubirPlatoDesdeImagen({
       if (macros?.plato && typeof macros.calorias === "number") {
         setPlatoDetectado(macros);
       } else {
-        alert(result?.error || "No se pudo interpretar la imagen.");
+        alert(result?.error || "Could not interpret the image.");
       }
     } catch (error) {
-      console.error("Error al subir imagen:", error);
-      alert("Hubo un error al analizar la imagen.");
+      console.error("Error uploading image:", error);
+      alert("There was an error analysing the image.");
     } finally {
       setSubiendo(false);
     }
@@ -80,11 +80,11 @@ export default function SubirPlatoDesdeImagen({
         setIngredientesManual("");
         setRecetaManual("");
       } else {
-        alert(result?.error || "No se pudo interpretar el texto.");
+        alert(result?.error || "Could not interpret the text.");
       }
     } catch (err) {
-      console.error("Error al procesar nombre de plato:", err);
-      alert("Error al contactar con el servidor.");
+      console.error("Error processing dish name:", err);
+      alert("Error contacting the server.");
     } finally {
       setSubiendo(false);
     }
@@ -124,24 +124,24 @@ export default function SubirPlatoDesdeImagen({
           onClick={() => setMostrarOpciones(true)}
           className="bg-emerald-500 text-white px-4 py-2 rounded-full hover:bg-emerald-600 font-semibold shadow-md"
         >
-          {subiendo ? "Subiendo..." : "+ Añadir plato"}
+          {subiendo ? "Uploading..." : "+ Add dish"}
         </button>
         <Link
           href="/lista-compra"
           className="bg-emerald-500 text-white px-4 py-2 rounded-full hover:bg-emerald-600 font-semibold shadow-md"
         >
-          Generar lista de la compra
+          Generate shopping list
         </Link>
       </div>
 
       {mostrarOpciones && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 text-center space-y-4">
-            <h3 className="text-lg font-bold text-gray-800">Selecciona cómo añadir el plato</h3>
+            <h3 className="text-lg font-bold text-gray-800">Select how to add the dish</h3>
 
             <div className="grid grid-cols-1 gap-3">
               <label className="cursor-pointer bg-emerald-100 text-emerald-800 font-semibold rounded-lg px-4 py-2 hover:bg-emerald-200">
-                Subir desde galería
+                Upload from gallery
                 <input
                   ref={fileInputRefGaleria}
                   type="file"
@@ -157,7 +157,7 @@ export default function SubirPlatoDesdeImagen({
               </label>
 
               <label className="cursor-pointer bg-emerald-100 text-emerald-800 font-semibold rounded-lg px-4 py-2 hover:bg-emerald-200">
-                Tomar foto con cámara
+                Take photo with camera
                 <input
                   ref={fileInputRefCamara}
                   type="file"
@@ -180,7 +180,7 @@ export default function SubirPlatoDesdeImagen({
                 }}
                 className="bg-emerald-100 text-emerald-800 font-semibold rounded-lg px-4 py-2 hover:bg-emerald-200"
               >
-                Escribir nombre del plato
+                Enter dish name
               </button>
             </div>
 
@@ -188,7 +188,7 @@ export default function SubirPlatoDesdeImagen({
               onClick={() => setMostrarOpciones(false)}
               className="text-sm text-gray-400 hover:text-gray-600"
             >
-              Cancelar
+              Cancel
             </button>
           </div>
         </div>
@@ -197,19 +197,19 @@ export default function SubirPlatoDesdeImagen({
       {mostrarInputManual && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 text-center space-y-4">
-            <h3 className="text-lg font-bold text-gray-800">Escribe el nombre del plato</h3>
+            <h3 className="text-lg font-bold text-gray-800">Enter the dish name</h3>
 
             <input
               value={nombrePlatoManual}
               onChange={(e) => setNombrePlatoManual(e.target.value)}
-              placeholder="Ej. Espaguetis con tomate"
+              placeholder="e.g. Spaghetti with tomato"
               className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring focus:border-emerald-400"
             />
 
             <textarea
               value={ingredientesManual}
               onChange={(e) => setIngredientesManual(e.target.value)}
-              placeholder="Ingredientes (opcional)"
+              placeholder="Ingredients (optional)"
               rows={2}
               className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring focus:border-emerald-200"
             />
@@ -217,7 +217,7 @@ export default function SubirPlatoDesdeImagen({
             <textarea
               value={recetaManual}
               onChange={(e) => setRecetaManual(e.target.value)}
-              placeholder="Instrucciones o receta (opcional)"
+              placeholder="Instructions or recipe (optional)"
               rows={2}
               className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring focus:border-emerald-200"
             />
@@ -227,13 +227,13 @@ export default function SubirPlatoDesdeImagen({
                 onClick={handleTexto}
                 className="bg-emerald-500 text-white font-semibold rounded-lg px-4 py-2 hover:bg-emerald-600"
               >
-                Enviar
+                Submit
               </button>
               <button
                 onClick={() => setMostrarInputManual(false)}
                 className="text-sm text-gray-400 hover:text-gray-600"
               >
-                Cancelar
+                Cancel
               </button>
             </div>
           </div>
@@ -244,7 +244,7 @@ export default function SubirPlatoDesdeImagen({
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 text-center space-y-4">
             <h3 className="text-lg font-bold text-gray-800">
-              ¿Dónde quieres añadir este plato?
+              Where do you want to add this dish?
             </h3>
             <p className="text-gray-600 text-sm">
               <span className="font-semibold">{platoDetectado.plato}</span> – {platoDetectado.calorias} kcal
@@ -255,7 +255,7 @@ export default function SubirPlatoDesdeImagen({
                 <button
                   key={momento}
                   onClick={() => {
-                    if (momento === "Comida" || momento === "Cena") {
+                    if (momento === "Lunch" || momento === "Dinner") {
                       setPreguntarParte(momento);
                     } else {
                       insertarPlato(momento);
@@ -272,7 +272,7 @@ export default function SubirPlatoDesdeImagen({
               onClick={() => setPlatoDetectado(null)}
               className="text-sm text-gray-400 hover:text-gray-600 mt-2"
             >
-              Cancelar
+              Cancel
             </button>
           </div>
         </div>
@@ -281,32 +281,32 @@ export default function SubirPlatoDesdeImagen({
       {preguntarParte && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 text-center space-y-4">
-            <h3 className="text-lg font-bold text-gray-800">¿En qué parte?</h3>
+            <h3 className="text-lg font-bold text-gray-800">Which part?</h3>
             <div className="grid grid-cols-1 gap-2">
               <button
                 onClick={() => insertarPlato(preguntarParte, 0)}
                 className="bg-emerald-100 text-emerald-800 font-semibold rounded-lg px-4 py-2 hover:bg-emerald-200"
               >
-                Primer plato
+                First course
               </button>
               <button
                 onClick={() => insertarPlato(preguntarParte, 1)}
                 className="bg-emerald-100 text-emerald-800 font-semibold rounded-lg px-4 py-2 hover:bg-emerald-200"
               >
-                Segundo plato
+                Second course
               </button>
               <button
                 onClick={() => insertarPlato(preguntarParte, 2)}
                 className="bg-emerald-100 text-emerald-800 font-semibold rounded-lg px-4 py-2 hover:bg-emerald-200"
               >
-                Postre
+                Dessert
               </button>
             </div>
             <button
               onClick={() => setPreguntarParte(null)}
               className="text-sm text-gray-400 hover:text-gray-600 mt-2"
             >
-              Cancelar
+              Cancel
             </button>
           </div>
         </div>
