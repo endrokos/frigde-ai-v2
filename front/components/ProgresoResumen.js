@@ -7,8 +7,8 @@ export default function ProgresoResumen({ progresoDia, realizadasDia, totalComid
       <div className="bg-white rounded-3xl p-6 flex flex-col sm:flex-row items-center justify-between shadow-md">
         <div>
           <div className="text-4xl font-extrabold text-emerald-700 mb-1">{Math.round(progresoDia * 100)}%</div>
-          <div className="text-lg font-semibold text-gray-600">Día completado</div>
-          <div className="text-sm text-gray-400">{realizadasDia} de {totalComidasDia} comidas</div>
+          <div className="text-lg font-semibold text-gray-600">Day completed</div>
+          <div className="text-sm text-gray-400">{realizadasDia} of {totalComidasDia} meals</div>
         </div>
         <ProgresoCircular progreso={progresoDia} size={80} icon="flame" color="#10B981" />
       </div>
@@ -16,8 +16,8 @@ export default function ProgresoResumen({ progresoDia, realizadasDia, totalComid
       <div className="bg-white rounded-3xl p-6 flex flex-col sm:flex-row items-center justify-between shadow-md">
         <div>
           <div className="text-4xl font-extrabold text-indigo-600 mb-1">{Math.round(progresoSemana * 100)}%</div>
-          <div className="text-lg font-semibold text-gray-600">Semana completada</div>
-          <div className="text-sm text-gray-400">{realizadasSemana} de {totalComidasSemana} comidas</div>
+          <div className="text-lg font-semibold text-gray-600">Week completed</div>
+          <div className="text-sm text-gray-400">{realizadasSemana} of {totalComidasSemana} meals</div>
         </div>
         <ProgresoCircular progreso={progresoSemana} size={80} icon="calendar" color="#6366F1" />
       </div>

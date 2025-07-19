@@ -1,44 +1,44 @@
 // data/options.js
 
 export const objetivos = [
-  "Perder peso",
-  "Ganar músculo",
-  "Mejorar salud",
-  "Mantener peso",
-  "Otro",
+  "Lose weight",
+  "Gain muscle",
+  "Improve health",
+  "Maintain weight",
+  "Other",
 ];
 
 export const alergias = [
   "🌾 Gluten",
-  "🥛 Lactosa",
-  "🥜 Frutos Secos",
-  "🍤 Mariscos",
-  "🥚 Huevo",
-  "🌱 Soja"
+  "🥛 Lactose",
+  "🥜 Nuts",
+  "🍤 Seafood",
+  "🥚 Egg",
+  "🌱 Soy"
 ];
 
 export const dietas = [
-  "🥦 Vegana",
-  "🥗 Vegetariana",
+  "🥦 Vegan",
+  "🥗 Vegetarian",
   "✡️ Kosher",
-  "🚫 Sin azúcar",
-  "🧂 Sin sal",
+  "🚫 Sugar-free",
+  "🧂 Salt-free",
   "🫖 Halal",
 ];
 
 export const comidas = [
-  "Desayuno",
-  "Media mañana",
-  "Comida",
-  "Merienda",
-  "Cena",
+  "Breakfast",
+  "Mid-morning",
+  "Lunch",
+  "Snack",
+  "Dinner",
 ];
 
-export const sexos = ["Hombre", "Mujer", "Otro"];
+export const sexos = ["Male", "Female", "Other"];
 
 export const nivelesActividad = [
-  "Sedentario",
-  "Ligero",
-  "Moderado",
-  "Intenso",
+  "Sedentary",
+  "Light",
+  "Moderate",
+  "Intense",
 ];

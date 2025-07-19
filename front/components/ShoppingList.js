@@ -5,31 +5,31 @@ import IngredientList from './IngredientList'; // 👈 Importa el componente
 
 const CATEGORY_INFO = {
   verduras_y_frutas: {
-    title: "Verduras y frutas",
+    title: "Vegetables and fruits",
     icon: "🥦",
     color: "text-green-700",
     bg: "bg-green-50",
   },
   cereales_y_derivados: {
-    title: "Cereales y derivados",
+    title: "Grains and derivatives",
     icon: "🌾",
     color: "text-yellow-700",
     bg: "bg-yellow-100",
   },
   proteinas: {
-    title: "Proteínas",
+    title: "Proteins",
     icon: "🍗",
     color: "text-red-700",
     bg: "bg-red-50",
   },
   lacteos: {
-    title: "Lácteos",
+    title: "Dairy",
     icon: "🧀",
     color: "text-blue-700",
     bg: "bg-blue-100",
   },
   otros: {
-    title: "Otros",
+    title: "Others",
     icon: "🛒",
     color: "text-gray-700",
     bg: "bg-gray-100",
@@ -60,12 +60,12 @@ export default function ShoppingList({ data }) {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Platos seleccionados */}
+      {/* Selected dishes */}
       {Array.isArray(list.platos_seleccionados) && (
         <CollapsibleCard
   open={!!open["platos"]}
   onClick={() => handleToggle("platos")}
-  title="Platos seleccionados"
+  title="Selected dishes"
   icon="🍽️"
   color="text-emerald-600"
   bg="bg-white"

@@ -7,7 +7,7 @@ import MacroCard from "@/components/MacroCard";
 import MenuCards from "@/components/MenuCards";
 import SubirPlatoDesdeImagen from "@/components/SubirPlatoDesdeImagen";
 
-const MOMENTOS = ["Desayuno", "Media mañana", "Comida", "Merienda", "Cena"];
+const MOMENTOS = ["Breakfast", "Mid-morning", "Lunch", "Snack", "Dinner"];
 
 export default function MenuPage() {
   const [diaActivo, setDiaActivo] = useState(0);
@@ -32,10 +32,10 @@ export default function MenuPage() {
       console.log("📥 dietaSemana.dias:", dietaSemana.dias);
       setDias(dietaSemana.dias || []);
     } else {
-      console.error("❌ No se encontró 'dietaSemana' en localStorage");    }
+      console.error("❌ 'dietaSemana' not found in localStorage");    }
   }, []);
 
-  // Cargar estado persistido de la selección de platos y comidas realizadas
+  // Load persisted state of selected dishes and completed meals
   useEffect(() => {
     const stored = localStorage.getItem("menuState");
     if (stored) {
@@ -199,7 +199,7 @@ export default function MenuPage() {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-tr from-white via-emerald-50 to-lime-100 relative py-8">
         <div className="bg-white/80 rounded-3xl shadow-xl shadow-emerald-100 p-8 w-full max-w-3xl flex flex-col gap-6 border border-emerald-100 text-center text-lg">
-          Cargando tu menú semanal...
+          Loading your weekly menu...
         </div>
       </main>
     );
@@ -208,7 +208,7 @@ export default function MenuPage() {
   return (
     <main className="flex min-h-screen flex-col items-center bg-gradient-to-tr from-white via-emerald-50 to-lime-100 relative py-8">
       <div className="bg-white/80 rounded-3xl shadow-xl shadow-emerald-100 p-8 w-full max-w-3xl flex flex-col gap-6 border border-emerald-100">
-        <h2 className="text-3xl font-extrabold text-emerald-600 text-center mb-2">Tu menú semanal</h2>
+        <h2 className="text-3xl font-extrabold text-emerald-600 text-center mb-2">Your weekly menu</h2>
 
         <DiaSelector dias={dias} diaActivo={diaActivo} setDiaActivo={setDiaActivo} />
 
@@ -222,10 +222,10 @@ export default function MenuPage() {
         />
 
         <div className="w-full grid grid-cols-1 sm:grid-cols-4 gap-4 mb-2">
-          <MacroCard cantidad={kcalRestantes} macro="Calorías" icon="fire" color="#111" objetivo={objetivoCalorias} realizado={macrosRealizadas.calorias} />
-          <MacroCard cantidad={protRestantes} macro="Proteína" icon="chicken" color="#EF4444" objetivo={objetivoProteina} realizado={macrosRealizadas.proteinas} />
-          <MacroCard cantidad={hidrRestantes} macro="Hidratos" icon="wheat" color="#F59E42" objetivo={objetivoHidratos} realizado={macrosRealizadas.hidratos} />
-          <MacroCard cantidad={grasaRestantes} macro="Grasas" icon="droplet" color="#22C55E" objetivo={objetivoGrasas} realizado={macrosRealizadas.grasas} />
+          <MacroCard cantidad={kcalRestantes} macro="Calories" icon="fire" color="#111" objetivo={objetivoCalorias} realizado={macrosRealizadas.calorias} />
+          <MacroCard cantidad={protRestantes} macro="Protein" icon="chicken" color="#EF4444" objetivo={objetivoProteina} realizado={macrosRealizadas.proteinas} />
+          <MacroCard cantidad={hidrRestantes} macro="Carbs" icon="wheat" color="#F59E42" objetivo={objetivoHidratos} realizado={macrosRealizadas.hidratos} />
+          <MacroCard cantidad={grasaRestantes} macro="Fats" icon="droplet" color="#22C55E" objetivo={objetivoGrasas} realizado={macrosRealizadas.grasas} />
         </div>
 
         <MenuCards

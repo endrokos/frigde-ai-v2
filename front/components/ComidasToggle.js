@@ -54,7 +54,7 @@ export default function ComidasToggle({ seleccionadas, onToggle, onConfigChange,
   return (
     <div>
       <h3 className="text-xl font-bold text-emerald-500 text-center mb-2">
-        ¿Cuántas comidas al día quieres planificar?
+        How many meals per day do you want to plan?
       </h3>
       <div className="flex justify-center w-full">
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full">
@@ -72,17 +72,17 @@ export default function ComidasToggle({ seleccionadas, onToggle, onConfigChange,
             >
               <span className="text-3xl mb-1">
                 {{
-                  Desayuno: "🍳",
-                  "Media mañana": "🥐",
-                  Comida: "🍽️",
-                  Merienda: "☕",
-                  Cena: "🌙",
+                  Breakfast: "🍳",
+                  "Mid-morning": "🥐",
+                  Lunch: "🍽️",
+                  Snack: "☕",
+                  Dinner: "🌙",
                 }[item]}
               </span>
               {item}
             </button>
           ))}
-          {/* Espaciador SOLO en desktop para centrar la última fila */}
+          {/* Spacer only for desktop to center the last row */}
           <div className="hidden md:block"></div>
         </div>
       </div>
@@ -98,7 +98,7 @@ export default function ComidasToggle({ seleccionadas, onToggle, onConfigChange,
       </button>
 
       <h3 className="text-lg font-semibold text-gray-800 mb-3 text-center">
-        ¿Cuántos platos quieres en tu {configOpen.toLowerCase()}?
+        How many dishes do you want in your {configOpen.toLowerCase()}?
       </h3>
 
       <div className="flex justify-center gap-4 mb-5">
@@ -122,14 +122,14 @@ export default function ComidasToggle({ seleccionadas, onToggle, onConfigChange,
       </div>
 
       <h4 className="text-sm font-medium text-gray-700 mb-2 text-center">
-        ¿Quieres postre?
+        Do you want dessert?
       </h4>
       <div className="flex justify-center gap-4 mb-5">
-        {["Sí", "No"].map(op => (
+        {["Yes", "No"].map(op => (
           <button
             key={op}
             type="button"
-            onClick={() => handlePostre(configOpen, op === "Sí")}
+            onClick={() => handlePostre(configOpen, op === "Yes")}
             className={`
               px-4 py-2 rounded-lg border text-sm
               ${
@@ -150,7 +150,7 @@ export default function ComidasToggle({ seleccionadas, onToggle, onConfigChange,
           onClick={guardarConfig}
           className="mt-1 bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow"
         >
-          Guardar
+          Save
         </button>
       </div>
     </div>

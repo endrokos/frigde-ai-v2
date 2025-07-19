@@ -14,22 +14,22 @@ const BG_HIDRATOS    = "#FEF6E7";
 const BG_GRASAS      = "#DCFCE7";
 
 const colorPorMomento = {
-  Desayuno:       "bg-yellow-200 text-yellow-800",
-  "Media mañana": "bg-orange-200 text-orange-800",
-  Comida:         "bg-green-200  text-green-800",
-  Merienda:       "bg-pink-200   text-pink-800",
-  Cena:           "bg-indigo-200 text-indigo-800",
+  Breakfast:       "bg-yellow-200 text-yellow-800",
+  "Mid-morning":   "bg-orange-200 text-orange-800",
+  Lunch:           "bg-green-200  text-green-800",
+  Snack:           "bg-pink-200   text-pink-800",
+  Dinner:          "bg-indigo-200 text-indigo-800",
 };
 
 const cajaPorMomento = {
-  Desayuno:       "bg-yellow-50 border-yellow-200",
-  "Media mañana": "bg-orange-50 border-orange-200",
-  Comida:         "bg-green-50  border-green-200",
-  Merienda:       "bg-pink-50   border-pink-200",
-  Cena:           "bg-indigo-50 border-indigo-200",
+  Breakfast:       "bg-yellow-50 border-yellow-200",
+  "Mid-morning":   "bg-orange-50 border-orange-200",
+  Lunch:           "bg-green-50  border-green-200",
+  Snack:           "bg-pink-50   border-pink-200",
+  Dinner:          "bg-indigo-50 border-indigo-200",
 };
 
-const MOMENTOS = ["Desayuno", "Media mañana", "Comida", "Merienda", "Cena"];
+const MOMENTOS = ["Breakfast", "Mid-morning", "Lunch", "Snack", "Dinner"];
 
 async function enviarPeticion(endpoint, datos, key, setRecetasGeneradas) {
   try {
@@ -70,7 +70,7 @@ export default function MenuCards({
   const [loadingCambio,     setLoadingCambio]      = useState({});
 
   if (!dias?.length || !dias[diaActivo]) {
-    return <div className="text-center text-lg py-10">Cargando tu menú…</div>;
+    return <div className="text-center text-lg py-10">Loading your menu…</div>;
   }
 
   return (
@@ -222,7 +222,7 @@ export default function MenuCards({
                                 }}
                                 className="px-3 py-1 text-xs font-semibold rounded-full bg-emerald-100 hover:bg-emerald-200 text-emerald-800"
                               >
-                                {loadingReceta[subKey] ? "Generando..." : "Generar receta"}
+                                {loadingReceta[subKey] ? "Generating..." : "Generate recipe"}
                               </button>
                               <button
                                 onClick={async()=> {
@@ -252,7 +252,7 @@ export default function MenuCards({
                                 }}
                                 className="px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 hover:bg-blue-200 text-blue-800"
                               >
-                                {loadingCambio[subKey] ? "Cargando..." : "Cambiar plato"}
+                                {loadingCambio[subKey] ? "Loading..." : "Change dish"}
                               </button>
                             </div>
                           </div>
@@ -279,7 +279,7 @@ export default function MenuCards({
                                   }
                                   className="text-sm font-medium text-center text-emerald-700 px-4 py-3 hover:bg-emerald-50 cursor-pointer"
                                 >
-                                  No cambiar plato actual
+                                  Keep current dish
                                 </li>
                                 {alt.map((op,i)=>(
                                   <li
