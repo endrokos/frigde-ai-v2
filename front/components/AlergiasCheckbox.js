@@ -41,14 +41,14 @@ export default function AlergiasCheckbox({
             }}
             className="accent-emerald-500 w-4 h-4 hidden"
           />
-          <span>Other</span>
+          <span>Otro</span>
         </label>
       </div>
       {mostrarOtra && (
         <input
           type="text"
           className="mt-2 w-full px-4 py-3 rounded-lg border border-emerald-200 focus:ring-2 focus:ring-emerald-400 outline-none transition"
-          placeholder="Specify your allergy or intolerance"
+          placeholder="Especifica tu alergia o intolerancia"
           value={otraValue}
           onChange={onOtraChange}
         />

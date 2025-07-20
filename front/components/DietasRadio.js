@@ -34,14 +34,14 @@ export default function DietasRadio({ seleccionadas, onToggle, mostrarOtra, setM
             }}
             className="accent-emerald-500 w-4 h-4 hidden"
           />
-          <span>Other</span>
+          <span>Otra</span>
         </label>
       </div>
       {mostrarOtra && (
         <input
           type="text"
           className="mt-2 w-full px-4 py-3 rounded-lg border border-emerald-200 focus:ring-2 focus:ring-emerald-400 outline-none transition"
-          placeholder="Specify the diet you follow"
+          placeholder="Especifica la dieta que sigues"
           value={otraValue}
           onChange={onOtraChange}
         />

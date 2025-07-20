@@ -72,7 +72,7 @@ export default function UserMetricsWizard({ onComplete }) {
   const preguntas = [
     {
       key: "sexo",
-      label: "What is your sex?",
+      label: "¿Cuál es tu sexo?",
       input: (
         <div className="mt-4 flex justify-center gap-4 w-full">
           {sexos.slice(0, 2).map(s => (
@@ -93,7 +93,7 @@ export default function UserMetricsWizard({ onComplete }) {
     },
     {
       key: "edad",
-      label: "What is your age?",
+      label: "¿Cuál es tu edad?",
       input: (
         <div className="mt-4 w-full flex flex-col items-center">
           <input
@@ -105,14 +105,14 @@ export default function UserMetricsWizard({ onComplete }) {
             className="w-full"
           />
           <span className="mt-2 text-lg font-semibold text-emerald-600">
-            {metrics.edad || 18} years
+            {metrics.edad || 18} años
           </span>
         </div>
       ),
     },
     {
       key: "altura_cm",
-      label: "What is your height in cm?",
+      label: "¿Cuál es tu altura en cm?",
       input: (
         <div className="mt-4 flex justify-center">
           <Picker
@@ -137,7 +137,7 @@ export default function UserMetricsWizard({ onComplete }) {
     },
     {
       key: "peso_kg",
-      label: "What is your weight in kg?",
+      label: "¿Cuál es tu peso en kg?",
       input: (
         <div className="mt-4 flex justify-center">
           <Picker
@@ -162,14 +162,14 @@ export default function UserMetricsWizard({ onComplete }) {
     },
     {
       key: "nivel_actividad",
-      label: "What is your physical activity level?",
+      label: "¿Cuál es tu nivel de actividad física?",
       input: (
         <div className="mt-4 grid grid-cols-2 gap-4 w-full">
           {[
-            { label: "Sedentary", value: "sedentario", Icon: FaBed },
-            { label: "Light", value: "ligero", Icon: FaWalking },
-            { label: "Moderate", value: "moderado", Icon: FaRunning },
-            { label: "Intense", value: "intenso", Icon: FaDumbbell },
+            { label: "Sedentario", value: "sedentario", Icon: FaBed },
+            { label: "Ligero", value: "ligero", Icon: FaWalking },
+            { label: "Moderado", value: "moderado", Icon: FaRunning },
+            { label: "Intenso", value: "intenso", Icon: FaDumbbell },
           ].map(({ label, value, Icon }) => (
             <button
               key={value}
@@ -189,14 +189,14 @@ export default function UserMetricsWizard({ onComplete }) {
     },
     {
       key: "objetivo",
-      label: "Menu goal",
+      label: "Objetivo del menú",
       input: (
         <div className="mt-4 grid grid-cols-2 gap-4 w-full">
           {[
-            { label: "Lose weight", value: "Lose weight", Icon: FlameIcon },
-            { label: "Gain muscle", value: "Gain muscle", Icon: ChickenIcon },
-            { label: "Improve health", value: "Improve health", Icon: AvocadoIcon },
-            { label: "Maintain weight", value: "Maintain weight", Icon: WheatIcon },
+            { label: "Perder peso", value: "Perder peso", Icon: FlameIcon },
+            { label: "Ganar músculo", value: "Ganar músculo", Icon: ChickenIcon },
+            { label: "Mejorar salud", value: "Mejorar salud", Icon: AvocadoIcon },
+            { label: "Mantener peso", value: "Mantener peso", Icon: WheatIcon },
           ].map(({ label, value, Icon }) => (
             <button
               key={value}
@@ -215,22 +215,22 @@ export default function UserMetricsWizard({ onComplete }) {
           <button
             type="button"
             onClick={() => {
-              setObjetivo("Other");
-              setMetrics({ ...metrics, objetivo: "Other" });
+              setObjetivo("Otro");
+              setMetrics({ ...metrics, objetivo: "Otro" });
             }}
             className={`flex flex-col items-center px-3 py-2 rounded-xl border transition select-none col-span-2
-              ${objetivo === "Other" ? "bg-emerald-500 text-white border-emerald-500" : "bg-emerald-50 border-emerald-200 text-emerald-600"}`}
+              ${objetivo === "Otro" ? "bg-emerald-500 text-white border-emerald-500" : "bg-emerald-50 border-emerald-200 text-emerald-600"}`}
           >
-            Other
+            Otro
           </button>
         </div>
       ),
       extra:
-        objetivo === "Other" ? (
+        objetivo === "Otro" ? (
           <input
             type="text"
             className="mt-3 w-full px-4 py-3 rounded-lg border border-emerald-200 focus:ring-2 focus:ring-emerald-400 outline-none transition"
-            placeholder="Enter your goal"
+            placeholder="Escribe tu objetivo"
             value={metrics.otroObjetivo || ""}
             onChange={e => setMetrics({ ...metrics, otroObjetivo: e.target.value })}
           />
@@ -238,7 +238,7 @@ export default function UserMetricsWizard({ onComplete }) {
     },
     {
       key: "alergias",
-      label: "Do you have any food allergies or intolerances?",
+      label: "¿Tienes alguna alergia o intolerancia alimentaria?",
       input: (
         <AlergiasCheckbox
           seleccionadas={alergiasSeleccionadas}
@@ -252,7 +252,7 @@ export default function UserMetricsWizard({ onComplete }) {
     },
     {
       key: "dieta",
-      label: "Do you follow any special diet?",
+      label: "¿Sigues alguna dieta especial?",
       input: (
         <DietasRadio
           seleccionadas={dietasSeleccionadas}
@@ -266,11 +266,11 @@ export default function UserMetricsWizard({ onComplete }) {
     },
     {
       key: "nogusta",
-      label: "Is there any food you dislike or want to exclude?",
+      label: "¿Hay algún alimento que no te guste o no quieras incluir?",
       input: (
         <textarea
           className="mt-4 w-full px-4 py-3 rounded-lg border border-emerald-200 focus:ring-2 focus:ring-emerald-400 outline-none transition resize-none"
-          placeholder="For example: Peppers, mushrooms, oily fish..."
+          placeholder="Por ejemplo: Pimiento, setas, pescado azul..."
           rows={2}
           value={noGusta}
           onChange={e => setNoGusta(e.target.value)}
@@ -298,7 +298,7 @@ export default function UserMetricsWizard({ onComplete }) {
       {pregunta.input}
       {pregunta.extra}
       <div className="flex justify-between items-center w-full mt-4">
-        <span className="text-sm text-gray-500">Step {step + 1} of {preguntas.length}</span>
+        <span className="text-sm text-gray-500">Paso {step + 1} de {preguntas.length}</span>
         <div className="flex gap-3">
           {step > 0 && (
             <button
@@ -306,7 +306,7 @@ export default function UserMetricsWizard({ onComplete }) {
               onClick={prev}
               className="bg-gray-200 text-gray-700 font-semibold px-4 py-2 rounded-xl shadow hover:bg-gray-300 active:scale-95 transition"
             >
-              Back
+              Atrás
             </button>
           )}
           <button
@@ -316,7 +316,7 @@ export default function UserMetricsWizard({ onComplete }) {
             className={`bg-emerald-600 text-white font-semibold px-6 py-2 rounded-xl shadow hover:bg-emerald-700 active:scale-95 transition
               ${!isStepValid ? "opacity-50 cursor-not-allowed" : ""}`}
           >
-            {step >= preguntas.length - 1 ? "Continue" : "Next"}
+            {step >= preguntas.length - 1 ? "Continuar" : "Siguiente"}
           </button>
         </div>
       </div>

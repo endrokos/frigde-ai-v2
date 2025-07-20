@@ -22,7 +22,7 @@ export default function ListaCompraResultado() {
   if (!lista) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-tr from-white via-emerald-50 to-lime-100">
-        <p className="text-center text-gray-500">Loading shopping list...</p>
+        <p className="text-center text-gray-500">Cargando lista de la compra...</p>
       </main>
     );
   }
@@ -30,13 +30,13 @@ export default function ListaCompraResultado() {
   return (
     <main className="flex min-h-screen flex-col items-center bg-gradient-to-tr from-white via-emerald-50 to-lime-100 py-8">
       <div className="bg-white/80 rounded-3xl shadow-xl p-8 w-full max-w-lg flex flex-col gap-4 border border-emerald-100">
-        <h2 className="text-xl font-bold text-center text-emerald-600">Your shopping list</h2>
+        <h2 className="text-xl font-bold text-center text-emerald-600">Tu lista de la compra</h2>
         <ShoppingList data={lista} />
         <button
           onClick={() => router.push("/menu-test")}
           className="mt-2 bg-emerald-500 text-white px-4 py-2 rounded-full hover:bg-emerald-600 font-semibold"
         >
-          Back to menu
+          Volver al menú
         </button>
       </div>
     </main>
